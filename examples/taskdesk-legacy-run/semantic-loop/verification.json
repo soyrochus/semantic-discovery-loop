@@ -1,0 +1,257 @@
+{
+  "iteration": 1,
+  "passed": true,
+  "verifier": {
+    "tool": "verifier-v1",
+    "gallery_source": ".agent-loop/tools/verifier",
+    "self_test": {
+      "mutations_applied": 4,
+      "mutations_detected": 4,
+      "passed": true
+    }
+  },
+  "scores": {
+    "inventory_coverage": {
+      "value": 10,
+      "derived_from": [
+        "inv-scope-complete",
+        "inv-files-exist",
+        "inv-hashes-match"
+      ],
+      "measurement": "55 files inventoried; 0 unexplained tracked paths, 0 missing, 0 hash mismatches"
+    },
+    "parser_validity": {
+      "value": 10,
+      "derived_from": [
+        "reg-manifests-complete",
+        "reg-status-validated",
+        "reg-smoke-tests",
+        "reg-gallery-fidelity"
+      ],
+      "measurement": "8 parsers; 0 smoke failures, 0 fidelity failures, 0 incomplete manifests, 0 unvalidated"
+    },
+    "source_graph_consistency": {
+      "value": 10,
+      "derived_from": [
+        "src-no-dangling",
+        "src-unique-ids",
+        "src-shape",
+        "src-parser-attribution"
+      ],
+      "measurement": "819 nodes / 811 edges; 0 dangling, 0 duplicate ids, 0 attribution violations"
+    },
+    "semantic_type_quality": {
+      "value": 10,
+      "derived_from": [
+        "types-kernel-present",
+        "types-used-are-stable",
+        "types-operational"
+      ],
+      "measurement": "16 types, 13 in use; 0 unstable in use, 0 non-operational"
+    },
+    "semantic_graph_provenance": {
+      "value": 10,
+      "derived_from": [
+        "sem-all-grounded",
+        "sem-refs-resolve",
+        "sem-evidence-files",
+        "sem-confidence"
+      ],
+      "measurement": "61 nodes, 91 grounding entries; 0 ungrounded, 0 unresolved refs, 0 evidence file/span problems"
+    },
+    "report_coverage": {
+      "value": 10,
+      "derived_from": [
+        "report-exists",
+        "report-sections",
+        "report-status-consistent"
+      ],
+      "measurement": "15/15 sections; status marker final=True/partial=False"
+    },
+    "unknowns_handling": {
+      "value": 10,
+      "derived_from": [
+        "unk-represented",
+        "unk-inventory-uncertainties",
+        "unk-assumptions-explicit"
+      ],
+      "measurement": "1 unknown constructs, 3 uncertainties, 3 assumptions"
+    },
+    "reproducibility": {
+      "value": 10,
+      "derived_from": [
+        "rep-fingerprint-consistent",
+        "rep-parsers-deterministic",
+        "rep-assumptions-stored"
+      ],
+      "measurement": "fingerprints consistent=True; 0 nondeterministic parsers"
+    }
+  },
+  "weakest_score": null,
+  "required_next_action": null,
+  "gate_failures": [],
+  "checks": [
+    {
+      "check": "inv-scope-complete",
+      "score": "inventory_coverage",
+      "result": "pass",
+      "detail": "56 tracked files under ['taskdesk-legacy', 'db']; 0 neither inventoried nor explained in uncertainties: []"
+    },
+    {
+      "check": "inv-files-exist",
+      "score": "inventory_coverage",
+      "result": "pass",
+      "detail": "55 inventoried files; 0 missing on disk: []"
+    },
+    {
+      "check": "inv-hashes-match",
+      "score": "inventory_coverage",
+      "result": "pass",
+      "detail": "recomputed sha256 for 55 files; 0 mismatches: []"
+    },
+    {
+      "check": "reg-manifests-complete",
+      "score": "parser_validity",
+      "result": "pass",
+      "detail": "8 manifests; incomplete: []"
+    },
+    {
+      "check": "reg-status-validated",
+      "score": "parser_validity",
+      "result": "pass",
+      "detail": "non-validated parsers: []"
+    },
+    {
+      "check": "reg-smoke-tests",
+      "score": "parser_validity",
+      "result": "pass",
+      "detail": "re-ran --smoke for 8 parsers; failures: []"
+    },
+    {
+      "check": "reg-gallery-fidelity",
+      "score": "parser_validity",
+      "result": "pass",
+      "detail": "gallery copies claiming no adaptations diverging from gallery source: []"
+    },
+    {
+      "check": "src-no-dangling",
+      "score": "source_graph_consistency",
+      "result": "pass",
+      "detail": "811 edges; dangling: 0 []"
+    },
+    {
+      "check": "src-unique-ids",
+      "score": "source_graph_consistency",
+      "result": "pass",
+      "detail": "819 nodes; duplicate ids: 0"
+    },
+    {
+      "check": "src-shape",
+      "score": "source_graph_consistency",
+      "result": "pass",
+      "detail": "bad spans: []; bad id prefixes: []"
+    },
+    {
+      "check": "src-parser-attribution",
+      "score": "source_graph_consistency",
+      "result": "pass",
+      "detail": "nodes whose parser_id is unregistered, missing, or pattern-mismatched: 0 []"
+    },
+    {
+      "check": "types-kernel-present",
+      "score": "semantic_type_quality",
+      "result": "pass",
+      "detail": "kernel types missing: []"
+    },
+    {
+      "check": "types-used-are-stable",
+      "score": "semantic_type_quality",
+      "result": "pass",
+      "detail": "semantic graph uses types not accepted/validated: []"
+    },
+    {
+      "check": "types-operational",
+      "score": "semantic_type_quality",
+      "result": "pass",
+      "detail": "types without detection rules or required evidence: []"
+    },
+    {
+      "check": "sem-all-grounded",
+      "score": "semantic_graph_provenance",
+      "result": "pass",
+      "detail": "61 semantic nodes; without provenance: []"
+    },
+    {
+      "check": "sem-refs-resolve",
+      "score": "semantic_graph_provenance",
+      "result": "pass",
+      "detail": "grounding refs not in source graph: 0 []"
+    },
+    {
+      "check": "sem-evidence-files",
+      "score": "semantic_graph_provenance",
+      "result": "pass",
+      "detail": "missing evidence files: []; spans past EOF: []"
+    },
+    {
+      "check": "sem-confidence",
+      "score": "semantic_graph_provenance",
+      "result": "pass",
+      "detail": "nodes without explicit confidence in [0,1]: []"
+    },
+    {
+      "check": "unk-represented",
+      "score": "unknowns_handling",
+      "result": "pass",
+      "detail": "UnknownSemanticConstruct nodes: 1"
+    },
+    {
+      "check": "unk-inventory-uncertainties",
+      "score": "unknowns_handling",
+      "result": "pass",
+      "detail": "inventory uncertainties recorded: 3"
+    },
+    {
+      "check": "unk-assumptions-explicit",
+      "score": "unknowns_handling",
+      "result": "pass",
+      "detail": "3 assumptions; malformed: []"
+    },
+    {
+      "check": "rep-fingerprint-consistent",
+      "score": "reproducibility",
+      "result": "pass",
+      "detail": "artefact fingerprints {'inventory': '3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a', 'source-graph': '3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a', 'semantic-graph': '3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a', 'state': '3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a'}; git HEAD 3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a"
+    },
+    {
+      "check": "rep-parsers-deterministic",
+      "score": "reproducibility",
+      "result": "pass",
+      "detail": "double-ran each parser on a repository sample; unstable output: []"
+    },
+    {
+      "check": "rep-assumptions-stored",
+      "score": "reproducibility",
+      "result": "pass",
+      "detail": "assumptions.json present"
+    },
+    {
+      "check": "report-exists",
+      "score": "report_coverage",
+      "result": "pass",
+      "detail": "report present"
+    },
+    {
+      "check": "report-sections",
+      "score": "report_coverage",
+      "result": "pass",
+      "detail": "15/15 required sections present; missing: []"
+    },
+    {
+      "check": "report-status-consistent",
+      "score": "report_coverage",
+      "result": "pass",
+      "detail": "report says final=True partial=False; other dimensions pass=True \u2014 a FINAL claim requires a passing gate"
+    }
+  ]
+}

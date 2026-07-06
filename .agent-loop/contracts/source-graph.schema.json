@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "source-graph.schema.json",
+  "title": "Source Construct Graph (Layer 1)",
+  "description": "Deterministic, parser-derived, factual graph of source-level constructs. No speculative application meaning. Stored at .work/semantic-loop/source-graph.json.",
+  "type": "object",
+  "required": ["repo_fingerprint", "nodes", "edges"],
+  "properties": {
+    "repo_fingerprint": { "type": ["string", "null"] },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceNode" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sourceEdge" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "span": {
+      "type": ["object", "null"],
+      "required": ["start_line", "end_line"],
+      "properties": {
+        "start_line": { "type": "integer", "minimum": 1 },
+        "end_line": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "sourceNode": {
+      "type": "object",
+      "required": ["id", "layer", "type", "name", "path"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^src:",
+          "description": "Stable id, prefixed 'src:', e.g. 'src:file:path/to/File.java' or 'src:method:com.example.Foo.run'."
+        },
+        "layer": { "type": "string", "const": "source" },
+        "type": {
+          "type": "string",
+          "description": "Factual construct kind, e.g. File, Directory, Package, Class, Method, Function, Annotation, Import, XmlElement, ConfigurationEntry, Route, Template, SqlStatement, BuildModule, Dependency.",
+          "examples": [
+            "File", "Directory", "Package", "Class", "Method", "Function",
+            "Annotation", "Import", "XmlElement", "ConfigurationEntry",
+            "Route", "Template", "SqlStatement", "BuildModule", "Dependency"
+          ]
+        },
+        "name": { "type": "string" },
+        "path": {
+          "type": ["string", "null"],
+          "description": "Repository-relative path of the file the construct lives in; null only for constructs with no single file (rare)."
+        },
+        "span": { "$ref": "#/$defs/span" },
+        "hash": {
+          "type": ["string", "null"],
+          "description": "Optional content hash of the underlying source region or file."
+        },
+        "parser_id": {
+          "type": ["string", "null"],
+          "description": "The parser (from parser-registry.json) that produced this node."
+        },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "sourceEdge": {
+      "type": "object",
+      "required": ["id", "source_id", "target_id", "type", "confidence"],
+      "properties": {
+        "id": { "type": "string" },
+        "source_id": { "type": "string" },
+        "target_id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "description": "Factual relation, e.g. contains, declares, imports, references, extends, implements, includes, configures, maps-to, depends-on.",
+          "examples": [
+            "contains", "declares", "imports", "references", "extends",
+            "implements", "includes", "configures", "maps-to", "depends-on"
+          ]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

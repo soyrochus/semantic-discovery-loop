@@ -1,0 +1,24 @@
+{
+  "tool_id": "sql-ddl-v1",
+  "artifact_type": "sql-script",
+  "input_patterns": ["**/*.sql"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Comment- and string-aware masking pass ('--', '/* */', single-quoted strings incl. '' escapes), then statement splitting on top-level semicolons and per-kind extraction. Semicolons in strings/comments never break statements; commented-out DDL is never extracted.",
+  "extracts": [
+    "one SqlStatement node per statement with kind, target object, line span",
+    "CREATE TABLE columns and REFERENCES targets (inline and table-level FK)",
+    "CREATE INDEX target table",
+    "foreign-key 'references' edges between tables defined in the same script"
+  ],
+  "known_limitations": [
+    "Not a SQL grammar: column types/constraints are not modeled, only column names.",
+    "Dialect-specific statements outside the known-kind list are kept as kind UNKNOWN.",
+    "Double-quoted identifiers are unquoted naively (no embedded-quote handling).",
+    "Trigger bodies with BEGIN...END containing semicolons will be split (document per-repo if triggers are present)."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

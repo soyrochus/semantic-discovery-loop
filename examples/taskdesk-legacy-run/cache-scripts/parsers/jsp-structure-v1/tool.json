@@ -1,0 +1,25 @@
+{
+  "tool_id": "jsp-structure-v1",
+  "artifact_type": "jsp-template",
+  "input_patterns": ["**/*.jsp", "**/*.jspf"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Lexical extractor (JSP is not well-formed XML, so no real parser is possible with stdlib). JSP and HTML comments are masked before matching, so commented-out includes/forms are never extracted. This tool is honest about being lexical — it targets a fixed set of constructs rather than pretending to parse the page.",
+  "extracts": [
+    "page/include/taglib directives with attributes",
+    "<jsp:include>/<jsp:forward> with targets (includes / forwards-to edges)",
+    "custom taglib tag usage counts resolved to taglib URIs",
+    "HTML forms with action/method, links with hrefs",
+    "scriptlet / expression / EL counts"
+  ],
+  "known_limitations": [
+    "Lexical: no HTML DOM, no nesting of extracted constructs.",
+    "Attributes using unquoted values or runtime expressions as attribute values may be missed.",
+    "Scriptlet Java code is counted, not parsed (pair with java-structure ideas manually if scriptlets matter).",
+    "Dynamic includes built from EL expressions are recorded as-is, unresolved."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

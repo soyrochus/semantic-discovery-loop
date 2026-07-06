@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+<struts-config>
+    <form-beans>
+        <form-bean name="loginForm" type="com.example.taskdesk.form.LoginForm"/>
+        <form-bean name="taskSearchForm" type="com.example.taskdesk.form.TaskSearchForm"/>
+        <form-bean name="taskForm" type="com.example.taskdesk.form.TaskForm"/>
+        <form-bean name="taskAssignForm" type="com.example.taskdesk.form.TaskAssignForm"/>
+        <form-bean name="taskReportForm" type="com.example.taskdesk.form.TaskReportForm"/>
+    </form-beans>
+
+    <global-forwards>
+        <forward name="login" path="/jsp/login.jsp"/>
+        <forward name="denied" path="/jsp/accessDenied.jsp"/>
+        <forward name="error" path="/jsp/error.jsp"/>
+        <forward name="notFound" path="/jsp/error.jsp"/>
+    </global-forwards>
+
+    <action-mappings>
+        <action path="/login"
+                type="com.example.taskdesk.action.LoginAction"
+                name="loginForm"
+                scope="request"
+                input="/jsp/login.jsp">
+            <forward name="input" path="/jsp/login.jsp"/>
+            <forward name="success" path="/tasks.do" redirect="true"/>
+        </action>
+
+        <action path="/logout"
+                type="com.example.taskdesk.action.LogoutAction">
+            <forward name="success" path="/jsp/login.jsp"/>
+        </action>
+
+        <action path="/tasks"
+                type="com.example.taskdesk.action.TaskListAction"
+                name="taskSearchForm"
+                scope="request"
+                input="/jsp/taskList.jsp">
+            <forward name="success" path="/jsp/taskList.jsp"/>
+        </action>
+
+        <action path="/taskDetail"
+                type="com.example.taskdesk.action.TaskDetailAction"
+                name="taskForm"
+                scope="request">
+            <forward name="success" path="/jsp/taskDetail.jsp"/>
+        </action>
+
+        <action path="/taskEdit"
+                type="com.example.taskdesk.action.TaskEditAction"
+                name="taskForm"
+                scope="request"
+                input="/jsp/taskEdit.jsp">
+            <forward name="success" path="/jsp/taskEdit.jsp"/>
+            <forward name="error" path="/jsp/error.jsp"/>
+        </action>
+
+        <action path="/taskSave"
+                type="com.example.taskdesk.action.TaskSaveAction"
+                name="taskForm"
+                scope="request"
+                input="/jsp/taskEdit.jsp">
+            <forward name="input" path="/jsp/taskEdit.jsp"/>
+            <forward name="success" path="/jsp/taskDetail.jsp"/>
+        </action>
+
+        <action path="/taskAssign"
+                type="com.example.taskdesk.action.TaskAssignAction"
+                name="taskAssignForm"
+                scope="request"
+                input="/jsp/taskAssign.jsp">
+            <forward name="input" path="/jsp/taskAssign.jsp"/>
+            <forward name="success" path="/jsp/taskDetail.jsp"/>
+        </action>
+
+        <action path="/taskComplete"
+                type="com.example.taskdesk.action.TaskCompleteAction"
+                name="taskForm"
+                scope="request">
+            <forward name="success" path="/jsp/taskDetail.jsp"/>
+        </action>
+
+        <action path="/taskReopen"
+                type="com.example.taskdesk.action.TaskReopenAction"
+                name="taskForm"
+                scope="request">
+            <forward name="success" path="/jsp/taskDetail.jsp"/>
+        </action>
+
+        <action path="/taskReport"
+                type="com.example.taskdesk.action.TaskReportAction"
+                name="taskReportForm"
+                scope="request"
+                input="/jsp/taskReport.jsp">
+            <forward name="success" path="/jsp/taskReport.jsp"/>
+        </action>
+
+        <action path="/taskExport"
+                type="com.example.taskdesk.action.TaskReportAction"
+                name="taskReportForm"
+                scope="request"/>
+    </action-mappings>
+
+    <message-resources parameter="resources.ApplicationResources"/>
+
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property property="pathnames" value="/WEB-INF/validation.xml"/>
+    </plug-in>
+</struts-config>

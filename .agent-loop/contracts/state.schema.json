@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state.schema.json",
+  "title": "Semantic Loop State",
+  "description": "Tracks the semantic source-discovery loop across iterations. Stored at .work/semantic-loop/state.json.",
+  "type": "object",
+  "required": [
+    "loop_id",
+    "iteration",
+    "max_iterations",
+    "status",
+    "scope",
+    "cache_dir",
+    "work_dir"
+  ],
+  "properties": {
+    "loop_id": {
+      "type": "string",
+      "const": "semantic-source-discovery"
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current iteration number. 0 means the loop is initialized but no iteration has run."
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 6
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "initialized",
+        "running",
+        "iterating",
+        "complete",
+        "partial",
+        "aborted"
+      ],
+      "description": "complete requires all verification scores >= 8. partial means max_iterations was reached with gate failures."
+    },
+    "repo_fingerprint": {
+      "type": ["string", "null"],
+      "description": "A stable fingerprint of the analyzed repository state, e.g. the git HEAD commit hash, so artefacts can be tied to a specific source state."
+    },
+    "scope": {
+      "type": "string",
+      "description": "Human-readable statement of scope, e.g. 'read-only semantic source discovery'."
+    },
+    "cache_dir": {
+      "type": "string",
+      "default": ".cache/scripts"
+    },
+    "work_dir": {
+      "type": "string",
+      "default": ".work/semantic-loop"
+    },
+    "last_completed_phase": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "inventory",
+        "parser-selection",
+        "source-graph",
+        "semantic-types",
+        "semantic-graph",
+        "verification",
+        "report"
+      ]
+    },
+    "weakest_score": {
+      "type": ["string", "null"],
+      "description": "Name of the lowest-scoring verification dimension from the most recent verification, if any."
+    },
+    "next_action": {
+      "type": ["string", "null"],
+      "description": "The corrective action the next iteration must perform first."
+    },
+    "history": {
+      "type": "array",
+      "description": "Optional per-iteration log entries.",
+      "items": {
+        "type": "object",
+        "required": ["iteration", "summary"],
+        "properties": {
+          "iteration": { "type": "integer", "minimum": 0 },
+          "summary": { "type": "string" },
+          "timestamp": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

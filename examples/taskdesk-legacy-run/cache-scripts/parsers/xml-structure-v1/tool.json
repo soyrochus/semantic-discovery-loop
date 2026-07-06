@@ -1,0 +1,23 @@
+{
+  "tool_id": "xml-structure-v1",
+  "artifact_type": "xml-file",
+  "input_patterns": ["**/*.xml"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Real XML parse via xml.sax with a locator for line numbers. Handles comments, CDATA, entities, and attribute quoting correctly by construction. External entity and DTD resolution disabled. Element ids are stable sibling-indexed paths (/root[1]/child[2]).",
+  "extracts": [
+    "every element with sibling-indexed xpath id, start/end line span",
+    "attributes and trimmed text content (capped at 500 chars)",
+    "containment edges file → root → children"
+  ],
+  "known_limitations": [
+    "Generic: emits raw XML structure only; interpreting web.xml/struts-config semantics is the graph builders' job.",
+    "SAX locator lines point at the end of the start tag; multi-line start tags report the closing line.",
+    "Not for JSP (not well-formed XML) — use jsp-structure instead.",
+    "Files with undeclared entities fail to parse (reported as an error, never half-parsed)."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

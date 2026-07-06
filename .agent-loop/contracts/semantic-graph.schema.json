@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "semantic-graph.schema.json",
+  "title": "Semantic Construct Graph (Layer 2)",
+  "description": "Interpretive, application-level, evidence-backed graph. Every node must have provenance (grounded_in). Stored at .work/semantic-loop/semantic-graph.json.",
+  "type": "object",
+  "required": ["repo_fingerprint", "nodes", "edges"],
+  "properties": {
+    "repo_fingerprint": { "type": ["string", "null"] },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticNode" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticEdge" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["file", "evidence_type"],
+      "properties": {
+        "source_node": {
+          "type": ["string", "null"],
+          "description": "Id of a node in source-graph.json this evidence refers to; null only when the evidence is a raw artefact not represented as a node."
+        },
+        "file": {
+          "type": "string",
+          "description": "Repository-relative path of the evidence."
+        },
+        "span": {
+          "type": ["object", "null"],
+          "required": ["start_line", "end_line"],
+          "properties": {
+            "start_line": { "type": "integer", "minimum": 1 },
+            "end_line": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "evidence_type": {
+          "type": "string",
+          "description": "What kind of evidence this is, e.g. 'action-mapping', 'handler-method', 'route-definition', 'ddl-statement'."
+        }
+      },
+      "additionalProperties": false
+    },
+    "semanticNode": {
+      "type": "object",
+      "required": ["id", "layer", "type", "name", "confidence", "status", "grounded_in"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^sem:",
+          "description": "Stable id, prefixed 'sem:', e.g. 'sem:action:login'."
+        },
+        "layer": { "type": "string", "const": "semantic" },
+        "type": {
+          "type": "string",
+          "description": "A type_id from semantic-types.json. Use UnknownSemanticConstruct when meaning cannot be established."
+        },
+        "name": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "proposed", "validated", "accepted", "deprecated"]
+        },
+        "grounded_in": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/provenance" },
+          "minItems": 1,
+          "description": "Provenance is mandatory. A semantic node without evidence must not exist; verification fails otherwise."
+        },
+        "unknowns": {
+          "type": "array",
+          "description": "Aspects of this construct that could not be determined from local evidence.",
+          "items": { "type": "string" }
+        },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "semanticEdge": {
+      "type": "object",
+      "required": ["id", "source_id", "target_id", "type", "confidence"],
+      "properties": {
+        "id": { "type": "string" },
+        "source_id": { "type": "string" },
+        "target_id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "description": "Application-level relation, e.g. part-of, triggers, renders, reads-from, writes-to, integrates-with, secured-by.",
+          "examples": [
+            "part-of", "triggers", "renders", "reads-from", "writes-to",
+            "integrates-with", "secured-by", "scheduled-by", "validates"
+          ]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "grounded_in": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/provenance" },
+          "description": "Optional edge-level evidence when the relation itself needs proof beyond its endpoints."
+        },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

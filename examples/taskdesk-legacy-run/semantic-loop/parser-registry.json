@@ -1,0 +1,190 @@
+{
+  "parsers": [
+    {
+      "parser_id": "java-structure-v1",
+      "artifact_type": "java-source",
+      "input_patterns": [
+        "taskdesk-legacy/**/*.java"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/java-structure",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/java-structure-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/java-structure-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/java-structure-v1/parser.py --smoke",
+        "parsed LoginAction.java real sample"
+      ],
+      "known_limitations": [
+        "No expression-level symbol resolution; method bodies are not fully parsed."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "xml-structure-v1",
+      "artifact_type": "xml-file",
+      "input_patterns": [
+        "taskdesk-legacy/**/*.xml",
+        "taskdesk-legacy/pom.xml"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/xml-structure",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/xml-structure-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/xml-structure-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/xml-structure-v1/parser.py --smoke",
+        "parsed struts-config.xml real sample"
+      ],
+      "known_limitations": [
+        "Generic XML structure only; Struts and Maven interpretation come from struts-config-v1 and maven-pom-v1."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "struts-config-v1",
+      "artifact_type": "struts-xml",
+      "input_patterns": [
+        "taskdesk-legacy/**/struts-config.xml",
+        "taskdesk-legacy/**/validation.xml"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/struts-config",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/struts-config-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/struts-config-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/struts-config-v1/parser.py --smoke",
+        "parsed struts-config.xml and validation.xml real samples"
+      ],
+      "known_limitations": [
+        "Struts 1.x vocabulary only; URL suffix derivation (e.g. '.do' from web.xml) is the semantic builder's job."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "maven-pom-v1",
+      "artifact_type": "maven-pom",
+      "input_patterns": [
+        "taskdesk-legacy/pom.xml"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/maven-pom",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/maven-pom-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/maven-pom-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/maven-pom-v1/parser.py --smoke",
+        "parsed taskdesk-legacy/pom.xml real sample"
+      ],
+      "known_limitations": [
+        "Single-POM view: no parent resolution or property interpolation; plugins/profiles not extracted."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "jsp-structure-v1",
+      "artifact_type": "jsp-template",
+      "input_patterns": [
+        "taskdesk-legacy/**/*.jsp"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/jsp-structure",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/jsp-structure-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/jsp-structure-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/jsp-structure-v1/parser.py --smoke",
+        "parsed login.jsp real sample"
+      ],
+      "known_limitations": [
+        "Lexical JSP extraction; scriptlet code is counted, not parsed."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "properties-config-v1",
+      "artifact_type": "properties-file",
+      "input_patterns": [
+        "taskdesk-legacy/**/*.properties"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/properties-config",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/properties-config-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/properties-config-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/properties-config-v1/parser.py --smoke",
+        "parsed taskdesk.properties real sample"
+      ],
+      "known_limitations": [
+        "Duplicate keys collapse to a stable key node if present."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "sql-ddl-v1",
+      "artifact_type": "sql-script",
+      "input_patterns": [
+        "db/**/*.sql"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/sql-ddl",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/sql-ddl-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/sql-ddl-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/sql-ddl-v1/parser.py --smoke",
+        "parsed db/sql/001_schema_sqlite.sql real sample"
+      ],
+      "known_limitations": [
+        "Not a full SQL grammar; seed/reset statements are kept as statement nodes, while table/foreign-key details come from CREATE TABLE statements."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    },
+    {
+      "parser_id": "sqlite-schema-v1",
+      "artifact_type": "sqlite-database",
+      "input_patterns": [
+        "db/**/*.sqlite"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/sqlite-schema",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/sqlite-schema-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/sqlite-schema-v1/parser.py <files...>",
+      "output_schema": "source-graph-fragment-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/sqlite-schema-v1/parser.py --smoke",
+        "introspected db/runtime-data/taskdesk-demo.sqlite real sample"
+      ],
+      "known_limitations": [
+        "Schema only; row data is not read."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "tool_id": "java-structure-v1",
+  "artifact_type": "java-source",
+  "input_patterns": ["**/*.java"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Comment/string-aware masking pass (state-machine lexer), then structural matching with brace-matched spans and brace-depth checks. Not a full grammar parser, but immune to the classic regex failures: declarations inside comments or string literals, spans cut short by nested braces, anonymous-class methods attributed to the enclosing type.",
+  "extracts": [
+    "package declaration",
+    "imports (incl. static)",
+    "class/interface/enum declarations incl. nested types, extends/implements, annotations",
+    "methods and constructors with line spans, signatures, modifiers, annotations, overloads"
+  ],
+  "known_limitations": [
+    "Not a full Java grammar: no expression-level analysis, no symbol resolution (extends/implements names are unresolved strings).",
+    "Java 15+ text blocks (\"\"\") are not handled by the lexer.",
+    "Records, sealed types, and annotation type declarations (@interface) are not extracted.",
+    "Enum constants and fields are not extracted as nodes.",
+    "Complex generic return types with nested angle brackets may cause a method to be skipped (skipped, never mis-parsed)."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

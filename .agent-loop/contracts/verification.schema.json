@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "verification.schema.json",
+  "title": "Loop Verification Result",
+  "description": "Verifier output. The loop is complete only when passed is true, which requires every score value >= 8 AND a passing verifier self-test. Scores are measured objects, never bare asserted numbers: each must name the checks it was derived from. Stored at .work/semantic-loop/verification.json.",
+  "type": "object",
+  "required": ["iteration", "passed", "verifier", "scores", "weakest_score", "required_next_action", "gate_failures", "checks"],
+  "properties": {
+    "iteration": { "type": "integer", "minimum": 0 },
+    "passed": {
+      "type": "boolean",
+      "description": "True only if every score value is >= 8 and the verifier self-test passed."
+    },
+    "verifier": {
+      "type": "object",
+      "description": "Which verifier produced this result and proof that its gate can fail. A verifier that has never been observed to fail proves nothing.",
+      "required": ["tool", "self_test"],
+      "properties": {
+        "tool": {
+          "type": "string",
+          "description": "Id of the verification tool, e.g. 'verifier-v1'. Verification logic must live outside the scripts that generate the artefacts."
+        },
+        "gallery_source": {
+          "type": ["string", "null"],
+          "description": "Gallery path the verifier was copied from, e.g. '.agent-loop/tools/verifier'."
+        },
+        "self_test": {
+          "type": ["object", "null"],
+          "description": "Mutation self-test result: deliberately corrupted artefact copies must be caught by the gate. Null only when the run explicitly skipped self-test (never for a final PASS).",
+          "required": ["mutations_applied", "mutations_detected", "passed"],
+          "properties": {
+            "mutations_applied": { "type": "integer", "minimum": 1 },
+            "mutations_detected": { "type": "integer", "minimum": 0 },
+            "passed": { "type": "boolean" }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "scores": {
+      "type": "object",
+      "required": [
+        "inventory_coverage",
+        "parser_validity",
+        "source_graph_consistency",
+        "semantic_type_quality",
+        "semantic_graph_provenance",
+        "report_coverage",
+        "unknowns_handling",
+        "reproducibility"
+      ],
+      "properties": {
+        "inventory_coverage": { "$ref": "#/$defs/score" },
+        "parser_validity": { "$ref": "#/$defs/score" },
+        "source_graph_consistency": { "$ref": "#/$defs/score" },
+        "semantic_type_quality": { "$ref": "#/$defs/score" },
+        "semantic_graph_provenance": { "$ref": "#/$defs/score" },
+        "report_coverage": { "$ref": "#/$defs/score" },
+        "unknowns_handling": { "$ref": "#/$defs/score" },
+        "reproducibility": { "$ref": "#/$defs/score" }
+      },
+      "additionalProperties": false
+    },
+    "weakest_score": {
+      "type": ["string", "null"],
+      "description": "Name of the lowest-scoring dimension; null only when passed is true and no dimension is weakest-relevant."
+    },
+    "required_next_action": {
+      "type": ["string", "null"],
+      "description": "Concrete corrective action for the next iteration; required (non-null) whenever passed is false."
+    },
+    "gate_failures": {
+      "type": "array",
+      "description": "One entry per dimension below 8, e.g. 'parser_validity below 8'. Empty when passed.",
+      "items": { "type": "string" }
+    },
+    "checks": {
+      "type": "array",
+      "description": "The measured checks backing the scores. Every score's derived_from entries must appear here.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["check", "score", "result"],
+        "properties": {
+          "check": { "type": "string" },
+          "score": {
+            "type": "string",
+            "description": "The score dimension this check feeds.",
+            "enum": [
+              "inventory_coverage",
+              "parser_validity",
+              "source_graph_consistency",
+              "semantic_type_quality",
+              "semantic_graph_provenance",
+              "report_coverage",
+              "unknowns_handling",
+              "reproducibility"
+            ]
+          },
+          "result": { "type": "string", "enum": ["pass", "fail", "warn"] },
+          "detail": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "score": {
+      "type": "object",
+      "description": "A measured score. 'value' must be a fixed formula over the named checks — a bare constant is a contract violation even though a schema cannot detect intent.",
+      "required": ["value", "derived_from", "measurement"],
+      "properties": {
+        "value": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "derived_from": {
+          "type": "array",
+          "description": "Ids of the checks (in checks[]) this value was computed from.",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "measurement": {
+          "type": "string",
+          "description": "Human-readable summary of the measured quantities behind the value."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

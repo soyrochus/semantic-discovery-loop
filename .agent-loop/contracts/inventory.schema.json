@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "inventory.schema.json",
+  "title": "Repository Inventory",
+  "description": "Deterministic inventory of the repository. Stored at .work/semantic-loop/inventory.json.",
+  "type": "object",
+  "required": ["repo_fingerprint", "generated_by", "summary", "files"],
+  "properties": {
+    "repo_fingerprint": {
+      "type": ["string", "null"],
+      "description": "Must match state.json repo_fingerprint (e.g. git HEAD hash)."
+    },
+    "generated_by": {
+      "type": "string",
+      "description": "Tool or method used to produce the listing, e.g. 'git ls-files'."
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_files", "languages"],
+      "properties": {
+        "total_files": { "type": "integer", "minimum": 0 },
+        "languages": {
+          "type": "object",
+          "description": "Map of detected language/format name to file count.",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "frameworks_detected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "evidence"],
+            "properties": {
+              "name": { "type": "string" },
+              "evidence": {
+                "type": "array",
+                "description": "Repository paths that indicate this framework.",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "excluded": {
+          "type": "array",
+          "description": "Patterns or directories excluded as generated/vendor/build output, with reasons.",
+          "items": {
+            "type": "object",
+            "required": ["pattern", "reason"],
+            "properties": {
+              "pattern": { "type": "string" },
+              "reason": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "properties": {
+          "path": { "type": "string" },
+          "language": {
+            "type": ["string", "null"],
+            "description": "Detected language or format; null if undetermined."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "source",
+              "test",
+              "build",
+              "configuration",
+              "template",
+              "data",
+              "documentation",
+              "script",
+              "generated",
+              "vendor",
+              "unknown"
+            ]
+          },
+          "artifact_types": {
+            "type": "array",
+            "description": "Detected artifact types this file contributes, e.g. 'java-class', 'struts-config', 'jsp-template', 'sql-ddl'.",
+            "items": { "type": "string" }
+          },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "hash": { "type": ["string", "null"] },
+          "uncertainty": {
+            "type": ["string", "null"],
+            "description": "Why classification is uncertain, if it is."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "description": "Inventory-level open questions that could not be resolved deterministically.",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

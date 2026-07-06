@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "semantic-types.schema.json",
+  "title": "Semantic Type Registry",
+  "description": "Kernel vocabulary plus project-specific discovered semantic types. Stored at .work/semantic-loop/semantic-types.json.",
+  "type": "object",
+  "required": ["types"],
+  "properties": {
+    "types": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticType" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "semanticType": {
+      "type": "object",
+      "required": [
+        "type_id",
+        "parent_type",
+        "definition",
+        "detection_rules",
+        "required_evidence",
+        "status",
+        "version"
+      ],
+      "properties": {
+        "type_id": {
+          "type": "string",
+          "description": "PascalCase type name, e.g. 'Action' or a project-specific type like 'BatchImportJob'."
+        },
+        "parent_type": {
+          "type": ["string", "null"],
+          "description": "type_id of the parent type for specializations; null for kernel roots."
+        },
+        "definition": { "type": "string", "minLength": 1 },
+        "detection_rules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Operational rules describing which source constructs indicate this type."
+        },
+        "required_evidence": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Evidence kinds that MUST be present for a node of this type to be instantiated."
+        },
+        "optional_evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "examples": {
+          "type": "array",
+          "description": "Examples from THIS repository (source node ids or paths). Required for proposed project-specific types.",
+          "items": { "type": "string" }
+        },
+        "confidence": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence that the type itself is a real, distinct concept in this repository. Kernel types may leave this null."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "proposed", "validated", "accepted", "deprecated"],
+          "description": "Only accepted or validated types may back stable constructs in the final report."
+        },
+        "version": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "tool_id": "struts-config-v1",
+  "artifact_type": "struts-xml",
+  "input_patterns": ["**/struts-config.xml", "**/validation.xml"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Real XML parse via xml.sax with a locator for line spans; external entity and DTD resolution disabled. Dispatches on the root element: <struts-config> yields Route nodes per action mapping (forwards, form bean, input, action class as properties, full element span) plus ConfigurationEntry nodes for form-beans, global-forwards, message-resources, and plug-ins; <form-validation> yields ConfigurationEntry nodes per validator field.",
+  "extracts": [
+    "Route node per <action> with path, action class, form bean, scope, input, and all forwards (name/path/redirect/line)",
+    "ConfigurationEntry per <form-bean>, <global-forwards>/<forward>, <message-resources>, <plug-in> (with set-property values)",
+    "ConfigurationEntry per validator <field> with form, property, depends",
+    "declares edges from the file node to every extracted construct"
+  ],
+  "known_limitations": [
+    "Struts 1.x vocabulary only; rejects XML whose root is not <struts-config> or <form-validation> rather than guessing.",
+    "Records configuration facts only: URL suffix derivation (e.g. '.do' from web.xml) and semantic interpretation are the graph builders' job.",
+    "SAX locator lines point at the end of the start tag; multi-line start tags report the closing line as the span start.",
+    "Validator <var>/<arg> details inside fields are not extracted, only form/property/depends."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

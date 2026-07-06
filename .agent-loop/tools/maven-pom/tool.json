@@ -1,0 +1,22 @@
+{
+  "tool_id": "maven-pom-v1",
+  "artifact_type": "maven-pom",
+  "input_patterns": ["**/pom.xml", "pom.xml"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <pom.xml...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Real XML parse via xml.sax with a locator, so each <dependency> block carries its actual line span. Tracks the element stack to take only direct project dependencies (not dependencyManagement, not plugin dependencies). External entity and DTD resolution disabled.",
+  "extracts": [
+    "BuildModule node with groupId/version/packaging from the project coordinates",
+    "Dependency node per direct <dependency> with group/artifact/version/scope and the block's line span",
+    "declares edge file → module, depends-on edges module → dependencies"
+  ],
+  "known_limitations": [
+    "Single-POM view: parent POM resolution, property interpolation (${...}) and dependencyManagement version inheritance are not performed.",
+    "Plugins, profiles, and repositories are not extracted.",
+    "SAX locator lines point at the end of the start tag; multi-line <dependency ...> start tags shift the span start to the closing line."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

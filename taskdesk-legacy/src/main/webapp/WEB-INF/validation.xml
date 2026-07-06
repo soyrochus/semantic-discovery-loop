@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC
+        "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+        "http://jakarta.apache.org/commons/dtds/validator_1_3_0.dtd">
+<form-validation>
+    <formset>
+        <form name="loginForm">
+            <field property="username" depends="required">
+                <arg key="login.username"/>
+            </field>
+            <field property="password" depends="required">
+                <arg key="login.password"/>
+            </field>
+        </form>
+
+        <form name="taskForm">
+            <field property="title" depends="required">
+                <arg key="task.title"/>
+            </field>
+            <field property="priority" depends="required">
+                <arg key="task.priority"/>
+            </field>
+            <field property="dueDate" depends="date">
+                <arg key="task.dueDate"/>
+                <var>
+                    <var-name>datePatternStrict</var-name>
+                    <var-value>yyyy-MM-dd</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="taskAssignForm">
+            <field property="taskId" depends="required">
+                <arg key="task.id"/>
+            </field>
+            <field property="ownerUserId" depends="required">
+                <arg key="task.owner"/>
+            </field>
+        </form>
+    </formset>
+</form-validation>

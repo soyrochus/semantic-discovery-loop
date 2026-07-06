@@ -1,0 +1,22 @@
+{
+  "tool_id": "sqlite-schema-v1",
+  "artifact_type": "sqlite-database",
+  "input_patterns": ["**/*.sqlite", "**/*.db", "**/*.sqlite3"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "No text parsing at all: introspects the database through stdlib sqlite3 (sqlite_master, PRAGMA table_info, PRAGMA foreign_key_list), opened read-only and immutable via URI. Fully deterministic, sorted output.",
+  "extracts": [
+    "tables with columns (name, type, notnull, primary key)",
+    "indexes, views, triggers with their target table (configures edges)",
+    "foreign-key 'references' edges with from/to columns"
+  ],
+  "known_limitations": [
+    "Binary artefact: no line spans (span is null).",
+    "Row data is not read — schema only.",
+    "Databases requiring extensions to open will fail cleanly."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

@@ -1,0 +1,640 @@
+#!/usr/bin/env python3
+"""verifier — independent verification tool for the semantic discovery loop.
+
+Scores all eight gate dimensions by *measuring* the artefacts in
+.work/semantic-loop/ against the repository — never by asserting. Every score
+is derived from named checks; the formulas are fixed in this file, which is
+human-reviewed gallery code, not generated during the loop.
+
+Independence rules this tool embodies:
+  - it reads artefacts and the repository; it writes only verification.json;
+  - it re-derives facts (recounts edges, re-resolves provenance, re-runs
+    parser smoke tests, recomputes hashes) instead of trusting generator
+    bookkeeping;
+  - before a PASS verdict is trusted, it must demonstrate it can fail: the
+    built-in self-test mutates copies of the artefacts and asserts the gate
+    catches each mutation.
+
+Usage:
+  python3 verify.py [--work DIR] [--iteration N] [--no-self-test] [--no-write]
+  python3 verify.py --self-test [--work DIR]   # mutation self-test only
+  python3 verify.py --smoke                    # self-contained smoke test
+
+Exit code 0 when the gate passes, 1 when it fails (ITERATING), 2 on usage or
+artefact-loading errors.
+"""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from fnmatch import fnmatch
+from pathlib import Path
+
+TOOL_ID = "verifier-v1"
+GALLERY_SOURCE = ".agent-loop/tools/verifier"
+
+DIMENSIONS = [
+    "inventory_coverage", "parser_validity", "source_graph_consistency",
+    "semantic_type_quality", "semantic_graph_provenance", "report_coverage",
+    "unknowns_handling", "reproducibility",
+]
+
+KERNEL_TYPES = {
+    "Application", "Module", "EntryPoint", "Interface", "Flow", "Action",
+    "View", "Component", "DataObject", "DataStore", "Rule", "Integration",
+    "Job", "Configuration", "SecurityElement", "UnknownSemanticConstruct",
+}
+
+# Node types the loop driver may assemble directly (file listing / doc
+# headings). Everything else must name the registered parser that emitted it.
+STRUCTURAL_TYPES = {"File", "Directory", "DocumentationSection"}
+
+REQUIRED_REPORT_SECTIONS = [
+    "Application overview", "Detected technology stack",
+    "Source inventory summary", "Major modules/components", "Entrypoints",
+    "Views/screens", "Controllers/actions/handlers", "Services/domain logic",
+    "Data access and persistence", "External integrations",
+    "Semantic type registry summary", "Unresolved unknowns", "Assumptions",
+    "Confidence and evidence notes", "Limitations",
+]
+
+REGISTRY_REQUIRED_KEYS = {
+    "parser_id", "artifact_type", "input_patterns", "script_path",
+    "invocation", "output_schema", "validation_status", "tests",
+    "known_limitations", "writes_source_tree", "network_required",
+}
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def clamp(v: int) -> int:
+    return max(0, min(10, v))
+
+
+class Artefacts:
+    """Loaded loop artefacts plus repo context."""
+
+    def __init__(self, work: Path, repo: Path):
+        self.work = work
+        self.repo = repo
+        self.inventory = self._load("inventory.json")
+        self.registry = self._load("parser-registry.json")
+        self.source = self._load("source-graph.json")
+        self.types = self._load("semantic-types.json")
+        self.semantic = self._load("semantic-graph.json")
+        self.assumptions = self._load("assumptions.json")
+        self.state = self._load("state.json", optional=True) or {}
+        report = work / "reports" / "application-structure.md"
+        self.report_text = report.read_text(encoding="utf-8") if report.exists() else None
+
+    def _load(self, name: str, optional: bool = False):
+        path = self.work / name
+        if not path.exists():
+            if optional:
+                return None
+            raise FileNotFoundError(f"required artefact missing: {path}")
+        return json.loads(path.read_text(encoding="utf-8"))
+
+
+class Result:
+    def __init__(self):
+        self.checks: list[dict] = []
+        self.scores: dict[str, dict] = {}
+
+    def check(self, dimension: str, check_id: str, ok: bool, detail: str, warn: bool = False) -> bool:
+        self.checks.append({
+            "check": check_id, "score": dimension,
+            "result": "pass" if ok else ("warn" if warn else "fail"),
+            "detail": detail,
+        })
+        return ok
+
+    def score(self, dimension: str, value: int, measurement: str) -> None:
+        derived = [c["check"] for c in self.checks if c["score"] == dimension]
+        self.scores[dimension] = {
+            "value": clamp(value), "derived_from": derived, "measurement": measurement,
+        }
+
+    def failed(self, dimension: str) -> int:
+        return sum(1 for c in self.checks if c["score"] == dimension and c["result"] == "fail")
+
+
+# ---------------------------------------------------------------- dimensions
+
+def score_inventory(a: Artefacts, r: Result, run_subprocesses: bool) -> None:
+    files = a.inventory.get("files", [])
+    listed = {f["path"] for f in files}
+    uncertainties = " ".join(a.inventory.get("uncertainties", []))
+    scope_roots = a.inventory.get("summary", {}).get("scope_roots") or sorted(
+        {p.split("/", 1)[0] for p in listed})
+
+    unexplained: list[str] = []
+    if run_subprocesses:
+        proc = subprocess.run(["git", "ls-files", *scope_roots], cwd=a.repo,
+                              text=True, capture_output=True)
+        tracked = [l for l in proc.stdout.splitlines() if l]
+        unexplained = [t for t in tracked if t not in listed and t not in uncertainties]
+        r.check("inventory_coverage", "inv-scope-complete", not unexplained,
+                f"{len(tracked)} tracked files under {scope_roots}; "
+                f"{len(unexplained)} neither inventoried nor explained in uncertainties: {unexplained[:5]}")
+
+    missing = [f["path"] for f in files if not (a.repo / f["path"]).is_file()]
+    r.check("inventory_coverage", "inv-files-exist", not missing,
+            f"{len(files)} inventoried files; {len(missing)} missing on disk: {missing[:5]}")
+
+    mismatched = [f["path"] for f in files
+                  if f.get("hash") and (a.repo / f["path"]).is_file()
+                  and sha256(a.repo / f["path"]) != f["hash"]]
+    r.check("inventory_coverage", "inv-hashes-match", not mismatched,
+            f"recomputed sha256 for {len(files)} files; {len(mismatched)} mismatches: {mismatched[:5]}")
+
+    value = 10 - 3 * len(unexplained) - 3 * len(missing) - 2 * len(mismatched)
+    r.score("inventory_coverage", value,
+            f"{len(files)} files inventoried; {len(unexplained)} unexplained tracked paths, "
+            f"{len(missing)} missing, {len(mismatched)} hash mismatches")
+
+
+def score_parsers(a: Artefacts, r: Result, run_subprocesses: bool) -> None:
+    parsers = a.registry.get("parsers", [])
+    incomplete = [p.get("parser_id", "?") for p in parsers
+                  if not REGISTRY_REQUIRED_KEYS.issubset(p.keys())]
+    r.check("parser_validity", "reg-manifests-complete", not incomplete,
+            f"{len(parsers)} manifests; incomplete: {incomplete}")
+
+    unvalidated = [p["parser_id"] for p in parsers
+                   if p.get("validation_status") != "validated"]
+    r.check("parser_validity", "reg-status-validated", not unvalidated,
+            f"non-validated parsers: {unvalidated}")
+
+    smoke_failures, fidelity_failures = [], []
+    for p in parsers:
+        script = a.repo / p.get("script_path", "")
+        if not script.exists():
+            smoke_failures.append(f"{p['parser_id']} (script missing)")
+            continue
+        if run_subprocesses:
+            proc = subprocess.run(["python3", str(script), "--smoke"], cwd=a.repo,
+                                  text=True, capture_output=True)
+            if proc.returncode != 0 or "SMOKE PASS" not in proc.stdout:
+                smoke_failures.append(p["parser_id"])
+        if p.get("origin") == "gallery" and not p.get("adaptations"):
+            gallery = a.repo / p.get("gallery_source", "") / script.name
+            if not gallery.exists() or gallery.read_bytes() != script.read_bytes():
+                fidelity_failures.append(p["parser_id"])
+    if run_subprocesses:
+        r.check("parser_validity", "reg-smoke-tests", not smoke_failures,
+                f"re-ran --smoke for {len(parsers)} parsers; failures: {smoke_failures}")
+    r.check("parser_validity", "reg-gallery-fidelity", not fidelity_failures,
+            "gallery copies claiming no adaptations diverging from gallery source: "
+            f"{fidelity_failures}")
+
+    value = 10 - 3 * r.failed("parser_validity")
+    r.score("parser_validity", value,
+            f"{len(parsers)} parsers; {len(smoke_failures)} smoke failures, "
+            f"{len(fidelity_failures)} fidelity failures, {len(incomplete)} incomplete manifests, "
+            f"{len(unvalidated)} unvalidated")
+
+
+def score_source_graph(a: Artefacts, r: Result) -> None:
+    nodes = a.source.get("nodes", [])
+    edges = a.source.get("edges", [])
+    ids = [n["id"] for n in nodes]
+    idset = set(ids)
+
+    dangling = [e["id"] for e in edges
+                if e["source_id"] not in idset or e["target_id"] not in idset]
+    r.check("source_graph_consistency", "src-no-dangling", not dangling,
+            f"{len(edges)} edges; dangling: {len(dangling)} {dangling[:5]}")
+
+    dupes = len(ids) - len(idset)
+    r.check("source_graph_consistency", "src-unique-ids", dupes == 0,
+            f"{len(nodes)} nodes; duplicate ids: {dupes}")
+
+    bad_spans = [n["id"] for n in nodes if n.get("span")
+                 and (n["span"]["start_line"] < 1 or n["span"]["end_line"] < n["span"]["start_line"])]
+    bad_prefix = [n["id"] for n in nodes if not n["id"].startswith("src:")]
+    r.check("source_graph_consistency", "src-shape", not bad_spans and not bad_prefix,
+            f"bad spans: {bad_spans[:5]}; bad id prefixes: {bad_prefix[:5]}")
+
+    by_parser = {p["parser_id"]: p for p in a.registry.get("parsers", [])}
+    bad_attr = []
+    for n in nodes:
+        pid = n.get("parser_id")
+        if pid is None:
+            if n["type"] not in STRUCTURAL_TYPES:
+                bad_attr.append(f"{n['id']} (type {n['type']} needs a parser)")
+        elif pid not in by_parser:
+            bad_attr.append(f"{n['id']} (unregistered parser {pid})")
+        elif n.get("path") and not any(
+                fnmatch(n["path"], pat) for pat in by_parser[pid]["input_patterns"]):
+            bad_attr.append(f"{n['id']} ({pid} does not match {n['path']})")
+    r.check("source_graph_consistency", "src-parser-attribution", not bad_attr,
+            f"nodes whose parser_id is unregistered, missing, or pattern-mismatched: "
+            f"{len(bad_attr)} {bad_attr[:5]}")
+
+    value = 10 - 3 * r.failed("source_graph_consistency")
+    r.score("source_graph_consistency", value,
+            f"{len(nodes)} nodes / {len(edges)} edges; {len(dangling)} dangling, "
+            f"{dupes} duplicate ids, {len(bad_attr)} attribution violations")
+
+
+def score_types(a: Artefacts, r: Result) -> None:
+    types = {t["type_id"]: t for t in a.types.get("types", [])}
+    missing_kernel = sorted(KERNEL_TYPES - set(types))
+    r.check("semantic_type_quality", "types-kernel-present", not missing_kernel,
+            f"kernel types missing: {missing_kernel}")
+
+    used = {n["type"] for n in a.semantic.get("nodes", [])}
+    unstable = [t for t in used
+                if types.get(t, {}).get("status") not in ("accepted", "validated")]
+    r.check("semantic_type_quality", "types-used-are-stable", not unstable,
+            f"semantic graph uses types not accepted/validated: {unstable}")
+
+    vague = [tid for tid, t in types.items()
+             if not t.get("detection_rules") or not t.get("required_evidence")]
+    r.check("semantic_type_quality", "types-operational", not vague,
+            f"types without detection rules or required evidence: {vague[:5]}")
+
+    value = 10 - 3 * r.failed("semantic_type_quality") - (1 if len(types) > 40 else 0)
+    r.score("semantic_type_quality", value,
+            f"{len(types)} types, {len(used)} in use; {len(unstable)} unstable in use, "
+            f"{len(vague)} non-operational")
+
+
+def score_provenance(a: Artefacts, r: Result) -> None:
+    source_ids = {n["id"] for n in a.source.get("nodes", [])}
+    nodes = a.semantic.get("nodes", [])
+
+    ungrounded = [n["id"] for n in nodes if not n.get("grounded_in")]
+    r.check("semantic_graph_provenance", "sem-all-grounded", not ungrounded,
+            f"{len(nodes)} semantic nodes; without provenance: {ungrounded}")
+
+    bad_refs = [f"{n['id']} -> {g['source_node']}"
+                for n in nodes for g in n.get("grounded_in", [])
+                if g.get("source_node") and g["source_node"] not in source_ids]
+    r.check("semantic_graph_provenance", "sem-refs-resolve", not bad_refs,
+            f"grounding refs not in source graph: {len(bad_refs)} {bad_refs[:5]}")
+
+    bad_files, bad_spans = [], []
+    for n in nodes:
+        for g in n.get("grounded_in", []):
+            f = a.repo / g.get("file", "")
+            if not f.is_file():
+                bad_files.append(f"{n['id']} -> {g.get('file')}")
+            elif g.get("span"):
+                lines = len(f.read_text(encoding="utf-8", errors="replace").splitlines()) or 1
+                if g["span"]["end_line"] > lines:
+                    bad_spans.append(f"{n['id']} -> {g['file']}:{g['span']['end_line']}>{lines}")
+    r.check("semantic_graph_provenance", "sem-evidence-files", not bad_files and not bad_spans,
+            f"missing evidence files: {bad_files[:5]}; spans past EOF: {bad_spans[:5]}")
+
+    bad_conf = [n["id"] for n in nodes
+                if not isinstance(n.get("confidence"), (int, float))
+                or not 0 <= n["confidence"] <= 1]
+    r.check("semantic_graph_provenance", "sem-confidence", not bad_conf,
+            f"nodes without explicit confidence in [0,1]: {bad_conf[:5]}")
+
+    if ungrounded or bad_refs:
+        value = min(5, 10 - 3 * r.failed("semantic_graph_provenance"))
+    else:
+        value = 10 - 2 * (len(bad_files) + len(bad_spans)) - (2 if bad_conf else 0)
+    r.score("semantic_graph_provenance", value,
+            f"{len(nodes)} nodes, {sum(len(n.get('grounded_in', [])) for n in nodes)} grounding entries; "
+            f"{len(ungrounded)} ungrounded, {len(bad_refs)} unresolved refs, "
+            f"{len(bad_files) + len(bad_spans)} evidence file/span problems")
+
+
+def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
+    if a.report_text is None:
+        r.check("report_coverage", "report-exists", False, "report not written yet")
+        r.score("report_coverage", 0, "reports/application-structure.md absent")
+        return
+    r.check("report_coverage", "report-exists", True, "report present")
+
+    text = a.report_text.lower()
+    missing = [s for s in REQUIRED_REPORT_SECTIONS if s.lower() not in text]
+    r.check("report_coverage", "report-sections", not missing,
+            f"{len(REQUIRED_REPORT_SECTIONS) - len(missing)}/{len(REQUIRED_REPORT_SECTIONS)} "
+            f"required sections present; missing: {missing}")
+
+    says_final = bool(re.search(r"status:\s*final", text))
+    says_partial = bool(re.search(r"status:\s*(partial|iterating)", text))
+    consistent = (says_final and provisional_pass) or (says_partial and not provisional_pass)
+    r.check("report_coverage", "report-status-consistent",
+            consistent,
+            f"report says final={says_final} partial={says_partial}; "
+            f"other dimensions pass={provisional_pass} — a FINAL claim requires a passing gate",
+            warn=(says_partial and provisional_pass))
+
+    value = round(10 * (len(REQUIRED_REPORT_SECTIONS) - len(missing)) / len(REQUIRED_REPORT_SECTIONS))
+    if not (says_final or says_partial):
+        value -= 2
+    if says_final and not provisional_pass:
+        value = min(value, 7)
+    r.score("report_coverage", value,
+            f"{len(REQUIRED_REPORT_SECTIONS) - len(missing)}/{len(REQUIRED_REPORT_SECTIONS)} sections; "
+            f"status marker final={says_final}/partial={says_partial}")
+
+
+def score_unknowns(a: Artefacts, r: Result) -> None:
+    unknown_nodes = [n for n in a.semantic.get("nodes", [])
+                     if n["type"] == "UnknownSemanticConstruct"]
+    r.check("unknowns_handling", "unk-represented", bool(unknown_nodes),
+            f"UnknownSemanticConstruct nodes: {len(unknown_nodes)}")
+
+    uncertainties = a.inventory.get("uncertainties", [])
+    r.check("unknowns_handling", "unk-inventory-uncertainties", bool(uncertainties),
+            f"inventory uncertainties recorded: {len(uncertainties)}")
+
+    assum = a.assumptions.get("assumptions", [])
+    bad = [x.get("id", "?") for x in assum
+           if not all(k in x for k in ("id", "statement", "reason", "confidence", "status"))]
+    r.check("unknowns_handling", "unk-assumptions-explicit", bool(assum) and not bad,
+            f"{len(assum)} assumptions; malformed: {bad}")
+
+    value = 10 - 3 * r.failed("unknowns_handling")
+    r.score("unknowns_handling", value,
+            f"{len(unknown_nodes)} unknown constructs, {len(uncertainties)} uncertainties, "
+            f"{len(assum)} assumptions")
+
+
+def score_reproducibility(a: Artefacts, r: Result, run_subprocesses: bool) -> None:
+    fingerprints = {name: art.get("repo_fingerprint") for name, art in
+                    (("inventory", a.inventory), ("source-graph", a.source),
+                     ("semantic-graph", a.semantic), ("state", a.state))}
+    distinct = set(fingerprints.values())
+    head = None
+    if run_subprocesses:
+        head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=a.repo,
+                              text=True, capture_output=True).stdout.strip() or None
+    consistent = len(distinct) == 1 and (head is None or distinct == {head})
+    r.check("reproducibility", "rep-fingerprint-consistent", consistent,
+            f"artefact fingerprints {fingerprints}; git HEAD {head}")
+
+    nondeterministic = []
+    if run_subprocesses:
+        for p in a.registry.get("parsers", []):
+            sample = next((f["path"] for f in a.inventory.get("files", [])
+                           if any(fnmatch(f["path"], pat) for pat in p["input_patterns"])), None)
+            script = a.repo / p["script_path"]
+            if sample and script.exists():
+                runs = [subprocess.run(["python3", str(script), sample], cwd=a.repo,
+                                       text=True, capture_output=True).stdout
+                        for _ in range(2)]
+                if runs[0] != runs[1] or not runs[0]:
+                    nondeterministic.append(p["parser_id"])
+        r.check("reproducibility", "rep-parsers-deterministic", not nondeterministic,
+                f"double-ran each parser on a repository sample; unstable output: {nondeterministic}")
+
+    assumptions_stored = (a.work / "assumptions.json").exists()
+    r.check("reproducibility", "rep-assumptions-stored", assumptions_stored,
+            "assumptions.json present" if assumptions_stored else "assumptions.json missing")
+
+    value = 10 - 3 * r.failed("reproducibility")
+    r.score("reproducibility", value,
+            f"fingerprints consistent={consistent}; "
+            f"{len(nondeterministic)} nondeterministic parsers")
+
+
+# ------------------------------------------------------------------ assembly
+
+def run_verification(work: Path, repo: Path, iteration: int,
+                     run_subprocesses: bool = True) -> dict:
+    a = Artefacts(work, repo)
+    r = Result()
+    score_inventory(a, r, run_subprocesses)
+    score_parsers(a, r, run_subprocesses)
+    score_source_graph(a, r)
+    score_types(a, r)
+    score_provenance(a, r)
+    score_unknowns(a, r)
+    score_reproducibility(a, r, run_subprocesses)
+    provisional_pass = all(s["value"] >= 8 for s in r.scores.values())
+    score_report(a, r, provisional_pass)
+
+    failures = [f"{k} below 8" for k in DIMENSIONS if r.scores[k]["value"] < 8]
+    passed = not failures
+    weakest = None if passed else min(DIMENSIONS, key=lambda k: r.scores[k]["value"])
+    action = None
+    if not passed:
+        failing_checks = [c for c in r.checks if c["score"] == weakest and c["result"] == "fail"]
+        action = (f"Improve {weakest}: fix " +
+                  "; ".join(c["check"] + " (" + c["detail"][:120] + ")" for c in failing_checks[:3]))
+    return {
+        "iteration": iteration,
+        "passed": passed,
+        "verifier": {"tool": TOOL_ID, "gallery_source": GALLERY_SOURCE, "self_test": None},
+        "scores": {k: r.scores[k] for k in DIMENSIONS},
+        "weakest_score": weakest,
+        "required_next_action": action,
+        "gate_failures": failures,
+        "checks": r.checks,
+    }
+
+
+# ------------------------------------------------------------------ self-test
+
+def _mutate_provenance(work: Path) -> str:
+    p = work / "semantic-graph.json"
+    data = json.loads(p.read_text())
+    data["nodes"][0]["grounded_in"] = []
+    p.write_text(json.dumps(data))
+    return "semantic_graph_provenance"
+
+
+def _mutate_dangling_edge(work: Path) -> str:
+    p = work / "source-graph.json"
+    data = json.loads(p.read_text())
+    data["edges"].append({"id": "edge:selftest-dangling", "source_id": data["nodes"][0]["id"],
+                          "target_id": "src:selftest:does-not-exist", "type": "contains",
+                          "confidence": 1.0, "properties": {}})
+    p.write_text(json.dumps(data))
+    return "source_graph_consistency"
+
+
+def _mutate_parser_attribution(work: Path) -> str:
+    p = work / "source-graph.json"
+    data = json.loads(p.read_text())
+    node = next((n for n in data["nodes"] if n.get("parser_id")), None)
+    if node is None:
+        data["nodes"].append({
+            "id": "src:selftest:unattributed", "layer": "source", "type": "Class",
+            "name": "SelfTest", "path": "selftest.java", "span": None, "hash": None,
+            "parser_id": "selftest-bogus-parser-v9", "properties": {}})
+    else:
+        node["parser_id"] = "selftest-bogus-parser-v9"
+    p.write_text(json.dumps(data))
+    return "source_graph_consistency"
+
+
+def _mutate_inventory_gap(work: Path) -> str:
+    # Point an inventoried path at a file that does not exist — detectable by
+    # the pure inv-files-exist check, no git subprocess needed.
+    p = work / "inventory.json"
+    data = json.loads(p.read_text())
+    entry = {"path": "selftest/does-not-exist.xyz", "role": "unknown",
+             "language": None, "artifact_types": [], "size_bytes": 0,
+             "hash": None, "uncertainty": None}
+    if data["files"]:
+        data["files"][0] = {**data["files"][0], "path": entry["path"]}
+    else:
+        data["files"].append(entry)
+    p.write_text(json.dumps(data))
+    return "inventory_coverage"
+
+
+MUTATIONS = [
+    ("strip-provenance", _mutate_provenance),
+    ("dangling-edge", _mutate_dangling_edge),
+    ("bogus-parser-id", _mutate_parser_attribution),
+    ("inventory-gap", _mutate_inventory_gap),
+]
+
+
+def run_self_test(work: Path, repo: Path) -> dict:
+    """Prove the gate can fail: each mutation must push its target dimension
+    below 8 on a scored copy of the real artefacts."""
+    detected, details = 0, []
+    for name, mutate in MUTATIONS:
+        with tempfile.TemporaryDirectory(prefix="verifier-selftest-") as tmp:
+            tmp_work = Path(tmp) / "work"
+            shutil.copytree(work, tmp_work)
+            target = mutate(tmp_work)
+            # Subprocess checks (smoke/determinism/git) are orthogonal to the
+            # mutations and slow; the mutated dimensions are all pure checks.
+            result = run_verification(tmp_work, repo, iteration=0,
+                                      run_subprocesses=False)
+            caught = (not result["passed"]
+                      and result["scores"][target]["value"] < 8)
+            detected += caught
+            details.append({"mutation": name, "target": target, "detected": caught})
+    return {"mutations_applied": len(MUTATIONS), "mutations_detected": detected,
+            "passed": detected == len(MUTATIONS), "details": details}
+
+
+# --------------------------------------------------------------------- smoke
+
+def smoke() -> None:
+    """Self-contained: builds a minimal artefact set, asserts the pure checks
+    pass on the clean fixture and fail on corrupted variants."""
+    clean = {
+        "inventory.json": {"repo_fingerprint": "f" * 40, "generated_by": "smoke",
+                           "summary": {"total_files": 0, "languages": {}, "scope_roots": []},
+                           "files": [], "uncertainties": ["smoke fixture"]},
+        "parser-registry.json": {"parsers": []},
+        "source-graph.json": {"repo_fingerprint": "f" * 40, "nodes": [
+            {"id": "src:file:a.java", "layer": "source", "type": "File", "name": "a.java",
+             "path": "a.java", "span": {"start_line": 1, "end_line": 2}, "hash": None,
+             "parser_id": None, "properties": {}}], "edges": []},
+        "semantic-types.json": {"types": [
+            {"type_id": t, "parent_type": None, "definition": t,
+             "detection_rules": ["r"], "required_evidence": ["e"],
+             "optional_evidence": [], "examples": [], "confidence": None,
+             "status": "accepted", "version": 1} for t in sorted(KERNEL_TYPES)]},
+        "semantic-graph.json": {"repo_fingerprint": "f" * 40, "nodes": [
+            {"id": "sem:unknown:x", "layer": "semantic", "type": "UnknownSemanticConstruct",
+             "name": "x", "confidence": 0.5, "status": "accepted",
+             "grounded_in": [{"source_node": "src:file:a.java", "file": "a.java",
+                              "span": None, "evidence_type": "smoke"}],
+             "unknowns": [], "properties": {}}], "edges": []},
+        "assumptions.json": {"assumptions": [
+            {"id": "a1", "statement": "s", "reason": "r", "confidence": 1.0,
+             "status": "accepted"}]},
+        "state.json": {"repo_fingerprint": "f" * 40},
+    }
+    with tempfile.TemporaryDirectory(prefix="verifier-smoke-") as tmp:
+        work = Path(tmp) / "work"
+        (work / "reports").mkdir(parents=True)
+        repo = Path(tmp) / "repo"
+        repo.mkdir()
+        (repo / "a.java").write_text("class A {\n}\n")
+        for name, data in clean.items():
+            (work / name).write_text(json.dumps(data))
+        (work / "reports" / "application-structure.md").write_text(
+            "Status: FINAL\n" + "\n".join(f"## {s}" for s in REQUIRED_REPORT_SECTIONS))
+
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert result["passed"], f"clean fixture must pass, got {result['gate_failures']}"
+
+        corrupt = copy.deepcopy(clean)
+        corrupt["semantic-graph.json"]["nodes"][0]["grounded_in"] = []
+        for name, data in corrupt.items():
+            (work / name).write_text(json.dumps(data))
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert not result["passed"], "ungrounded semantic node must fail the gate"
+        assert result["scores"]["semantic_graph_provenance"]["value"] < 8
+        assert result["weakest_score"] == "semantic_graph_provenance"
+        assert result["required_next_action"], "failing gate must define a next action"
+
+        st = run_self_test(work, repo)
+        assert st["mutations_applied"] == len(MUTATIONS)
+    print("SMOKE PASS")
+
+
+# ---------------------------------------------------------------------- main
+
+def main(argv: list[str]) -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--work", default=".work/semantic-loop")
+    ap.add_argument("--repo", default=".")
+    ap.add_argument("--iteration", type=int, default=None)
+    ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--no-self-test", action="store_true")
+    ap.add_argument("--no-write", action="store_true")
+    args = ap.parse_args(argv[1:])
+
+    if args.smoke:
+        smoke()
+        return 0
+
+    work, repo = Path(args.work), Path(args.repo)
+    if args.self_test:
+        result = run_self_test(work, repo)
+        print(json.dumps(result, indent=2))
+        return 0 if result["passed"] else 1
+
+    self_test = None
+    if not args.no_self_test:
+        self_test = run_self_test(work, repo)
+        if not self_test["passed"]:
+            print("VERIFIER SELF-TEST FAILED — verdict would be untrustworthy", file=sys.stderr)
+            print(json.dumps(self_test, indent=2), file=sys.stderr)
+            return 2
+
+    iteration = args.iteration
+    if iteration is None:
+        state = work / "state.json"
+        iteration = json.loads(state.read_text()).get("iteration", 0) if state.exists() else 0
+    result = run_verification(work, repo, iteration)
+    result["verifier"]["self_test"] = (
+        {k: self_test[k] for k in ("mutations_applied", "mutations_detected", "passed")}
+        if self_test else None)
+
+    if not args.no_write:
+        out = work / "verification.json"
+        out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+
+    if result["passed"]:
+        print("VERIFICATION PASSED — all scores >= 8")
+    else:
+        print("ITERATING")
+        print(f"weakest_score: {result['weakest_score']}")
+        print(f"required_next_action: {result['required_next_action']}")
+    print(json.dumps({k: v["value"] for k, v in result["scores"].items()}, indent=2))
+    return 0 if result["passed"] else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

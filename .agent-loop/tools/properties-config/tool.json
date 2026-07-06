@@ -1,0 +1,22 @@
+{
+  "tool_id": "properties-config-v1",
+  "artifact_type": "properties-file",
+  "input_patterns": ["**/*.properties"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Implements java.util.Properties line rules: '#'/'!' comments, '='/':'/whitespace separators, odd-trailing-backslash line continuations, escaped separator characters in keys. Not a naive split-on-equals.",
+  "extracts": [
+    "one ConfigurationEntry node per key with full (continued) line span",
+    "values (capped at 500 chars)",
+    "containment edges from the file node"
+  ],
+  "known_limitations": [
+    "Unicode \\uXXXX escapes in values are kept literal, not decoded.",
+    "ISO-8859-1 vs UTF-8 encoding nuances are ignored (read as UTF-8 with replacement).",
+    "Duplicate keys produce one node id; the last occurrence wins in the node list."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

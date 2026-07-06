@@ -1,0 +1,25 @@
+{
+  "assumptions": [
+    {
+      "id": "assumption:scope",
+      "statement": "The requested analysis scope is taskdesk-legacy plus db after user permission to incorporate db.",
+      "reason": "User first requested taskdesk-legacy scope, then explicitly allowed DB incorporation.",
+      "confidence": 1.0,
+      "status": "accepted"
+    },
+    {
+      "id": "assumption:java-package-modules",
+      "statement": "Immediate Java package directories action/service/dao/form/model/util represent source modules.",
+      "reason": "Directory names and package declarations align across source files.",
+      "confidence": 0.9,
+      "status": "accepted"
+    },
+    {
+      "id": "assumption:do-suffix",
+      "statement": "Struts action paths map to .do URLs through the web.xml url-pattern.",
+      "reason": "The parsed web.xml url-pattern element maps ActionServlet to *.do and struts-config declares action paths without suffix.",
+      "confidence": 1.0,
+      "status": "accepted"
+    }
+  ]
+}

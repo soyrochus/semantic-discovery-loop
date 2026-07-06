@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parser-registry.schema.json",
+  "title": "Parser Registry",
+  "description": "Manifests for every parser/extractor used by the loop. Stored at .work/semantic-loop/parser-registry.json.",
+  "type": "object",
+  "required": ["parsers"],
+  "properties": {
+    "parsers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/parserManifest" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "parserManifest": {
+      "type": "object",
+      "required": [
+        "parser_id",
+        "artifact_type",
+        "input_patterns",
+        "origin",
+        "output_schema",
+        "validation_status",
+        "writes_source_tree",
+        "network_required"
+      ],
+      "properties": {
+        "parser_id": {
+          "type": "string",
+          "description": "Stable versioned id, e.g. 'java-signature-extractor-v1'."
+        },
+        "artifact_type": {
+          "type": "string",
+          "description": "The artifact type this parser handles, matching inventory artifact_types."
+        },
+        "input_patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "project-tooling",
+            "cached",
+            "gallery",
+            "gallery-adapted",
+            "standard-local",
+            "custom-extractor",
+            "generated"
+          ],
+          "description": "How the parser was obtained, per the selection order in LOOP.md. gallery = copied unmodified from .agent-loop/tools/; gallery-adapted = copied and modified for this repository."
+        },
+        "gallery_source": {
+          "type": ["string", "null"],
+          "description": "For gallery/gallery-adapted origins: the gallery folder the parser was copied from, e.g. '.agent-loop/tools/java-structure'."
+        },
+        "adaptations": {
+          "type": "array",
+          "description": "For gallery-adapted origins: what was changed in the cache copy and why.",
+          "items": { "type": "string" }
+        },
+        "script_path": {
+          "type": ["string", "null"],
+          "description": "Path under .cache/scripts/parsers/ for cached/custom/generated parsers; null when project or standard tooling is invoked directly."
+        },
+        "invocation": {
+          "type": ["string", "null"],
+          "description": "Command line or method used to run the parser."
+        },
+        "output_schema": {
+          "type": "string",
+          "description": "Identifier of the output contract, e.g. 'source-graph-fragment-v1'."
+        },
+        "validation_status": {
+          "type": "string",
+          "enum": ["unvalidated", "smoke-tested", "validated", "rejected"],
+          "description": "Generated parsers must be 'validated' before their output feeds final artefacts."
+        },
+        "tests": {
+          "type": "array",
+          "description": "Smoke tests or example inputs used to validate the parser.",
+          "items": { "type": "string" }
+        },
+        "known_limitations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "writes_source_tree": {
+          "type": "boolean",
+          "const": false,
+          "description": "Must always be false: parsers never write to the source tree."
+        },
+        "network_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

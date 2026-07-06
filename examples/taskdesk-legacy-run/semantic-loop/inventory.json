@@ -1,0 +1,681 @@
+{
+  "repo_fingerprint": "3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a",
+  "generated_by": "git ls-files taskdesk-legacy db with deterministic extension classification",
+  "summary": {
+    "total_files": 55,
+    "scope_roots": [
+      "taskdesk-legacy",
+      "db"
+    ],
+    "languages": {
+      "Markdown": 3,
+      "SQLite": 1,
+      "SQL": 3,
+      "XML": 5,
+      "Java": 31,
+      "Properties": 3,
+      "CSS": 1,
+      "JSP": 8
+    },
+    "frameworks_detected": [
+      {
+        "name": "Maven WAR",
+        "evidence": [
+          "taskdesk-legacy/pom.xml"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "name": "Struts 1.x",
+        "evidence": [
+          "taskdesk-legacy/pom.xml",
+          "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "taskdesk-legacy/src/main/webapp/WEB-INF/web.xml"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "name": "JSP/JSTL",
+        "evidence": [
+          "taskdesk-legacy/pom.xml",
+          "taskdesk-legacy/src/main/webapp/jsp/login.jsp"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "name": "SQLite JDBC",
+        "evidence": [
+          "taskdesk-legacy/pom.xml",
+          "taskdesk-legacy/src/main/resources/taskdesk.properties",
+          "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java"
+        ],
+        "confidence": 1.0
+      }
+    ],
+    "excluded": [
+      {
+        "pattern": ".work/**",
+        "reason": "semantic-loop generated artefacts are outside requested application/database scope"
+      },
+      {
+        "pattern": ".cache/**",
+        "reason": "parser cache and loop scripts are outside requested application/database scope"
+      },
+      {
+        "pattern": ".agent-loop/**",
+        "reason": "loop instructions/tools are not application source"
+      },
+      {
+        "pattern": "target/**",
+        "reason": "build output excluded if present"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "db/runtime-data/README.md",
+      "language": "Markdown",
+      "role": "documentation",
+      "artifact_types": [],
+      "size_bytes": 303,
+      "hash": "a3f1c3421c2a5ddb5edde468f162131e1aa646cb3d6c9c5898751c7cee2e93fb",
+      "uncertainty": null
+    },
+    {
+      "path": "db/runtime-data/taskdesk-demo.sqlite",
+      "language": "SQLite",
+      "role": "data",
+      "artifact_types": [
+        "sqlite-database"
+      ],
+      "size_bytes": 53248,
+      "hash": "93d02f7d265f0a10a80ddc9b048476782501534cc2e01d8ef868594580521944",
+      "uncertainty": null
+    },
+    {
+      "path": "db/sql/001_schema_sqlite.sql",
+      "language": "SQL",
+      "role": "data",
+      "artifact_types": [
+        "sql-script"
+      ],
+      "size_bytes": 2031,
+      "hash": "ec3e1fc49bdfa997a8d6a1a885bc9f693538f2f96790b5187a9b87e6714bdb69",
+      "uncertainty": null
+    },
+    {
+      "path": "db/sql/002_seed_data.sql",
+      "language": "SQL",
+      "role": "data",
+      "artifact_types": [
+        "sql-script"
+      ],
+      "size_bytes": 2447,
+      "hash": "866ae4a0479cf99b6313689bedac7474c470eaab0325fb0d4a76e9ede0f97934",
+      "uncertainty": null
+    },
+    {
+      "path": "db/sql/003_reset_database.sql",
+      "language": "SQL",
+      "role": "data",
+      "artifact_types": [
+        "sql-script"
+      ],
+      "size_bytes": 4480,
+      "hash": "306d8779206e585f6a3d02ff87d5db2f9fe72fe422130a3f5671b1d9cba9e5ac",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
+      "language": "Markdown",
+      "role": "documentation",
+      "artifact_types": [],
+      "size_bytes": 5649,
+      "hash": "4ae45762ad4e0c4a43c2a33e80b5606cc93ad6b7d3ae880d07936b18192d35eb",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/README.md",
+      "language": "Markdown",
+      "role": "documentation",
+      "artifact_types": [],
+      "size_bytes": 4861,
+      "hash": "68d035b65905f42254fdc165caef0fbf6a16e2d9cd6b25c24bdde48812fc0abf",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/pom.xml",
+      "language": "XML",
+      "role": "build",
+      "artifact_types": [
+        "maven-pom",
+        "xml-file"
+      ],
+      "size_bytes": 2331,
+      "hash": "5e137682dc3d438c35f3cf7d0e03f63e032987930214e44ba51c753a1b09724b",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/BaseTaskDeskAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1129,
+      "hash": "3257ddfebbf6f9073905462b74d30ec35242f4d5a87fe3630d1d7531a403a076",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1676,
+      "hash": "01471dfc8b3f2c2b9ba295813dd0646eb1ad90455c16d09eb13d033d0db77f3d",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LogoutAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 718,
+      "hash": "56d2fac7f42b211db55a55200701ba40be480ee365d5530285f1987f67e4215e",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2247,
+      "hash": "77fb63aa1d4aee2c8eec72ec7908bbb3f497deeec91ba47de07a4ef352b19c87",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1728,
+      "hash": "d6b0a17bd408b80d412b460db0e73a9215e7427bec69bb5bb574d52329d3ef96",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1791,
+      "hash": "a26b1bd3eed7d6ac984f24fdf6c99d17f9372634f20fc966cdb7d456d76bbc6d",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2313,
+      "hash": "ee5ed4f3b4ddc95c1d38f1882824869a1407affeffe375496060fbc8454c245a",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2500,
+      "hash": "504eb9c80b7e72f6c4e227a0b13db8abd3520ca2971432bf02aa3d460052bdb5",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1486,
+      "hash": "fc49d484903ff9a12d4471e3123f27ecf4da4393379bc993cecb243e965fd241",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2557,
+      "hash": "8cc895274344fbeedd1314e55cc862aed0869ed289e3292e85dfdfe96db9e957",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 5379,
+      "hash": "498a79e02f59d309848dc57a1acb3250525d6ee5e0fbc6c6eac4601961b397d2",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 5658,
+      "hash": "927c3b425d7c1bcd8c47f627c522f8e9ae76a0b500cbdc4b007637d8298f7d3a",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2315,
+      "hash": "f7a91e7e5040d95465f4a86373178a4d70ff575740760e5bc089553466f2ddb5",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 13771,
+      "hash": "f304293811439569b63242e055ec738e3a982dc8f6d3b8d6ebdb4ee473ccc67c",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 3887,
+      "hash": "6404032df308f9cda8b75ac55d1b05385a07c89f9bee2566b6d4684e5dcfddc3",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/LoginForm.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 493,
+      "hash": "bba3349934e59cd1416d7c6f4dade253fe2f48d9ab09dce09706e09d20816d7d",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskAssignForm.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 744,
+      "hash": "45caebd7e41a23f753183e0c6967fee64dd52802fbc890f4d34d6a9dac793281",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskForm.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1752,
+      "hash": "9f71ca429d38fb1ec06a484db4fa4f6c705a905194ad285e942b1faf3e89999c",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskReportForm.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 899,
+      "hash": "af540c16aff38e6fb7e0393c50b19d5e06dd7abc7758ef05d3dfaf94b1d1fb83",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskSearchForm.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1469,
+      "hash": "2564a1be026fe8a934f37ff1fe3f73a6cec6b5649cd97a0dc329fef01e50ccd6",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/Task.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 2485,
+      "hash": "9e077d11ed5654f4ac64da08c8045beb7729ec82ebfc4214a9613b5473331f17",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskAuditEntry.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1733,
+      "hash": "e4b6b74b4f1d307798c1ae637b31c1fc32e54f46fe64c1280f976f936c8b0672",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskComment.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1329,
+      "hash": "8db9ce91bb3f8be7fc2091e1fce73e099c878a892568faf8a3055daa29f40082",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskSearchCriteria.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1469,
+      "hash": "56ac8e148d54edaf3cfc3b26c14e9cb4ed7785c4ca2abef9c31faf069cc784d5",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/User.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1200,
+      "hash": "bda35789870f708609a186638a71102fa87f4a28c03626e719425027c6cab6a8",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 950,
+      "hash": "84fcde781e9a5f69b0a0a074f526331becfcbd28f8a3d50725587f23cbf2be7b",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 4830,
+      "hash": "01516f32a7a3e08c8c3779a6cd4017d1237116550526e00a562cb5256c10c9f8",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 824,
+      "hash": "480c550de51482ea5a7d1d3490a3d29da08c61c39039d336059c6954beb25d3e",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1349,
+      "hash": "fc75da0ad1dfc5396f5e8ba17e959bfada672a68c9c54e70b405425db9888e19",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/DateUtils.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1710,
+      "hash": "f763c5a1e8774c0dbb59462c20d9a661272415462de00393720e00a5e695a7b6",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+      "language": "Java",
+      "role": "source",
+      "artifact_types": [
+        "java-source"
+      ],
+      "size_bytes": 1612,
+      "hash": "cd727517b3360207131798d2b5fd7b6ac8609901ae17a1030539a3317474f7b6",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/resources/resources/ApplicationResources.properties",
+      "language": "Properties",
+      "role": "configuration",
+      "artifact_types": [
+        "properties-file"
+      ],
+      "size_bytes": 1206,
+      "hash": "c122689589ab3b551a70b7a16ac2abbee8bf9b928be233f6226d6539c140a498",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/resources/taskdesk.properties",
+      "language": "Properties",
+      "role": "configuration",
+      "artifact_types": [
+        "properties-file"
+      ],
+      "size_bytes": 112,
+      "hash": "7c6e035d62bfce5a4e8c4e76ac1dddcd928426d43525863e043e3852c846868d",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/WEB-INF/resources/ApplicationResources.properties",
+      "language": "Properties",
+      "role": "configuration",
+      "artifact_types": [
+        "properties-file"
+      ],
+      "size_bytes": 1206,
+      "hash": "c122689589ab3b551a70b7a16ac2abbee8bf9b928be233f6226d6539c140a498",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+      "language": "XML",
+      "role": "configuration",
+      "artifact_types": [
+        "struts-xml",
+        "xml-file"
+      ],
+      "size_bytes": 4370,
+      "hash": "316c564d706986ef46d18c3261755e3be6e7096fdf6ed32c32731ffd9548b1f2",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/WEB-INF/tiles-defs.xml",
+      "language": "XML",
+      "role": "configuration",
+      "artifact_types": [
+        "xml-file"
+      ],
+      "size_bytes": 368,
+      "hash": "cbc60320637c9805a021d64fd21a7b7d57d4b935a57ab0542423319c66facc4b",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/WEB-INF/validation.xml",
+      "language": "XML",
+      "role": "configuration",
+      "artifact_types": [
+        "struts-xml",
+        "xml-file"
+      ],
+      "size_bytes": 1452,
+      "hash": "f96fabf82f9a1c2796afe578af74d2e9edd7e1af7b197bf1e3e36b7eb961a3a1",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+      "language": "XML",
+      "role": "configuration",
+      "artifact_types": [
+        "xml-file"
+      ],
+      "size_bytes": 927,
+      "hash": "f903b31d300dac3b7169024664c1848e21547b430896067bd6026863d44f8e9c",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/css/taskdesk-legacy.css",
+      "language": "CSS",
+      "role": "source",
+      "artifact_types": [],
+      "size_bytes": 5501,
+      "hash": "9a477373a6225ea68e02506e2a86c79d140e7b13012f3d6862e9853d33d267fd",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/accessDenied.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 916,
+      "hash": "a667ef541ec5e3cad98d758f7e009e6e223772878b3c1dfbd0f0952cbe7cc90a",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/error.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 901,
+      "hash": "b1cdb48811d1c71af8ee7021e6a6d0df11ee8d12b98a74d24da411ae84ae19cd",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/login.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 1326,
+      "hash": "58a5bad92b370f2d034630e0ee26b27d56175f9cf22e75d835edbb5dc3f9d979",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/taskAssign.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 1759,
+      "hash": "8655dd5ba6b6d7047c62158e5b9a7c0152f2b638f554655b00971792de233672",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/taskDetail.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 3569,
+      "hash": "5f72c41ec84e75841c4a67b0773f72048e4d37ef666c168618e4130bed529c28",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/taskEdit.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 2643,
+      "hash": "1d55887668159f9524cecceb0252079fa314cb1d8d91915d50bc52a6016c5db5",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/taskList.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 5086,
+      "hash": "223ac584b1f367f9c6c13effa05614850b1a554ac2603109e3faf50fc2e6e757",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/src/main/webapp/jsp/taskReport.jsp",
+      "language": "JSP",
+      "role": "template",
+      "artifact_types": [
+        "jsp-template"
+      ],
+      "size_bytes": 2474,
+      "hash": "fb464eead2537bafe0c335641afaae3f05d3c53c91765a2c0546c4353d79d165",
+      "uncertainty": null
+    }
+  ],
+  "uncertainties": [
+    "SQLite schema and DDL are analyzed, but row-level data semantics are not read by the sqlite-schema parser.",
+    "The scope is taskdesk-legacy plus db; other repository areas are not analyzed as application evidence.",
+    "Tracked path taskdesk-legacy/runtime-data/taskdesk-demo.sqlite is not a regular file (symlink or special file) and was skipped; its link target was not followed."
+  ]
+}

@@ -1,0 +1,5729 @@
+{
+  "repo_fingerprint": "3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a",
+  "nodes": [
+    {
+      "id": "sem:application:taskdesk-legacy",
+      "layer": "semantic",
+      "type": "Application",
+      "name": "TaskDesk Legacy",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:build-module:taskdesk-legacy",
+          "file": "taskdesk-legacy/pom.xml",
+          "span": {
+            "start_line": 1,
+            "end_line": 69
+          },
+          "evidence_type": "maven-war-module"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+          "span": {
+            "start_line": 1,
+            "end_line": 26
+          },
+          "evidence_type": "struts-servlet-mapping"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "packaging": "war"
+      }
+    },
+    {
+      "id": "sem:module:action",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Actions",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/BaseTaskDeskAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/BaseTaskDeskAction.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 34
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:service",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Services",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 118
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:dao",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "DAO",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 313
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:form",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Forms",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/form/LoginForm.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/LoginForm.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 24
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:model",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Models",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/model/Task.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/Task.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 115
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:util",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Utilities",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 49
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:view",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "JSP Views",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/login.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/login.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 32
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:module:config",
+      "layer": "semantic",
+      "type": "Module",
+      "name": "Configuration",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 1,
+            "end_line": 111
+          },
+          "evidence_type": "directory/package evidence"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:entrypoint:struts-action-servlet-do",
+      "layer": "semantic",
+      "type": "EntryPoint",
+      "name": "Struts ActionServlet *.do",
+      "confidence": 1.0,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+          "span": {
+            "start_line": 1,
+            "end_line": 26
+          },
+          "evidence_type": "servlet-and-url-mapping"
+        },
+        {
+          "source_node": "src:xml:taskdesk-legacy/src/main/webapp/WEB-INF/web.xml:/web-app[1]/servlet-mapping[1]/url-pattern[1]",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/web.xml",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "servlet-url-pattern"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "url_pattern": "*.do"
+      }
+    },
+    {
+      "id": "sem:action:login",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "LoginAction (/login.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/login",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 22,
+            "end_line": 29
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.LoginAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 36
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/login.do",
+        "form": "loginForm",
+        "action_class": "com.example.taskdesk.action.LoginAction"
+      }
+    },
+    {
+      "id": "sem:view:login",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/login.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/login.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/login.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 32
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/login.jsp"
+      }
+    },
+    {
+      "id": "sem:action:logout",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "LogoutAction (/logout.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/logout",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 31,
+            "end_line": 34
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.LogoutAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LogoutAction.java",
+          "span": {
+            "start_line": 11,
+            "end_line": 20
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/logout.do",
+        "form": null,
+        "action_class": "com.example.taskdesk.action.LogoutAction"
+      }
+    },
+    {
+      "id": "sem:action:tasks",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskListAction (/tasks.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/tasks",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 36,
+            "end_line": 42
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskListAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 55
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/tasks.do",
+        "form": "taskSearchForm",
+        "action_class": "com.example.taskdesk.action.TaskListAction"
+      }
+    },
+    {
+      "id": "sem:view:taskList",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/taskList.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/taskList.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/taskList.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 119
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/taskList.jsp"
+      }
+    },
+    {
+      "id": "sem:action:taskDetail",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskDetailAction (/taskDetail.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskDetail",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 44,
+            "end_line": 49
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskDetailAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 41
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskDetail.do",
+        "form": "taskForm",
+        "action_class": "com.example.taskdesk.action.TaskDetailAction"
+      }
+    },
+    {
+      "id": "sem:view:taskDetail",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/taskDetail.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/taskDetail.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/taskDetail.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 85
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/taskDetail.jsp"
+      }
+    },
+    {
+      "id": "sem:action:taskEdit",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskEditAction (/taskEdit.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskEdit",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 51,
+            "end_line": 58
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskEditAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 56
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskEdit.do",
+        "form": "taskForm",
+        "action_class": "com.example.taskdesk.action.TaskEditAction"
+      }
+    },
+    {
+      "id": "sem:view:taskEdit",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/taskEdit.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/taskEdit.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/taskEdit.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 61
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/taskEdit.jsp"
+      }
+    },
+    {
+      "id": "sem:view:error",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/error.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/error.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/error.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 30
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/error.jsp"
+      }
+    },
+    {
+      "id": "sem:action:taskSave",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskSaveAction (/taskSave.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskSave",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 60,
+            "end_line": 67
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskSaveAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 115
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskSave.do",
+        "form": "taskForm",
+        "action_class": "com.example.taskdesk.action.TaskSaveAction"
+      }
+    },
+    {
+      "id": "sem:action:taskAssign",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskAssignAction (/taskAssign.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskAssign",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 69,
+            "end_line": 76
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskAssignAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 50
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskAssign.do",
+        "form": "taskAssignForm",
+        "action_class": "com.example.taskdesk.action.TaskAssignAction"
+      }
+    },
+    {
+      "id": "sem:view:taskAssign",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/taskAssign.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/taskAssign.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/taskAssign.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 51
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/taskAssign.jsp"
+      }
+    },
+    {
+      "id": "sem:action:taskComplete",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskCompleteAction (/taskComplete.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskComplete",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 78,
+            "end_line": 83
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskCompleteAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 14,
+            "end_line": 41
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskComplete.do",
+        "form": "taskForm",
+        "action_class": "com.example.taskdesk.action.TaskCompleteAction"
+      }
+    },
+    {
+      "id": "sem:action:taskReopen",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskReopenAction (/taskReopen.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReopen",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 85,
+            "end_line": 90
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskReopenAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 13,
+            "end_line": 36
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskReopen.do",
+        "form": "taskForm",
+        "action_class": "com.example.taskdesk.action.TaskReopenAction"
+      }
+    },
+    {
+      "id": "sem:action:taskReport",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskReportAction (/taskReport.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 92,
+            "end_line": 98
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskReportAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 19,
+            "end_line": 58
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskReport.do",
+        "form": "taskReportForm",
+        "action_class": "com.example.taskdesk.action.TaskReportAction"
+      }
+    },
+    {
+      "id": "sem:view:taskReport",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/taskReport.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/taskReport.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/taskReport.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 70
+          },
+          "evidence_type": "jsp-template"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/taskReport.jsp"
+      }
+    },
+    {
+      "id": "sem:action:taskExport",
+      "layer": "semantic",
+      "type": "Action",
+      "name": "TaskReportAction (/taskExport.do)",
+      "confidence": 0.97,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskExport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 100,
+            "end_line": 103
+          },
+          "evidence_type": "struts-action-mapping"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskReportAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 19,
+            "end_line": 58
+          },
+          "evidence_type": "action-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "route": "/taskExport.do",
+        "form": "taskReportForm",
+        "action_class": "com.example.taskdesk.action.TaskReportAction"
+      }
+    },
+    {
+      "id": "sem:view:accessDenied",
+      "layer": "semantic",
+      "type": "View",
+      "name": "/jsp/accessDenied.jsp",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:template:taskdesk-legacy/src/main/webapp/jsp/accessDenied.jsp",
+          "file": "taskdesk-legacy/src/main/webapp/jsp/accessDenied.jsp",
+          "span": {
+            "start_line": 1,
+            "end_line": 30
+          },
+          "evidence_type": "jsp-template"
+        },
+        {
+          "source_node": "src:struts:global-forward:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:denied",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "struts-global-forward"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "view_path": "/jsp/accessDenied.jsp"
+      }
+    },
+    {
+      "id": "sem:component:dao:AuditDAO",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "AuditDAO",
+      "confidence": 0.93,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.AuditDAO",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 134
+          },
+          "evidence_type": "dao-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:dao:JdbcConnectionManager",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "JdbcConnectionManager",
+      "confidence": 0.93,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.JdbcConnectionManager",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 65
+          },
+          "evidence_type": "dao-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:dao:TaskDAO",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "TaskDAO",
+      "confidence": 0.93,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.TaskDAO",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 313
+          },
+          "evidence_type": "dao-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:dao:UserDAO",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "UserDAO",
+      "confidence": 0.93,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.UserDAO",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 12,
+            "end_line": 106
+          },
+          "evidence_type": "dao-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:dataobject:form:LoginForm",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "LoginForm",
+      "confidence": 0.88,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.form.LoginForm",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/LoginForm.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 24
+          },
+          "evidence_type": "struts-actionform-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.form.LoginForm"
+      }
+    },
+    {
+      "id": "sem:dataobject:form:TaskAssignForm",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskAssignForm",
+      "confidence": 0.88,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.form.TaskAssignForm",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskAssignForm.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 33
+          },
+          "evidence_type": "struts-actionform-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.form.TaskAssignForm"
+      }
+    },
+    {
+      "id": "sem:dataobject:form:TaskForm",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskForm",
+      "confidence": 0.88,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.form.TaskForm",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskForm.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 87
+          },
+          "evidence_type": "struts-actionform-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.form.TaskForm"
+      }
+    },
+    {
+      "id": "sem:dataobject:form:TaskReportForm",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskReportForm",
+      "confidence": 0.88,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.form.TaskReportForm",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskReportForm.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 42
+          },
+          "evidence_type": "struts-actionform-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.form.TaskReportForm"
+      }
+    },
+    {
+      "id": "sem:dataobject:form:TaskSearchForm",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskSearchForm",
+      "confidence": 0.88,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.form.TaskSearchForm",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/form/TaskSearchForm.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 69
+          },
+          "evidence_type": "struts-actionform-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.form.TaskSearchForm"
+      }
+    },
+    {
+      "id": "sem:dataobject:model:Task",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "Task",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.model.Task",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/Task.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 115
+          },
+          "evidence_type": "model-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.model.Task"
+      }
+    },
+    {
+      "id": "sem:dataobject:model:TaskAuditEntry",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskAuditEntry",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.model.TaskAuditEntry",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskAuditEntry.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 79
+          },
+          "evidence_type": "model-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.model.TaskAuditEntry"
+      }
+    },
+    {
+      "id": "sem:dataobject:model:TaskComment",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskComment",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.model.TaskComment",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskComment.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 61
+          },
+          "evidence_type": "model-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.model.TaskComment"
+      }
+    },
+    {
+      "id": "sem:dataobject:model:TaskSearchCriteria",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "TaskSearchCriteria",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.model.TaskSearchCriteria",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/TaskSearchCriteria.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 70
+          },
+          "evidence_type": "model-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.model.TaskSearchCriteria"
+      }
+    },
+    {
+      "id": "sem:dataobject:model:User",
+      "layer": "semantic",
+      "type": "DataObject",
+      "name": "User",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.model.User",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/model/User.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 60
+          },
+          "evidence_type": "model-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "qualified_name": "com.example.taskdesk.model.User"
+      }
+    },
+    {
+      "id": "sem:component:service:AuditService",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "AuditService",
+      "confidence": 0.92,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.service.AuditService",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 30
+          },
+          "evidence_type": "service-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:service:TaskService",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "TaskService",
+      "confidence": 0.92,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.service.TaskService",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 12,
+            "end_line": 118
+          },
+          "evidence_type": "service-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:service:UserService",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "UserService",
+      "confidence": 0.92,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.service.UserService",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 32
+          },
+          "evidence_type": "service-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:util:CsvExportUtils",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "CsvExportUtils",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.util.CsvExportUtils",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 37
+          },
+          "evidence_type": "utility-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:util:DateUtils",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "DateUtils",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.util.DateUtils",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/DateUtils.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 57
+          },
+          "evidence_type": "utility-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:component:util:SecurityUtils",
+      "layer": "semantic",
+      "type": "Component",
+      "name": "SecurityUtils",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.util.SecurityUtils",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 49
+          },
+          "evidence_type": "utility-class"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:datastore:sqlite",
+      "layer": "semantic",
+      "type": "DataStore",
+      "name": "SQLite taskdesk demo database",
+      "confidence": 0.94,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:config:taskdesk-legacy/src/main/resources/taskdesk.properties:taskdesk.db.url",
+          "file": "taskdesk-legacy/src/main/resources/taskdesk.properties",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "jdbc-url"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.JdbcConnectionManager",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 65
+          },
+          "evidence_type": "jdbc-connection-manager"
+        },
+        {
+          "source_node": "src:file:db/runtime-data/taskdesk-demo.sqlite",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-database-file"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "jdbc": "sqlite"
+      }
+    },
+    {
+      "id": "sem:integration:sqlite-jdbc",
+      "layer": "semantic",
+      "type": "Integration",
+      "name": "SQLite JDBC driver",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:dependency:org.xerial:sqlite-jdbc",
+          "file": "taskdesk-legacy/pom.xml",
+          "span": {
+            "start_line": 35,
+            "end_line": 39
+          },
+          "evidence_type": "maven-dependency"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.dao.JdbcConnectionManager",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "driver-load"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:datastore:table:task",
+      "layer": "semantic",
+      "type": "DataStore",
+      "name": "TASK",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 26,
+            "end_line": 26
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:db:db/runtime-data/taskdesk-demo.sqlite:table:TASK",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-schema-table"
+        },
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-7",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 17,
+            "end_line": 30
+          },
+          "evidence_type": "sql-ddl-create-table"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "table": "TASK",
+        "reference_count": 6,
+        "schema_verified": true
+      }
+    },
+    {
+      "id": "sem:datastore:table:app_user",
+      "layer": "semantic",
+      "type": "DataStore",
+      "name": "APP_USER",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 44,
+            "end_line": 44
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:db:db/runtime-data/taskdesk-demo.sqlite:table:APP_USER",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-schema-table"
+        },
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-6",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 8,
+            "end_line": 15
+          },
+          "evidence_type": "sql-ddl-create-table"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "table": "APP_USER",
+        "reference_count": 10,
+        "schema_verified": true
+      }
+    },
+    {
+      "id": "sem:datastore:table:task_comment",
+      "layer": "semantic",
+      "type": "DataStore",
+      "name": "TASK_COMMENT",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 155,
+            "end_line": 155
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:db:db/runtime-data/taskdesk-demo.sqlite:table:TASK_COMMENT",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-schema-table"
+        },
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-8",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 32,
+            "end_line": 40
+          },
+          "evidence_type": "sql-ddl-create-table"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "table": "TASK_COMMENT",
+        "reference_count": 2,
+        "schema_verified": true
+      }
+    },
+    {
+      "id": "sem:datastore:table:task_audit",
+      "layer": "semantic",
+      "type": "DataStore",
+      "name": "TASK_AUDIT",
+      "confidence": 0.98,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:db:db/runtime-data/taskdesk-demo.sqlite:table:TASK_AUDIT",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-schema-table"
+        },
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-9",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 42,
+            "end_line": 52
+          },
+          "evidence_type": "sql-ddl-create-table"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "table": "TASK_AUDIT",
+        "reference_count": 3,
+        "schema_verified": true
+      }
+    },
+    {
+      "id": "sem:security:session-login",
+      "layer": "semantic",
+      "type": "SecurityElement",
+      "name": "Session login state",
+      "confidence": 0.93,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.util.SecurityUtils",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 49
+          },
+          "evidence_type": "session-security-utility"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.LoginAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 22,
+            "end_line": 22
+          },
+          "evidence_type": "session-attribute-write"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:rule:manager-role-checks",
+      "layer": "semantic",
+      "type": "Rule",
+      "name": "Manager-only role checks",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskAssignAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "role-check"
+        },
+        {
+          "source_node": "src:class:com.example.taskdesk.action.TaskReportAction",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "role-check"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:rule:validator-required-fields",
+      "layer": "semantic",
+      "type": "Rule",
+      "name": "Struts required field validation",
+      "confidence": 0.96,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:validation-field:loginForm:username",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/validation.xml",
+          "span": {
+            "start_line": 8,
+            "end_line": 10
+          },
+          "evidence_type": "commons-validator-field"
+        },
+        {
+          "source_node": "src:struts:plug-in:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:org.apache.struts.validator.ValidatorPlugIn",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 108,
+            "end_line": 110
+          },
+          "evidence_type": "validator-plugin"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:rule:database-check-constraints",
+      "layer": "semantic",
+      "type": "Rule",
+      "name": "Database enum/check constraints",
+      "confidence": 0.95,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-6",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 8,
+            "end_line": 15
+          },
+          "evidence_type": "app_user-check-constraints"
+        },
+        {
+          "source_node": "src:sql:db/sql/001_schema_sqlite.sql:stmt-7",
+          "file": "db/sql/001_schema_sqlite.sql",
+          "span": {
+            "start_line": 17,
+            "end_line": 30
+          },
+          "evidence_type": "task-check-constraints"
+        },
+        {
+          "source_node": "src:db:db/runtime-data/taskdesk-demo.sqlite:table:TASK",
+          "file": "db/runtime-data/taskdesk-demo.sqlite",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "sqlite-create-sql"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "constraints": [
+          "ROLE in OPERATOR/MANAGER",
+          "ACTIVE in 0/1",
+          "STATUS enum",
+          "PRIORITY enum"
+        ]
+      }
+    },
+    {
+      "id": "sem:configuration:taskdesk-db-url",
+      "layer": "semantic",
+      "type": "Configuration",
+      "name": "taskdesk.db.url",
+      "confidence": 1.0,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:config:taskdesk-legacy/src/main/resources/taskdesk.properties:taskdesk.db.url",
+          "file": "taskdesk-legacy/src/main/resources/taskdesk.properties",
+          "span": {
+            "start_line": 1,
+            "end_line": 1
+          },
+          "evidence_type": "properties-entry"
+        }
+      ],
+      "unknowns": [],
+      "properties": {}
+    },
+    {
+      "id": "sem:unknown:runtime-row-semantics",
+      "layer": "semantic",
+      "type": "UnknownSemanticConstruct",
+      "name": "Runtime seed row semantics",
+      "confidence": 0.7,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": "src:file:db/runtime-data/README.md",
+          "file": "db/runtime-data/README.md",
+          "span": {
+            "start_line": 1,
+            "end_line": 24
+          },
+          "evidence_type": "documented-row-counts"
+        }
+      ],
+      "unknowns": [
+        "The SQLite schema is analyzed, but row contents and business meaning of seed records were not read by the schema parser."
+      ],
+      "properties": {}
+    }
+  ],
+  "edges": [
+    {
+      "id": "sem-edge:1:sem:module:action:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:action",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:2:sem:module:service:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:service",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:3:sem:module:dao:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:dao",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:4:sem:module:form:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:form",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:5:sem:module:model:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:model",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:6:sem:module:util:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:util",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:7:sem:module:view:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:view",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:8:sem:module:config:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:module:config",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:9:sem:entrypoint:struts-action-servlet-do:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:entrypoint:struts-action-servlet-do",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:10:sem:action:login:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:login",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/login",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 22,
+            "end_line": 29
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:11:sem:action:login:part-of:sem:module:action",
+      "source_id": "sem:action:login",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:12:sem:view:login:part-of:sem:module:view",
+      "source_id": "sem:view:login",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:13:sem:action:login:renders:sem:view:login",
+      "source_id": "sem:action:login",
+      "target_id": "sem:view:login",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/login",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 22,
+            "end_line": 29
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:14:sem:action:login:renders:sem:view:login",
+      "source_id": "sem:action:login",
+      "target_id": "sem:view:login",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/login",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 22,
+            "end_line": 29
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:15:sem:action:logout:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:logout",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/logout",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 31,
+            "end_line": 34
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:16:sem:action:logout:part-of:sem:module:action",
+      "source_id": "sem:action:logout",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:17:sem:action:logout:renders:sem:view:login",
+      "source_id": "sem:action:logout",
+      "target_id": "sem:view:login",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/logout",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 31,
+            "end_line": 34
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:18:sem:action:tasks:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/tasks",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 36,
+            "end_line": 42
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:19:sem:action:tasks:part-of:sem:module:action",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:20:sem:view:taskList:part-of:sem:module:view",
+      "source_id": "sem:view:taskList",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:21:sem:action:tasks:renders:sem:view:taskList",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:view:taskList",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/tasks",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 36,
+            "end_line": 42
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:22:sem:action:tasks:renders:sem:view:taskList",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:view:taskList",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/tasks",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 36,
+            "end_line": 42
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:23:sem:action:taskDetail:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskDetail",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 44,
+            "end_line": 49
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:24:sem:action:taskDetail:part-of:sem:module:action",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:25:sem:view:taskDetail:part-of:sem:module:view",
+      "source_id": "sem:view:taskDetail",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:26:sem:action:taskDetail:renders:sem:view:taskDetail",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:view:taskDetail",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskDetail",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 44,
+            "end_line": 49
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:27:sem:action:taskEdit:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskEdit",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 51,
+            "end_line": 58
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:28:sem:action:taskEdit:part-of:sem:module:action",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:29:sem:view:taskEdit:part-of:sem:module:view",
+      "source_id": "sem:view:taskEdit",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:30:sem:action:taskEdit:renders:sem:view:taskEdit",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:view:taskEdit",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskEdit",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 51,
+            "end_line": 58
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:31:sem:action:taskEdit:renders:sem:view:taskEdit",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:view:taskEdit",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskEdit",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 51,
+            "end_line": 58
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:32:sem:view:error:part-of:sem:module:view",
+      "source_id": "sem:view:error",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:33:sem:action:taskEdit:renders:sem:view:error",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:view:error",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskEdit",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 51,
+            "end_line": 58
+          },
+          "evidence_type": "forward:error"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:34:sem:action:taskSave:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskSave",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 60,
+            "end_line": 67
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:35:sem:action:taskSave:part-of:sem:module:action",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:36:sem:action:taskSave:renders:sem:view:taskEdit",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:view:taskEdit",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskSave",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 60,
+            "end_line": 67
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:37:sem:action:taskSave:renders:sem:view:taskEdit",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:view:taskEdit",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskSave",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 60,
+            "end_line": 67
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:38:sem:action:taskSave:renders:sem:view:taskDetail",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:view:taskDetail",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskSave",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 60,
+            "end_line": 67
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:39:sem:action:taskAssign:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskAssign",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 69,
+            "end_line": 76
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:40:sem:action:taskAssign:part-of:sem:module:action",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:41:sem:view:taskAssign:part-of:sem:module:view",
+      "source_id": "sem:view:taskAssign",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:42:sem:action:taskAssign:renders:sem:view:taskAssign",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:view:taskAssign",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskAssign",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 69,
+            "end_line": 76
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:43:sem:action:taskAssign:renders:sem:view:taskAssign",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:view:taskAssign",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskAssign",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 69,
+            "end_line": 76
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:44:sem:action:taskAssign:renders:sem:view:taskDetail",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:view:taskDetail",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskAssign",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 69,
+            "end_line": 76
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:45:sem:action:taskComplete:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskComplete",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 78,
+            "end_line": 83
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:46:sem:action:taskComplete:part-of:sem:module:action",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:47:sem:action:taskComplete:renders:sem:view:taskDetail",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:view:taskDetail",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskComplete",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 78,
+            "end_line": 83
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:48:sem:action:taskReopen:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReopen",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 85,
+            "end_line": 90
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:49:sem:action:taskReopen:part-of:sem:module:action",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:50:sem:action:taskReopen:renders:sem:view:taskDetail",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:view:taskDetail",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReopen",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 85,
+            "end_line": 90
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:51:sem:action:taskReport:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskReport",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 92,
+            "end_line": 98
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:52:sem:action:taskReport:part-of:sem:module:action",
+      "source_id": "sem:action:taskReport",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:53:sem:view:taskReport:part-of:sem:module:view",
+      "source_id": "sem:view:taskReport",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:54:sem:action:taskReport:renders:sem:view:taskReport",
+      "source_id": "sem:action:taskReport",
+      "target_id": "sem:view:taskReport",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 92,
+            "end_line": 98
+          },
+          "evidence_type": "forward:input"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:55:sem:action:taskReport:renders:sem:view:taskReport",
+      "source_id": "sem:action:taskReport",
+      "target_id": "sem:view:taskReport",
+      "type": "renders",
+      "confidence": 0.92,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskReport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 92,
+            "end_line": 98
+          },
+          "evidence_type": "forward:success"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:56:sem:action:taskExport:triggers:sem:entrypoint:struts-action-servlet-do",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:entrypoint:struts-action-servlet-do",
+      "type": "triggers",
+      "confidence": 0.95,
+      "grounded_in": [
+        {
+          "source_node": "src:route:taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml:/taskExport",
+          "file": "taskdesk-legacy/src/main/webapp/WEB-INF/struts-config.xml",
+          "span": {
+            "start_line": 100,
+            "end_line": 103
+          },
+          "evidence_type": "struts-action-mapping"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:57:sem:action:taskExport:part-of:sem:module:action",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:module:action",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:58:sem:view:accessDenied:part-of:sem:module:view",
+      "source_id": "sem:view:accessDenied",
+      "target_id": "sem:module:view",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:59:sem:component:dao:AuditDAO:part-of:sem:module:dao",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:module:dao",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:60:sem:component:dao:JdbcConnectionManager:part-of:sem:module:dao",
+      "source_id": "sem:component:dao:JdbcConnectionManager",
+      "target_id": "sem:module:dao",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:61:sem:component:dao:TaskDAO:part-of:sem:module:dao",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:module:dao",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:62:sem:component:dao:UserDAO:part-of:sem:module:dao",
+      "source_id": "sem:component:dao:UserDAO",
+      "target_id": "sem:module:dao",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:63:sem:dataobject:form:LoginForm:part-of:sem:module:form",
+      "source_id": "sem:dataobject:form:LoginForm",
+      "target_id": "sem:module:form",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:64:sem:dataobject:form:TaskAssignForm:part-of:sem:module:form",
+      "source_id": "sem:dataobject:form:TaskAssignForm",
+      "target_id": "sem:module:form",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:65:sem:dataobject:form:TaskForm:part-of:sem:module:form",
+      "source_id": "sem:dataobject:form:TaskForm",
+      "target_id": "sem:module:form",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:66:sem:dataobject:form:TaskReportForm:part-of:sem:module:form",
+      "source_id": "sem:dataobject:form:TaskReportForm",
+      "target_id": "sem:module:form",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:67:sem:dataobject:form:TaskSearchForm:part-of:sem:module:form",
+      "source_id": "sem:dataobject:form:TaskSearchForm",
+      "target_id": "sem:module:form",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:68:sem:dataobject:model:Task:part-of:sem:module:model",
+      "source_id": "sem:dataobject:model:Task",
+      "target_id": "sem:module:model",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:69:sem:dataobject:model:TaskAuditEntry:part-of:sem:module:model",
+      "source_id": "sem:dataobject:model:TaskAuditEntry",
+      "target_id": "sem:module:model",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:70:sem:dataobject:model:TaskComment:part-of:sem:module:model",
+      "source_id": "sem:dataobject:model:TaskComment",
+      "target_id": "sem:module:model",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:71:sem:dataobject:model:TaskSearchCriteria:part-of:sem:module:model",
+      "source_id": "sem:dataobject:model:TaskSearchCriteria",
+      "target_id": "sem:module:model",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:72:sem:dataobject:model:User:part-of:sem:module:model",
+      "source_id": "sem:dataobject:model:User",
+      "target_id": "sem:module:model",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:73:sem:component:service:AuditService:part-of:sem:module:service",
+      "source_id": "sem:component:service:AuditService",
+      "target_id": "sem:module:service",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:74:sem:component:service:TaskService:part-of:sem:module:service",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:module:service",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:75:sem:component:service:UserService:part-of:sem:module:service",
+      "source_id": "sem:component:service:UserService",
+      "target_id": "sem:module:service",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:76:sem:component:util:CsvExportUtils:part-of:sem:module:util",
+      "source_id": "sem:component:util:CsvExportUtils",
+      "target_id": "sem:module:util",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:77:sem:component:util:DateUtils:part-of:sem:module:util",
+      "source_id": "sem:component:util:DateUtils",
+      "target_id": "sem:module:util",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:78:sem:component:util:SecurityUtils:part-of:sem:module:util",
+      "source_id": "sem:component:util:SecurityUtils",
+      "target_id": "sem:module:util",
+      "type": "part-of",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:79:sem:action:login:uses:sem:dataobject:form:LoginForm",
+      "source_id": "sem:action:login",
+      "target_id": "sem:dataobject:form:LoginForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          20
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:80:sem:action:login:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:login",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 25,
+            "end_line": 25
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          25
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:81:sem:action:login:uses:sem:component:service:UserService",
+      "source_id": "sem:action:login",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          16
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:82:sem:action:login:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:login",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 31,
+            "end_line": 31
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/LoginAction.java",
+          "span": {
+            "start_line": 32,
+            "end_line": 32
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          31,
+          32,
+          33
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:83:sem:action:taskAssign:uses:sem:dataobject:form:TaskAssignForm",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:dataobject:form:TaskAssignForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 28,
+            "end_line": 28
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          28
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:84:sem:action:taskAssign:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 39,
+            "end_line": 39
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          39
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:85:sem:action:taskAssign:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          16
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:86:sem:action:taskAssign:uses:sem:component:service:UserService",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          17
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:87:sem:action:taskAssign:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskAssign",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 25,
+            "end_line": 25
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskAssignAction.java",
+          "span": {
+            "start_line": 41,
+            "end_line": 41
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          25,
+          41
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:88:sem:action:taskComplete:uses:sem:dataobject:model:Task",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 27,
+            "end_line": 27
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          27
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:89:sem:action:taskComplete:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 28,
+            "end_line": 28
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          28
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:90:sem:action:taskComplete:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 15
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          15
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:91:sem:action:taskComplete:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskComplete",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 32,
+            "end_line": 32
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskCompleteAction.java",
+          "span": {
+            "start_line": 36,
+            "end_line": 36
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          32,
+          36
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:92:sem:action:taskDetail:uses:sem:dataobject:model:Task",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 30,
+            "end_line": 30
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          30
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:93:sem:action:taskDetail:uses:sem:component:service:AuditService",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:component:service:AuditService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          17
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:94:sem:action:taskDetail:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          16
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:95:sem:action:taskDetail:uses:sem:component:service:UserService",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 18,
+            "end_line": 18
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          18
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:96:sem:action:taskDetail:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskDetail",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskDetailAction.java",
+          "span": {
+            "start_line": 34,
+            "end_line": 34
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          34
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:97:sem:action:taskEdit:uses:sem:dataobject:form:TaskForm",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:dataobject:form:TaskForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 25,
+            "end_line": 25
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 46,
+            "end_line": 46
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          25,
+          46
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:98:sem:action:taskEdit:uses:sem:dataobject:model:Task",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 32,
+            "end_line": 32
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 46,
+            "end_line": 46
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          32,
+          46
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:99:sem:action:taskEdit:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          16
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:100:sem:action:taskEdit:uses:sem:component:service:UserService",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          17
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:101:sem:action:taskEdit:uses:sem:component:util:DateUtils",
+      "source_id": "sem:action:taskEdit",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskEditAction.java",
+          "span": {
+            "start_line": 54,
+            "end_line": 54
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          54
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:102:sem:action:tasks:uses:sem:dataobject:form:TaskSearchForm",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:dataobject:form:TaskSearchForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 27,
+            "end_line": 27
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 40,
+            "end_line": 40
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          27,
+          40
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:103:sem:action:tasks:uses:sem:dataobject:model:TaskSearchCriteria",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:dataobject:model:TaskSearchCriteria",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 28,
+            "end_line": 28
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 40,
+            "end_line": 40
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          28,
+          40,
+          41
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:104:sem:action:tasks:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 29,
+            "end_line": 29
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          29
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:105:sem:action:tasks:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 18,
+            "end_line": 18
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          18
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:106:sem:action:tasks:uses:sem:component:service:UserService",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 19,
+            "end_line": 19
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          19
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:107:sem:action:tasks:uses:sem:component:util:DateUtils",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 8
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 45,
+            "end_line": 45
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 46,
+            "end_line": 46
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          8,
+          45,
+          46
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:108:sem:action:tasks:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:tasks",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 9
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskListAction.java",
+          "span": {
+            "start_line": 34,
+            "end_line": 34
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          9,
+          34
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:109:sem:action:taskReopen:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 29,
+            "end_line": 29
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          29
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:110:sem:action:taskReopen:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 14,
+            "end_line": 14
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          14
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:111:sem:action:taskReopen:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskReopen",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 22,
+            "end_line": 22
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReopenAction.java",
+          "span": {
+            "start_line": 31,
+            "end_line": 31
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          22,
+          31
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:112:sem:action:taskExport:uses:sem:dataobject:form:TaskReportForm",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:dataobject:form:TaskReportForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 36,
+            "end_line": 36
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          36
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:113:sem:action:taskExport:uses:sem:dataobject:model:TaskSearchCriteria",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:dataobject:model:TaskSearchCriteria",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 51,
+            "end_line": 51
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          51
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:114:sem:action:taskExport:uses:sem:component:service:AuditService",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:component:service:AuditService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          20
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:115:sem:action:taskExport:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 21,
+            "end_line": 21
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          21
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:116:sem:action:taskExport:uses:sem:component:util:CsvExportUtils",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:component:util:CsvExportUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 55,
+            "end_line": 55
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          55
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:117:sem:action:taskExport:uses:sem:component:util:DateUtils",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 8
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 37,
+            "end_line": 37
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 38,
+            "end_line": 38
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          8,
+          37,
+          38
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:118:sem:action:taskExport:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskExport",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 9
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskReportAction.java",
+          "span": {
+            "start_line": 33,
+            "end_line": 33
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          9,
+          33
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:119:sem:action:taskSave:uses:sem:dataobject:form:TaskForm",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:dataobject:form:TaskForm",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 31,
+            "end_line": 31
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 65,
+            "end_line": 65
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          31,
+          65,
+          85,
+          104
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:120:sem:action:taskSave:uses:sem:dataobject:model:Task",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 43,
+            "end_line": 43
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 47,
+            "end_line": 47
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          43,
+          47,
+          51,
+          104,
+          105
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:121:sem:action:taskSave:uses:sem:dataobject:model:User",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 41,
+            "end_line": 41
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          41
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:122:sem:action:taskSave:uses:sem:component:service:AuditService",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:component:service:AuditService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 23,
+            "end_line": 23
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          23
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:123:sem:action:taskSave:uses:sem:component:service:TaskService",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:component:service:TaskService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 21,
+            "end_line": 21
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          21
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:124:sem:action:taskSave:uses:sem:component:service:UserService",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:component:service:UserService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 8,
+            "end_line": 8
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 22,
+            "end_line": 22
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          8,
+          22
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:125:sem:action:taskSave:uses:sem:component:util:DateUtils",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 9
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 94,
+            "end_line": 94
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 112,
+            "end_line": 112
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          9,
+          94,
+          112
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:126:sem:action:taskSave:uses:sem:component:util:SecurityUtils",
+      "source_id": "sem:action:taskSave",
+      "target_id": "sem:component:util:SecurityUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 10,
+            "end_line": 10
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 47,
+            "end_line": 47
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/action/TaskSaveAction.java",
+          "span": {
+            "start_line": 51,
+            "end_line": 51
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          10,
+          47,
+          51,
+          70
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:127:sem:component:dao:AuditDAO:uses:sem:component:dao:JdbcConnectionManager",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:component:dao:JdbcConnectionManager",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          17
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:128:sem:component:dao:AuditDAO:uses:sem:dataobject:model:TaskAuditEntry",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:dataobject:model:TaskAuditEntry",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 19,
+            "end_line": 19
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 107,
+            "end_line": 107
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          19,
+          107,
+          108
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:129:sem:component:dao:AuditDAO:uses:sem:component:util:DateUtils",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 32,
+            "end_line": 32
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 73,
+            "end_line": 73
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          32,
+          73,
+          77,
+          116
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:130:sem:component:dao:TaskDAO:uses:sem:component:dao:JdbcConnectionManager",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:component:dao:JdbcConnectionManager",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          17
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:131:sem:component:dao:TaskDAO:uses:sem:dataobject:model:Task",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 54,
+            "end_line": 54
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 68,
+            "end_line": 68
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          54,
+          68,
+          71,
+          86,
+          94,
+          232,
+          233,
+          252
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:132:sem:component:dao:TaskDAO:uses:sem:dataobject:model:TaskComment",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:dataobject:model:TaskComment",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 154,
+            "end_line": 154
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 187,
+            "end_line": 187
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          154,
+          187
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:133:sem:component:dao:TaskDAO:uses:sem:dataobject:model:TaskSearchCriteria",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:dataobject:model:TaskSearchCriteria",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 19,
+            "end_line": 19
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 264,
+            "end_line": 264
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          19,
+          264,
+          280
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:134:sem:component:dao:TaskDAO:uses:sem:component:util:DateUtils",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 44,
+            "end_line": 44
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 48,
+            "end_line": 48
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          44,
+          48,
+          107,
+          108,
+          126,
+          144,
+          164,
+          193,
+          246,
+          247,
+          248,
+          259,
+          260,
+          261
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:135:sem:component:dao:UserDAO:uses:sem:component:dao:JdbcConnectionManager",
+      "source_id": "sem:component:dao:UserDAO",
+      "target_id": "sem:component:dao:JdbcConnectionManager",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 13,
+            "end_line": 13
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          13
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:136:sem:component:dao:UserDAO:uses:sem:dataobject:model:User",
+      "source_id": "sem:component:dao:UserDAO",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 15
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 59,
+            "end_line": 59
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          15,
+          59,
+          81,
+          82
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:137:sem:component:service:AuditService:uses:sem:component:dao:AuditDAO",
+      "source_id": "sem:component:service:AuditService",
+      "target_id": "sem:component:dao:AuditDAO",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "span": {
+            "start_line": 10,
+            "end_line": 10
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          10
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:138:sem:component:service:AuditService:uses:sem:dataobject:model:TaskAuditEntry",
+      "source_id": "sem:component:service:AuditService",
+      "target_id": "sem:dataobject:model:TaskAuditEntry",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/AuditService.java",
+          "span": {
+            "start_line": 13,
+            "end_line": 13
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          13
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:139:sem:component:service:TaskService:uses:sem:component:dao:TaskDAO",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:component:dao:TaskDAO",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 13,
+            "end_line": 13
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          13
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:140:sem:component:service:TaskService:uses:sem:dataobject:model:Task",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 24,
+            "end_line": 24
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          20,
+          24,
+          36,
+          37,
+          39,
+          47,
+          53,
+          59,
+          86,
+          111,
+          112,
+          114
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:141:sem:component:service:TaskService:uses:sem:dataobject:model:TaskComment",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:dataobject:model:TaskComment",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 5,
+            "end_line": 5
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 73,
+            "end_line": 73
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          5,
+          73
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:142:sem:component:service:TaskService:uses:sem:dataobject:model:TaskSearchCriteria",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:dataobject:model:TaskSearchCriteria",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 6,
+            "end_line": 6
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 16,
+            "end_line": 16
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          6,
+          16
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:143:sem:component:service:TaskService:uses:sem:dataobject:model:User",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 7,
+            "end_line": 7
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 24,
+            "end_line": 24
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 36,
+            "end_line": 36
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          7,
+          24,
+          36,
+          46,
+          52,
+          58,
+          68
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:144:sem:component:service:TaskService:uses:sem:component:service:AuditService",
+      "source_id": "sem:component:service:TaskService",
+      "target_id": "sem:component:service:AuditService",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/TaskService.java",
+          "span": {
+            "start_line": 14,
+            "end_line": 14
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          14
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:145:sem:component:service:UserService:uses:sem:component:dao:UserDAO",
+      "source_id": "sem:component:service:UserService",
+      "target_id": "sem:component:dao:UserDAO",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 9,
+            "end_line": 9
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          9
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:146:sem:component:service:UserService:uses:sem:dataobject:model:User",
+      "source_id": "sem:component:service:UserService",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 4,
+            "end_line": 4
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 11,
+            "end_line": 11
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/service/UserService.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 15
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          4,
+          11,
+          15,
+          29
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:147:sem:component:util:CsvExportUtils:uses:sem:dataobject:model:Task",
+      "source_id": "sem:component:util:CsvExportUtils",
+      "target_id": "sem:dataobject:model:Task",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "span": {
+            "start_line": 13,
+            "end_line": 13
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "span": {
+            "start_line": 15,
+            "end_line": 15
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          13,
+          15
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:148:sem:component:util:CsvExportUtils:uses:sem:component:util:DateUtils",
+      "source_id": "sem:component:util:CsvExportUtils",
+      "target_id": "sem:component:util:DateUtils",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/CsvExportUtils.java",
+          "span": {
+            "start_line": 22,
+            "end_line": 22
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          22
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:149:sem:component:util:SecurityUtils:uses:sem:dataobject:model:User",
+      "source_id": "sem:component:util:SecurityUtils",
+      "target_id": "sem:dataobject:model:User",
+      "type": "uses",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 18,
+            "end_line": 18
+          },
+          "evidence_type": "class-name-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/util/SecurityUtils.java",
+          "span": {
+            "start_line": 24,
+            "end_line": 24
+          },
+          "evidence_type": "class-name-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          3,
+          18,
+          24,
+          25,
+          35,
+          40
+        ],
+        "heuristic": "word-boundary class-name match in class source; not a call graph"
+      }
+    },
+    {
+      "id": "sem-edge:150:sem:datastore:sqlite:integrates-with:sem:integration:sqlite-jdbc",
+      "source_id": "sem:datastore:sqlite",
+      "target_id": "sem:integration:sqlite-jdbc",
+      "type": "integrates-with",
+      "confidence": 1.0,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:151:sem:datastore:table:task:part-of:sem:datastore:sqlite",
+      "source_id": "sem:datastore:table:task",
+      "target_id": "sem:datastore:sqlite",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:152:sem:datastore:table:app_user:part-of:sem:datastore:sqlite",
+      "source_id": "sem:datastore:table:app_user",
+      "target_id": "sem:datastore:sqlite",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:153:sem:datastore:table:task_comment:part-of:sem:datastore:sqlite",
+      "source_id": "sem:datastore:table:task_comment",
+      "target_id": "sem:datastore:sqlite",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:154:sem:datastore:table:task_audit:part-of:sem:datastore:sqlite",
+      "source_id": "sem:datastore:table:task_audit",
+      "target_id": "sem:datastore:sqlite",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:155:sem:component:dao:TaskDAO:references:sem:datastore:table:task",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:datastore:table:task",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 26,
+            "end_line": 26
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 59,
+            "end_line": 59
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 72,
+            "end_line": 72
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 95,
+            "end_line": 95
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 119,
+            "end_line": 119
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          26,
+          59,
+          72,
+          95,
+          119,
+          137
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:156:sem:component:dao:AuditDAO:references:sem:datastore:table:app_user",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:datastore:table:app_user",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 44,
+            "end_line": 44
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 70,
+            "end_line": 70
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          44,
+          70
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:157:sem:component:dao:TaskDAO:references:sem:datastore:table:app_user",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:datastore:table:app_user",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 27,
+            "end_line": 27
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 28,
+            "end_line": 28
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 59,
+            "end_line": 59
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 60,
+            "end_line": 60
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 175,
+            "end_line": 175
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          27,
+          28,
+          59,
+          60,
+          175
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:158:sem:component:dao:UserDAO:references:sem:datastore:table:app_user",
+      "source_id": "sem:component:dao:UserDAO",
+      "target_id": "sem:datastore:table:app_user",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 17,
+            "end_line": 17
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 39,
+            "end_line": 39
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/UserDAO.java",
+          "span": {
+            "start_line": 61,
+            "end_line": 61
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          17,
+          39,
+          61
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:159:sem:component:dao:TaskDAO:references:sem:datastore:table:task_comment",
+      "source_id": "sem:component:dao:TaskDAO",
+      "target_id": "sem:datastore:table:task_comment",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 155,
+            "end_line": 155
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/TaskDAO.java",
+          "span": {
+            "start_line": 175,
+            "end_line": 175
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          155,
+          175
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:160:sem:component:dao:AuditDAO:references:sem:datastore:table:task_audit",
+      "source_id": "sem:component:dao:AuditDAO",
+      "target_id": "sem:datastore:table:task_audit",
+      "type": "references",
+      "confidence": 0.85,
+      "grounded_in": [
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 20,
+            "end_line": 20
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 44,
+            "end_line": 44
+          },
+          "evidence_type": "sql-literal-table-reference"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "file": "taskdesk-legacy/src/main/java/com/example/taskdesk/dao/AuditDAO.java",
+          "span": {
+            "start_line": 70,
+            "end_line": 70
+          },
+          "evidence_type": "sql-literal-table-reference"
+        }
+      ],
+      "properties": {
+        "reference_lines": [
+          20,
+          44,
+          70
+        ],
+        "heuristic": "word-boundary table-name literal match in class source; SQL is not parsed"
+      }
+    },
+    {
+      "id": "sem-edge:161:sem:security:session-login:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:security:session-login",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:162:sem:rule:manager-role-checks:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:rule:manager-role-checks",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:163:sem:rule:validator-required-fields:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:rule:validator-required-fields",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:164:sem:rule:database-check-constraints:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:rule:database-check-constraints",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:165:sem:configuration:taskdesk-db-url:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:configuration:taskdesk-db-url",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.9,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:166:sem:security:session-login:secured-by:sem:rule:manager-role-checks",
+      "source_id": "sem:security:session-login",
+      "target_id": "sem:rule:manager-role-checks",
+      "type": "secured-by",
+      "confidence": 0.8,
+      "grounded_in": [],
+      "properties": {}
+    }
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "types": [
+    {
+      "type_id": "Application",
+      "parent_type": null,
+      "definition": "The deployable application as a whole.",
+      "detection_rules": [
+        "Instantiate Application only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Module",
+      "parent_type": null,
+      "definition": "A cohesive package, directory, or layer grouping source constructs.",
+      "detection_rules": [
+        "Instantiate Module only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "EntryPoint",
+      "parent_type": null,
+      "definition": "A framework or runtime entry into application code.",
+      "detection_rules": [
+        "Instantiate EntryPoint only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Interface",
+      "parent_type": null,
+      "definition": "A user-facing or external-facing surface such as a route or page.",
+      "detection_rules": [
+        "Instantiate Interface only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Flow",
+      "parent_type": null,
+      "definition": "A multi-step user or system activity evidenced by related actions/views/data access.",
+      "detection_rules": [
+        "Instantiate Flow only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Action",
+      "parent_type": null,
+      "definition": "A controller, handler, or operation that responds to an entrypoint or route.",
+      "detection_rules": [
+        "Instantiate Action only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "View",
+      "parent_type": null,
+      "definition": "A rendered user-facing template or screen.",
+      "detection_rules": [
+        "Instantiate View only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Component",
+      "parent_type": null,
+      "definition": "A reusable source-level implementation unit such as a service, DAO, utility, or form.",
+      "detection_rules": [
+        "Instantiate Component only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "DataObject",
+      "parent_type": null,
+      "definition": "A domain object or transfer object represented by model/form classes.",
+      "detection_rules": [
+        "Instantiate DataObject only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "DataStore",
+      "parent_type": null,
+      "definition": "A persistence target such as a database, table, or configured JDBC store.",
+      "detection_rules": [
+        "Instantiate DataStore only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Rule",
+      "parent_type": null,
+      "definition": "A validation, authorization, or business constraint enforced by configuration or code.",
+      "detection_rules": [
+        "Instantiate Rule only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Integration",
+      "parent_type": null,
+      "definition": "A dependency or external technology boundary used by the application.",
+      "detection_rules": [
+        "Instantiate Integration only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Job",
+      "parent_type": null,
+      "definition": "Scheduled or asynchronous work.",
+      "detection_rules": [
+        "Instantiate Job only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "Configuration",
+      "parent_type": null,
+      "definition": "Runtime or build-time configuration that shapes application behavior.",
+      "detection_rules": [
+        "Instantiate Configuration only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "SecurityElement",
+      "parent_type": null,
+      "definition": "Authentication, authorization, or session-security construct.",
+      "detection_rules": [
+        "Instantiate SecurityElement only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    },
+    {
+      "type_id": "UnknownSemanticConstruct",
+      "parent_type": null,
+      "definition": "A source-backed construct whose application meaning remains unresolved.",
+      "detection_rules": [
+        "Instantiate UnknownSemanticConstruct only when a source node or file evidence directly supports the construct."
+      ],
+      "required_evidence": [
+        "At least one local source file path and span or source-node id."
+      ],
+      "optional_evidence": [
+        "Corroborating Java class, XML mapping, JSP template, dependency, or documentation catalog evidence."
+      ],
+      "examples": [],
+      "confidence": null,
+      "status": "accepted",
+      "version": 1
+    }
+  ]
+}
