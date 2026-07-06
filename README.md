@@ -1,5 +1,8 @@
 # semantic-discovery-loop
 
+> **The AI proposes, the repository proves.** See a complete example run in
+> [`examples/taskdesk-legacy-run/`](examples/taskdesk-legacy-run/).
+
 A bounded, evidence-backed AI agent loop that inspects a source repository **without
 modifying it** and produces two artefacts:
 
