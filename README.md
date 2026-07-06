@@ -15,6 +15,17 @@ modifying it** and produces two artefacts:
 The loop verifies its own output against a scored gate and is only complete when every
 score in `.work/semantic-loop/verification.json` is 8 or higher.
 
+## The articles
+
+This repository is the working example for a two-part article series,
+*From AI Loops to Semantic Software Understanding*:
+
+1. [From Prompts to Loops](https://www.linkedin.com/pulse/from-ai-loops-semantic-software-understanding-1-2-iwan-van-der-kleijn-i8jie/) —
+   making AI work verifiable: bounded loops, durable artefacts, and an independent
+   verification gate.
+2. [Beyond ASTs — Why AI needs a semantic layer to understand software](https://www.linkedin.com/pulse/from-ai-loops-semantic-software-understanding-2-iwan-van-der-kleijn-nspee/) —
+   the two-layer source/semantic model the loop builds.
+
 ## Repository layout
 
 | Path | Purpose |
