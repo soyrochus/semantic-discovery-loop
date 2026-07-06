@@ -65,3 +65,20 @@ this example, so you can see what a finished run produces without running one yo
 The example app is runnable (Java 8+, Maven, Tomcat 9); see `taskdesk-legacy/README.md`.
 Running it is not required for the discovery loop — the loop only reads the source tree
 and the SQLite file.
+
+---
+
+## Contributing & Principles of Participation
+
+Pull requests are welcome. For major changes, open an issue first to discuss the approach.
+
+Everyone is welcome to contribute: open issues, propose pull requests, share ideas, or improve documentation. Participation is open to all, regardless of background or viewpoint.
+
+This project follows the [FOSS Pluralism Manifesto](./FOSS_PLURALISM_MANIFESTO.md), which affirms respect for people, freedom to critique ideas, and space for diverse perspectives.
+
+
+## Copyright and License
+
+Copyright © 2026 Iwan van der Kleijn
+
+Licensed under the [MIT License](https://choosealicense.com/licenses/mit/). See the [LICENSE file](./LICENSE) in the repository.
