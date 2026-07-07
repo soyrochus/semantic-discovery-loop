@@ -47,10 +47,16 @@ TaskDesk Legacy is represented as `sem:application:taskdesk-legacy`, grounded in
 - The kernel semantic vocabulary is used with accepted status only; no project-specific candidate types were needed.
 
 ## Documentation drift
-- 8 claims were extracted from `taskdesk-legacy/README.md`, `db/runtime-data/README.md` by `doc-claims-v1` (model-driven reading; every claim carries a verbatim excerpt and span, re-resolved deterministically by check mode and the verifier): 7 confirmed, 0 contradicted, 1 unverifiable.
+- 9 claims were extracted from `taskdesk-legacy/README.md`, `db/runtime-data/README.md` by `doc-claims-v1` (model-driven reading; every claim carries a verbatim excerpt and span, re-resolved deterministically by check mode and the verifier): 8 confirmed, 0 contradicted, 1 unverifiable.
 - Unverifiable `claim:db-readme:seed-row-counts` (db/runtime-data/README.md:9): The runtime demo database initially contains 3 APP_USER, 6 TASK, 5 TASK_COMMENT, and 8 TASK_AUDIT rows. — sqlite-schema-v1 introspects schema only and no parser reads row data from db/runtime-data/taskdesk-demo.sqlite, so the documented counts of the live database file cannot be settled statically. The seed SQL suggests but does not prove the current file contents. Recorded as asserted evidence on sem:unknown:runtime-row-semantics.
 - No contradicted claims: documentation and code agree everywhere a claim could be checked against parsed evidence.
 - Confirmed claims were applied to the semantic graph as asserted evidence (naming and intent only, per the authority rule): business descriptions on the application and SQLite datastore, the documented DB-URL override order on `sem:configuration:taskdesk-db-url` and `JdbcConnectionManager`, documented demo users on `sem:datastore:table:app_user`, and the documented runtime row counts now ground `sem:unknown:runtime-row-semantics` via `claim_ref`.
+
+## Runtime journeys
+- The runtime phase ran with recorded user approval against a **disposable copy** of `db/runtime-data/taskdesk-demo.sqlite` (`runtime/db/taskdesk-demo.sqlite`); the committed file's sha256 was recorded at launch and is re-verified by the gate (`jr-source-db-untouched`).
+- `journey:login-task-review` (operator1): /login (200) -> /login (302) -> /taskDetail (200). Corroborates 7 statically derived nodes; instantiates `sem:flow:login-task-review` from 3 replayable trace files under `runtime/traces/` (sha256-referenced, screenshots included). Hypothesis: claim:taskdesk-readme:login-entry (documented login URL and demo users) plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards.
+- Traces are normalized per the RT-8 rule (no timestamps, session ids, cookie/date values); observed evidence carries `kind: "observed"` with a `journey_ref` and boosts confidence without ever being required for existence of statically grounded nodes.
+- Flow nodes instantiated from observed evidence: sem:flow:login-task-review.
 
 ## Unresolved unknowns
 - `sem:unknown:runtime-row-semantics`: schema and documented row counts are known, but row contents and business meaning of seed records in the live database file were not read by the schema parser. The documented counts are recorded as asserted evidence (`claim:db-readme:seed-row-counts`), which cannot prove the live file's contents.
@@ -71,5 +77,5 @@ TaskDesk Legacy is represented as `sem:application:taskdesk-legacy`, grounded in
 - Claim extraction is model-driven interpretation; anchors, spans, and excerpts are deterministic and re-checked, the reading is not.
 
 ## Verification
-- Verified by `verifier-v1` (.agent-loop/tools/verifier); self-test caught 6/6 seeded mutations.
-- Scores (measured, nine dimensions): {"assertion_grounding": 10, "inventory_coverage": 10, "parser_validity": 10, "report_coverage": 10, "reproducibility": 10, "semantic_graph_provenance": 10, "semantic_type_quality": 10, "source_graph_consistency": 10, "unknowns_handling": 10}.
+- Verified by `verifier-v1` (.agent-loop/tools/verifier); self-test caught 8/8 seeded mutations.
+- Scores (measured, ten dimensions): {"assertion_grounding": 10, "inventory_coverage": 10, "journey_corroboration": 10, "parser_validity": 10, "report_coverage": 10, "reproducibility": 10, "semantic_graph_provenance": 10, "semantic_type_quality": 10, "source_graph_consistency": 10, "unknowns_handling": 10}.

@@ -1,0 +1,132 @@
+{
+  "repo_fingerprint": "f944873f50f565b872c246e3a5c942dbf107bed6",
+  "produced_by": "runtime/scripts/walk-journeys.mjs",
+  "approval": {
+    "granted": true,
+    "statement": "User instructed \"ok, lets finish it\" for Milestone 3 (runtime journeys) in the Claude Code session of 2026-07-07, covering execution of the bundled taskdesk-legacy target."
+  },
+  "environment": {
+    "declared_dependencies": [
+      {
+        "name": "java-17 (~/opt/jdk17)",
+        "satisfied": true,
+        "version": "17"
+      },
+      {
+        "name": "maven (~/opt/maven, built the deployed WAR)",
+        "satisfied": true,
+        "version": "3.9"
+      },
+      {
+        "name": "tomcat-9 (~/opt/tomcat9, javax.servlet)",
+        "satisfied": true,
+        "version": "9.0.120"
+      },
+      {
+        "name": "node",
+        "satisfied": true,
+        "version": "24"
+      },
+      {
+        "name": "playwright-chromium",
+        "satisfied": true,
+        "version": "1.61"
+      }
+    ],
+    "app_base_url": "http://localhost:8080/taskdesk-legacy",
+    "container": "tomcat-9.0.120"
+  },
+  "db_snapshot": {
+    "source_file": "db/runtime-data/taskdesk-demo.sqlite",
+    "source_sha256": "93d02f7d265f0a10a80ddc9b048476782501534cc2e01d8ef868594580521944",
+    "copy_path": "runtime/db/taskdesk-demo.sqlite"
+  },
+  "journeys": [
+    {
+      "id": "journey:login-task-review",
+      "name": "Login and review a task (operator1)",
+      "flow_hypothesis": "claim:taskdesk-readme:login-entry (documented login URL and demo users) plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
+      "actor": "operator1",
+      "steps": [
+        {
+          "index": 1,
+          "action": "goto",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "GET",
+          "form_fields": [],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/login.jsp",
+          "view_evidence": "title: TaskDesk Login",
+          "trace_ref": {
+            "path": "runtime/traces/login-task-review/step-1.json",
+            "sha256": "a4441effe18d9571743a0d3e068c42be84b9d69e0c871a4be8d3cd5451edf865"
+          },
+          "screenshot": {
+            "path": "runtime/traces/login-task-review/step-1.png",
+            "sha256": "f3d486edc17188959d988cfafa482a4750fb973a87cdb6e1a71f89e9cc205d96"
+          },
+          "db_diff": null
+        },
+        {
+          "index": 2,
+          "action": "submit-form",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "POST",
+          "form_fields": [
+            "username",
+            "password"
+          ],
+          "response_status": 302,
+          "redirect_location": "/taskdesk-legacy/tasks.do",
+          "rendered_view": "/jsp/taskList.jsp",
+          "view_evidence": "title: Task List",
+          "trace_ref": {
+            "path": "runtime/traces/login-task-review/step-2.json",
+            "sha256": "fb1deb5a0c398169ed2d4a1dbd5ed1982fddc8608dc5386f08f972b856b86e5b"
+          },
+          "screenshot": {
+            "path": "runtime/traces/login-task-review/step-2.png",
+            "sha256": "fa937d5f4e01ecd72dff74b83fc11ae1f34f8ac9c9d88f037868ab24dc9cd16b"
+          },
+          "db_diff": null
+        },
+        {
+          "index": 3,
+          "action": "click",
+          "url": "/taskdesk-legacy/taskDetail.do?taskId=1",
+          "route": "/taskDetail",
+          "request_method": "GET",
+          "form_fields": [],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/taskDetail.jsp",
+          "view_evidence": "title: Task Detail",
+          "trace_ref": {
+            "path": "runtime/traces/login-task-review/step-3.json",
+            "sha256": "2d47d9200fe64b04e546a71641414d28db9d7096da8470bcaf6a8bafc6bef768"
+          },
+          "screenshot": {
+            "path": "runtime/traces/login-task-review/step-3.png",
+            "sha256": "e3b2d5041cef4797c829f5496adfc8eec80f6303586c812b90290423a5bd1b66"
+          },
+          "db_diff": null
+        }
+      ],
+      "corroborates": [
+        "sem:entrypoint:struts-action-servlet-do",
+        "sem:action:login",
+        "sem:view:login",
+        "sem:action:tasks",
+        "sem:view:taskList",
+        "sem:action:taskDetail",
+        "sem:view:taskDetail"
+      ],
+      "properties": {
+        "slice": "corroboration-only (spec §7 Milestone 3); no security diffing or DB-diff proof yet"
+      }
+    }
+  ]
+}

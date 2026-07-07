@@ -27,9 +27,10 @@ A verifier the generator wrote for itself, with scores it chose, is not verifica
 - **Prove the gate can fail before trusting a pass.** Run the mutation self-test
   (corrupt copies of the artefacts — strip provenance, add a dangling edge, forge a
   `parser_id`, break an inventory path, forge a documentation claim's excerpt,
-  promote a node to accepted on asserted evidence alone — and require the gate to
-  catch each one). A verdict without a passing self-test is not a verdict. Record the
-  self-test result in `verification.json` under `verifier.self_test`.
+  promote a node to accepted on asserted evidence alone, corrupt a journey trace
+  reference, attach observed evidence with no journey behind it — and require the
+  gate to catch each one). A verdict without a passing self-test is not a verdict.
+  Record the self-test result in `verification.json` under `verifier.self_test`.
 
 ## Scores
 
@@ -63,14 +64,27 @@ feeds):
   claim. When the doc-alignment phase did not run, an absent `doc-claims.json` is a
   recorded unknown, not a failure — but asserted evidence with no claims artefact
   behind it fails.
-- **report_coverage** — required sections present; status marker (`FINAL`/`PARTIAL`)
-  consistent with the gate outcome — a report claiming FINAL while the gate fails caps
-  this at 7.
+- **journey_corroboration** — runtime journeys re-resolved onto the artefacts and the
+  repository: recorded user approval present; every observed provenance entry's
+  `journey_ref` resolves into `runtime/journeys.json`; every trace/screenshot hash
+  recomputes to its recorded value; corroborated node ids exist in the semantic
+  graph; walked routes match parsed `Route` nodes; the committed database file's
+  recomputed hash proves the source tree was untouched (RT-2). When the runtime
+  phase did not run, an absent `journeys.json` is a recorded unknown, not a failure —
+  but observed evidence with no journeys artefact behind it fails.
+- **report_coverage** — required sections present (including `Documentation drift`
+  when doc-claims exist and `Runtime journeys` when journeys exist); status marker
+  (`FINAL`/`PARTIAL`) consistent with the gate outcome — a report claiming FINAL
+  while the gate fails caps this at 7.
 - **unknowns_handling** — UnknownSemanticConstruct nodes, inventory uncertainties, and
   well-formed explicit assumptions present rather than silently resolved gaps.
 - **reproducibility** — one `repo_fingerprint` across artefacts matching git HEAD;
   parsers produce identical output on double runs; assumptions stored as an artefact,
-  not only prose.
+  not only prose. **Split standard (RT-8):** static artefacts stay byte-identical;
+  runtime artefacts must be pre-normalized — volatile content (timestamps, session
+  ids, cookie/date values, durations, absolute user paths) in `journeys.json` or its
+  trace files fails the named check `rep-journeys-normalized`. The normalization rule
+  is written in `contracts/journeys.schema.json`; weakening it quietly is prohibited.
 
 ## Gate
 

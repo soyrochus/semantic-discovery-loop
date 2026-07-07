@@ -369,6 +369,7 @@ The loop should generate the following artefacts:
   semantic-types.json
   semantic-graph.json
   doc-claims.json       (optional — documentation claims, when docs are in scope)
+  runtime/journeys.json (optional — runtime journeys, when the approval-gated phase runs)
   verification.json
   reports/
     application-structure.md
@@ -572,6 +573,7 @@ source_graph_consistency
 semantic_type_quality
 semantic_graph_provenance
 assertion_grounding
+journey_corroboration
 report_coverage
 unknowns_handling
 reproducibility
@@ -632,7 +634,7 @@ computed from, plus the self-test result):
 ```
 
 (The full shape is defined in `.agent-loop/contracts/verification.schema.json`; the
-`scores` object carries all nine dimensions.)
+`scores` object carries all ten dimensions.)
 
 If any score is below 8:
 
@@ -879,6 +881,7 @@ Scores:
 - semantic_type_quality
 - semantic_graph_provenance
 - assertion_grounding
+- journey_corroboration
 - report_coverage
 - unknowns_handling
 - reproducibility
@@ -974,6 +977,7 @@ Read:
 - .work/semantic-loop/semantic-types.json
 - .work/semantic-loop/semantic-graph.json
 - .work/semantic-loop/doc-claims.json if present
+- .work/semantic-loop/runtime/journeys.json if present
 - .work/semantic-loop/reports/application-structure.md if present
 
 Write:

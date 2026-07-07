@@ -47,6 +47,7 @@
         "semantic_type_quality",
         "semantic_graph_provenance",
         "assertion_grounding",
+        "journey_corroboration",
         "report_coverage",
         "unknowns_handling",
         "reproducibility"
@@ -58,6 +59,7 @@
         "semantic_type_quality": { "$ref": "#/$defs/score" },
         "semantic_graph_provenance": { "$ref": "#/$defs/score" },
         "assertion_grounding": { "$ref": "#/$defs/score" },
+        "journey_corroboration": { "$ref": "#/$defs/score" },
         "report_coverage": { "$ref": "#/$defs/score" },
         "unknowns_handling": { "$ref": "#/$defs/score" },
         "reproducibility": { "$ref": "#/$defs/score" }
@@ -96,6 +98,7 @@
               "semantic_type_quality",
               "semantic_graph_provenance",
               "assertion_grounding",
+              "journey_corroboration",
               "report_coverage",
               "unknowns_handling",
               "reproducibility"

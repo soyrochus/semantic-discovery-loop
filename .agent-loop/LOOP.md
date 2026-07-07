@@ -1,5 +1,11 @@
 # LOOP.md — Semantic Source-Discovery Loop
 
+**Contract version 2.** Version 1 admitted static evidence only ("no web automation").
+Version 2 admits the sandboxed, approval-gated **runtime journey phase** (skill 09,
+`observed` evidence) alongside documentation alignment (skill 10, `asserted` evidence).
+This is a renegotiated contract, not an incremental tweak — the trust-boundary,
+sandbox, and reproducibility rules below are part of the version change.
+
 This file is the governing definition of the loop. Every run starts by reading this file
 and `skills/00-loop-conductor.md`. The skills in `skills/` are the operational
 instructions for each phase. The schemas in `contracts/` define the required shape of
@@ -28,6 +34,13 @@ evidence.
 - During loop execution, write only to `.work/semantic-loop/**` and `.cache/scripts/**`.
 - Never modify source files, build files, dependency files, or application configuration.
 - Never install dependencies without explicit approval.
+- **Never execute the target application without explicit user approval.** The runtime
+  journey phase (skill 09) runs the target — pointed at an arbitrary repository that is
+  arbitrary code execution. Approval must be obtained per run and recorded in
+  `runtime/journeys.json`; the app runs against a **disposable copy** of its runtime
+  database in a sandboxed directory under `.work/semantic-loop/runtime/`, and the
+  source tree — including any committed database file — stays byte-identical
+  (verifier-checked).
 - Never run destructive commands.
 - Never delete files outside `.work/semantic-loop/` or `.cache/scripts/`.
 - Never invent facts about the application. If something cannot be determined, represent
@@ -45,17 +58,21 @@ Every provenance entry in the semantic graph carries an evidence `kind`
 (`semantic-graph.schema.json`); an absent `kind` means `parsed`:
 
 ```text
-kind        source                                        answers
-parsed      deterministic parser output over the tree     what exists
-observed    recorded from executing the target (v2+)      what happens
-asserted    claims extracted from in-repo documentation   what is meant
+kind        source                                          answers
+parsed      deterministic parser output over the tree       what exists
+observed    recorded from executing the target (skill 09)   what happens
+asserted    claims extracted from in-repo documentation     what is meant
 ```
 
 For **existence** claims the authority order is `parsed > observed > asserted`:
 
 - `parsed` evidence instantiates nodes of any type.
-- `observed` evidence is reserved for a future loop version (see out-of-scope); when
-  admitted it may instantiate behavioural types and corroborate structural ones.
+- `observed` evidence may instantiate **behavioural** types (`Flow`) from replayable
+  journey traces and corroborate structural ones (a bounded confidence boost, recorded
+  as an observed provenance entry with a `journey_ref`). Observed evidence confirms
+  and adds, never vetoes: a runtime contradiction (route 404s, view never renders)
+  becomes a recorded conflict, not a deletion, and unvisited constructs are untouched —
+  absence of observation is not absence of behaviour.
 - `asserted` evidence is authoritative for **naming and intent only** — it is never
   sufficient for existence. A node grounded solely in asserted evidence may exist only
   as `candidate`, `proposed`, or as an `UnknownSemanticConstruct`, never as
@@ -126,6 +143,10 @@ and the parser's input patterns.
   semantic-types.json   # type registry                   (contracts/semantic-types.schema.json)
   semantic-graph.json   # Layer 2                         (contracts/semantic-graph.schema.json)
   doc-claims.json       # documentation claims — optional (contracts/doc-claims.schema.json)
+  runtime/
+    journeys.json       # runtime journeys — optional     (contracts/journeys.schema.json)
+    traces/**           # normalized per-step traces + screenshots referenced by journeys.json
+    scripts/**          # the journey scripts that produced them
   verification.json     # gate scores                     (contracts/verification.schema.json)
   reports/
     application-structure.md
@@ -150,28 +171,40 @@ Markdown.
 10. Align documentation claims                     (skills/10-doc-alignment.md) —
     optional and degradable: with no documentation in scope, record the layer as an
     explicit unknown and continue; never fail the gate for its absence.
-11. Verify all artefacts                           (skills/07-verifier.md).
-12. If verification passes, write the final report (skills/08-report-writer.md).
-13. If verification fails:
+11. Walk runtime journeys                          (skills/09-journey-walker.md) —
+    optional, degradable, and approval-gated: requires explicit user approval to
+    execute the target; without approval, a satisfied environment, or a startable
+    target, record the layer as an explicit unknown and continue static-only.
+12. Verify all artefacts                           (skills/07-verifier.md).
+13. If verification passes, write the final report (skills/08-report-writer.md).
+14. If verification fails:
     a. print ITERATING;
     b. identify the weakest score;
     c. improve the weakest score first;
     d. update state.json;
     e. continue until verification passes or max_iterations is reached.
-14. If max_iterations is reached, write a partial report with unresolved items,
+15. If max_iterations is reached, write a partial report with unresolved items,
     clearly marked as partial.
 ```
 
 ## Verification gate
 
-The verifier scores nine dimensions from 0–10:
+The verifier scores ten dimensions from 0–10:
 
 ```text
 inventory_coverage        parser_validity         source_graph_consistency
 semantic_type_quality     semantic_graph_provenance
-assertion_grounding       report_coverage
+assertion_grounding       journey_corroboration   report_coverage
 unknowns_handling         reproducibility
 ```
+
+`reproducibility` applies a **split standard** (see `contracts/journeys.schema.json`):
+static artefacts must be byte-identical across re-runs; runtime artefacts must be
+*semantically* reproducible — written pre-normalized (no timestamps, session ids,
+cookie/date values, durations, or absolute user paths), so two runs over the same
+repository state and DB snapshot compare byte-equal, with screenshots exempt from
+byte-identity and integrity-checked by recorded hash instead. Weakening this quietly
+is prohibited; the normalization rule is enforced by a named verifier check.
 
 **The loop may only be marked complete if all scores are 8 or higher.** If any score is
 below 8: print `ITERATING`, name the weakest score, define the next corrective action,
@@ -193,11 +226,14 @@ Verification must be **independent and measured** (see `skills/07-verifier.md`):
 
 ## Out of scope for this version
 
-No SQLite/graph databases, no vector search, no web automation, no scheduling, no
-persistent background agents, no platform integration. This version is a manually
-invoked, file-based, prompt/skill-driven demonstrator.
+No SQLite/graph databases, no vector search, no scheduling, no persistent background
+agents, no platform integration. This remains a manually invoked, file-based,
+prompt/skill-driven demonstrator.
 
-The `observed` evidence kind is declared in the schema but **reserved**: no phase in
-this version executes the target application. Admitting observed evidence (runtime
-journeys) is a versioned contract change with its own approval, sandboxing, and
-reproducibility rules — see `docs/implement-extended-semantic-layer.md`, Extension B.
+Web automation is **in scope since contract version 2**, but only as the runtime
+journey phase defined by `skills/09-journey-walker.md` and
+`contracts/journeys.schema.json`: explicit per-run user approval, sandboxed execution
+against a disposable database copy, hypothesis-driven journeys, and the split
+reproducibility standard. Free crawling, scheduled runs, and journeys against
+unapproved targets stay out of scope. Background and spec:
+`docs/implement-extended-semantic-layer.md`, Extension B.

@@ -20,7 +20,7 @@
   "$defs": {
     "provenance": {
       "type": "object",
-      "required": ["file", "evidence_type"],
+      "required": ["evidence_type"],
       "properties": {
         "source_node": {
           "type": ["string", "null"],
@@ -28,7 +28,7 @@
         },
         "file": {
           "type": "string",
-          "description": "Repository-relative path of the evidence."
+          "description": "Repository-relative path of the evidence. Required for parsed and asserted evidence; observed evidence references a journey instead."
         },
         "span": {
           "type": ["object", "null"],
@@ -51,9 +51,28 @@
         "claim_ref": {
           "type": ["string", "null"],
           "description": "For kind 'asserted': id of the claim in doc-claims.json this evidence derives from."
+        },
+        "journey_ref": {
+          "type": ["string", "null"],
+          "description": "For kind 'observed': id of the journey in runtime/journeys.json this evidence derives from. Observed provenance is a replayable-trace reference, not a file/span claim."
+        },
+        "trace_ref": {
+          "type": ["string", "null"],
+          "description": "For kind 'observed': optional work-relative path of the specific trace file within the journey, e.g. 'runtime/traces/login-task-review/step-2.json'."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "Shape split (RT-1): parsed/asserted evidence cites a repository file; observed evidence cites a journey in runtime/journeys.json.",
+          "if": {
+            "properties": { "kind": { "const": "observed" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["journey_ref"] },
+          "else": { "required": ["file"] }
+        }
+      ]
     },
     "conflict": {
       "type": "object",

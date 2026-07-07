@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "journeys.schema.json",
+  "title": "Runtime Journeys",
+  "description": "Recorded user journeys walked against a sandboxed instance of the target application (skill 09). Stored at .work/semantic-loop/runtime/journeys.json. Optional artefact — absent when the runtime phase did not run (no approval, missing dependencies, or the target would not start); its absence is a recorded unknown, never a gate failure. Observed evidence confirms and adds, never vetoes (EV-6/RT-5). NORMALIZATION RULE (RT-8): this artefact and every trace file it references must be written pre-normalized — no wall-clock timestamps, no session identifiers (jsessionid path segments and cookie values stripped), no Set-Cookie or Date header values, no durations, no absolute filesystem paths outside the runtime directory. Two runs over the same repository state and database snapshot must produce byte-identical journeys.json and trace files after this normalization; screenshot files are exempt from byte-identity (rendering is not deterministic) and are compared by recorded hash integrity only.",
+  "type": "object",
+  "required": ["repo_fingerprint", "produced_by", "approval", "environment", "db_snapshot", "journeys"],
+  "properties": {
+    "repo_fingerprint": { "type": ["string", "null"] },
+    "produced_by": {
+      "type": "string",
+      "description": "Work-relative path of the journey script that produced this artefact, e.g. 'runtime/scripts/walk-journeys.mjs'."
+    },
+    "approval": {
+      "type": "object",
+      "description": "RT-3: executing the target is a trust-boundary change and requires explicit user approval before anything is launched.",
+      "required": ["granted", "statement"],
+      "properties": {
+        "granted": { "type": "boolean" },
+        "statement": { "type": "string", "description": "Where/how the user granted approval for this run." }
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "description": "RT-6: declared runtime dependencies, checked before launch. A missing dependency triggers the RT-4 degradation path instead of a failed run.",
+      "required": ["declared_dependencies", "app_base_url"],
+      "properties": {
+        "declared_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "satisfied"],
+            "properties": {
+              "name": { "type": "string" },
+              "satisfied": { "type": "boolean" },
+              "version": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+          }
+        },
+        "app_base_url": { "type": "string" },
+        "container": { "type": ["string", "null"], "description": "Servlet container / runtime used, e.g. 'tomcat-9.0.120'." }
+      },
+      "additionalProperties": false
+    },
+    "db_snapshot": {
+      "type": "object",
+      "description": "RT-2: journeys run against a disposable copy of the runtime database; the committed source file stays byte-identical. Both identities are recorded so the verifier can prove it.",
+      "required": ["source_file", "source_sha256", "copy_path"],
+      "properties": {
+        "source_file": { "type": "string", "description": "Repository-relative path of the committed database file." },
+        "source_sha256": { "type": "string", "description": "sha256 of the committed file at launch time; the verifier recomputes it to prove the source tree was untouched." },
+        "copy_path": { "type": "string", "description": "Work-relative path of the disposable copy the application actually used." }
+      },
+      "additionalProperties": false
+    },
+    "journeys": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/journey" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "journey": {
+      "type": "object",
+      "required": ["id", "name", "flow_hypothesis", "actor", "steps", "corroborates"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^journey:", "description": "Stable id, e.g. 'journey:login-task-review'." },
+        "name": { "type": "string" },
+        "flow_hypothesis": {
+          "type": "string",
+          "description": "What predicted this journey: a doc-claims claim id and/or the statically derived route chain it walks. Journeys are driven by hypotheses, not free exploration."
+        },
+        "actor": { "type": "string", "description": "The identity the journey ran as, e.g. 'operator1'." },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/step" }
+        },
+        "corroborates": {
+          "type": "array",
+          "description": "Semantic-graph node ids this journey corroborates (EntryPoint/Action/View). Corroboration confirms and adds; it never lowers or removes anything (EV-6).",
+          "items": { "type": "string", "pattern": "^sem:" }
+        },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "required": ["index", "action", "url", "response_status", "trace_ref"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 1 },
+        "action": { "type": "string", "enum": ["goto", "submit-form", "click", "assert"] },
+        "url": { "type": "string", "description": "Context-relative URL, normalized (no scheme/host/port, no jsessionid)." },
+        "route": { "type": ["string", "null"], "description": "The framework route this URL maps to (matches a Route source node's path), e.g. '/login'." },
+        "request_method": { "type": ["string", "null"] },
+        "form_fields": {
+          "type": "array",
+          "description": "Names (never values) of form fields submitted in this step; matched against form-bean properties.",
+          "items": { "type": "string" }
+        },
+        "response_status": { "type": "integer" },
+        "redirect_location": { "type": ["string", "null"], "description": "Normalized Location of a redirect response, when one occurred." },
+        "rendered_view": { "type": ["string", "null"], "description": "Webapp-relative template the rendered page was matched to, e.g. '/jsp/taskList.jsp'." },
+        "view_evidence": { "type": ["string", "null"], "description": "What in the rendered page matched the view (title, heading, form action)." },
+        "trace_ref": { "$ref": "#/$defs/artefactRef" },
+        "screenshot": {
+          "oneOf": [ { "$ref": "#/$defs/artefactRef" }, { "type": "null" } ]
+        },
+        "db_diff": {
+          "type": ["object", "null"],
+          "description": "Observed table-level row-count changes on the disposable copy caused by this step; null when not measured (corroboration-only slice)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "artefactRef": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "description": "Work-relative path under runtime/, e.g. 'runtime/traces/login-task-review/step-1.json'." },
+        "sha256": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

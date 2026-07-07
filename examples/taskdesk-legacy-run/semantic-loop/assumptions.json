@@ -1,6 +1,13 @@
 {
   "assumptions": [
     {
+      "id": "assumption:runtime-journeys",
+      "statement": "The runtime journey phase ran with explicit user approval against a disposable copy of the demo database in the sandboxed runtime directory; the source tree, including the committed SQLite file, was left byte-identical (hash recorded and re-checked by the verifier).",
+      "reason": "User approval recorded in runtime/journeys.json; Tomcat was launched with TASKDESK_DB_URL pointing at the runtime copy.",
+      "confidence": 1.0,
+      "status": "accepted"
+    },
+    {
       "id": "assumption:scope",
       "statement": "The requested analysis scope is taskdesk-legacy plus db after user permission to incorporate db.",
       "reason": "User first requested taskdesk-legacy scope, then explicitly allowed DB incorporation.",

@@ -58,12 +58,22 @@ and all of them delegate to `.agent-loop/`:
 The loop never modifies the source tree. All writes are restricted to:
 
 - `.work/semantic-loop/**` — state, inventory, source graph, semantic graph, semantic
-  types, assumptions, verification scores, and the final report under
-  `.work/semantic-loop/reports/`.
+  types, documentation claims, runtime journeys (under `runtime/`), assumptions,
+  verification scores, and the final report under `.work/semantic-loop/reports/`.
 - `.cache/scripts/**` — adapted parsers/extractors with manifests.
 
 Both directories are gitignored; every run regenerates them. Each artefact must validate
 against its schema in `.agent-loop/contracts/`.
+
+Contract version 2 adds two optional, degradable evidence layers on top of the static
+parse: **documentation alignment** (skill 10, `asserted` evidence — claims extracted
+from in-repo docs, naming and intent only) and the **runtime journey phase** (skill 09,
+`observed` evidence). The runtime phase *executes* the target and therefore requires
+**explicit user approval**; it runs the app against a disposable copy of its database in
+a sandbox under `.work/semantic-loop/runtime/`, leaving the source tree — including any
+committed database — byte-identical. Both layers are degradable: absent approval, docs,
+or a startable target, the loop completes static-only and records the missing layer as an
+explicit unknown. The verifier scores ten dimensions; all must be ≥ 8.
 
 ## The bundled example: TaskDesk Legacy
 

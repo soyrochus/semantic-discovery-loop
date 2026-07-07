@@ -5,8 +5,8 @@
     "tool": "verifier-v1",
     "gallery_source": ".agent-loop/tools/verifier",
     "self_test": {
-      "mutations_applied": 6,
-      "mutations_detected": 6,
+      "mutations_applied": 8,
+      "mutations_detected": 8,
       "passed": true
     }
   },
@@ -47,7 +47,7 @@
         "types-used-are-stable",
         "types-operational"
       ],
-      "measurement": "16 types, 13 in use; 0 unstable in use, 0 non-operational"
+      "measurement": "16 types, 14 in use; 0 unstable in use, 0 non-operational"
     },
     "semantic_graph_provenance": {
       "value": 10,
@@ -59,7 +59,7 @@
         "sem-kind-valid",
         "sem-asserted-not-sufficient"
       ],
-      "measurement": "61 nodes, 100 grounding entries; 0 ungrounded, 0 unresolved refs, 0 evidence file/span problems, 0 asserted-only existence violations"
+      "measurement": "62 nodes, 110 grounding entries; 0 ungrounded, 0 unresolved refs, 0 evidence file/span problems, 0 asserted-only existence violations"
     },
     "assertion_grounding": {
       "value": 10,
@@ -70,7 +70,19 @@
         "doc-nodes-resolve",
         "doc-refs-linked"
       ],
-      "measurement": "8 claims re-resolved ({'confirmed': 7, 'contradicted': 0, 'unverifiable': 1}); 0 unresolved, 0 excerpt mismatches, 0 indefinite, 0 node-mapping problems, 0 broken claim links"
+      "measurement": "9 claims re-resolved ({'confirmed': 8, 'contradicted': 0, 'unverifiable': 1}); 0 unresolved, 0 excerpt mismatches, 0 indefinite, 0 node-mapping problems, 0 broken claim links"
+    },
+    "journey_corroboration": {
+      "value": 10,
+      "derived_from": [
+        "jr-approval-recorded",
+        "jr-refs-resolve",
+        "jr-traces-resolve",
+        "jr-corroborates-resolve",
+        "jr-routes-match",
+        "jr-source-db-untouched"
+      ],
+      "measurement": "1 journeys / 3 steps re-resolved; 0 broken journey refs, 0 trace integrity failures, 0 node-mapping problems, 0 route mismatches, source db untouched=True"
     },
     "report_coverage": {
       "value": 10,
@@ -79,7 +91,7 @@
         "report-sections",
         "report-status-consistent"
       ],
-      "measurement": "16/16 sections; status marker final=True/partial=False"
+      "measurement": "17/17 sections; status marker final=True/partial=False"
     },
     "unknowns_handling": {
       "value": 10,
@@ -88,14 +100,15 @@
         "unk-inventory-uncertainties",
         "unk-assumptions-explicit"
       ],
-      "measurement": "1 unknown constructs, 4 uncertainties, 4 assumptions"
+      "measurement": "1 unknown constructs, 4 uncertainties, 5 assumptions"
     },
     "reproducibility": {
       "value": 10,
       "derived_from": [
         "rep-fingerprint-consistent",
         "rep-parsers-deterministic",
-        "rep-assumptions-stored"
+        "rep-assumptions-stored",
+        "rep-journeys-normalized"
       ],
       "measurement": "fingerprints consistent=True; 0 nondeterministic parsers"
     }
@@ -192,7 +205,7 @@
       "check": "sem-all-grounded",
       "score": "semantic_graph_provenance",
       "result": "pass",
-      "detail": "61 semantic nodes; without provenance: []"
+      "detail": "62 semantic nodes; without provenance: []"
     },
     {
       "check": "sem-refs-resolve",
@@ -228,7 +241,7 @@
       "check": "doc-spans-resolve",
       "score": "assertion_grounding",
       "result": "pass",
-      "detail": "8 claims; provenance that does not resolve onto the repository: []"
+      "detail": "9 claims; provenance that does not resolve onto the repository: []"
     },
     {
       "check": "doc-excerpts-match",
@@ -255,6 +268,42 @@
       "detail": "asserted provenance without a resolvable claim_ref: []; node conflicts referencing unknown claims: []"
     },
     {
+      "check": "jr-approval-recorded",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "explicit user approval recorded for executing the target"
+    },
+    {
+      "check": "jr-refs-resolve",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "observed provenance without a resolvable journey_ref: []"
+    },
+    {
+      "check": "jr-traces-resolve",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "trace/screenshot refs whose file is missing or whose recomputed sha256 differs from the recorded one: []"
+    },
+    {
+      "check": "jr-corroborates-resolve",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "corroborated node ids missing from the semantic graph: []"
+    },
+    {
+      "check": "jr-routes-match",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "walked routes with no matching parsed Route node: []"
+    },
+    {
+      "check": "jr-source-db-untouched",
+      "score": "journey_corroboration",
+      "result": "pass",
+      "detail": "committed database file db/runtime-data/taskdesk-demo.sqlite recomputed hash matches the recorded launch-time hash (RT-2)"
+    },
+    {
       "check": "unk-represented",
       "score": "unknowns_handling",
       "result": "pass",
@@ -270,13 +319,13 @@
       "check": "unk-assumptions-explicit",
       "score": "unknowns_handling",
       "result": "pass",
-      "detail": "4 assumptions; malformed: []"
+      "detail": "5 assumptions; malformed: []"
     },
     {
       "check": "rep-fingerprint-consistent",
       "score": "reproducibility",
       "result": "pass",
-      "detail": "artefact fingerprints {'inventory': '431f0c71eafeeb480584e518b9e430453f702411', 'source-graph': '431f0c71eafeeb480584e518b9e430453f702411', 'semantic-graph': '431f0c71eafeeb480584e518b9e430453f702411', 'state': '431f0c71eafeeb480584e518b9e430453f702411'}; git HEAD 431f0c71eafeeb480584e518b9e430453f702411"
+      "detail": "artefact fingerprints {'inventory': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'source-graph': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'semantic-graph': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'state': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'journeys': 'f944873f50f565b872c246e3a5c942dbf107bed6'}; git HEAD f944873f50f565b872c246e3a5c942dbf107bed6"
     },
     {
       "check": "rep-parsers-deterministic",
@@ -291,6 +340,12 @@
       "detail": "assumptions.json present"
     },
     {
+      "check": "rep-journeys-normalized",
+      "score": "reproducibility",
+      "result": "pass",
+      "detail": "volatile content prohibited by the normalization rule found in runtime artefacts: []"
+    },
+    {
       "check": "report-exists",
       "score": "report_coverage",
       "result": "pass",
@@ -300,7 +355,7 @@
       "check": "report-sections",
       "score": "report_coverage",
       "result": "pass",
-      "detail": "16/16 required sections present; missing: []"
+      "detail": "17/17 required sections present; missing: []"
     },
     {
       "check": "report-status-consistent",

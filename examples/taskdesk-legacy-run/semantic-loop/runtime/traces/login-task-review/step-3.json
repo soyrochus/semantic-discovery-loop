@@ -1,0 +1,12 @@
+{
+  "step": 3,
+  "action": "click",
+  "url": "/taskdesk-legacy/taskDetail.do?taskId=1",
+  "route": "/taskDetail",
+  "request_method": "GET",
+  "form_fields": [],
+  "response_status": 200,
+  "redirect_location": null,
+  "rendered_view": "/jsp/taskDetail.jsp",
+  "view_evidence": "title: Task Detail"
+}

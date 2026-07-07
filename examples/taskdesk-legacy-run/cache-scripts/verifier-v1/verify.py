@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """verifier — independent verification tool for the semantic discovery loop.
 
-Scores all nine gate dimensions by *measuring* the artefacts in
+Scores all ten gate dimensions by *measuring* the artefacts in
 .work/semantic-loop/ against the repository — never by asserting. Every score
 is derived from named checks; the formulas are fixed in this file, which is
 human-reviewed gallery code, not generated during the loop.
@@ -44,7 +44,19 @@ GALLERY_SOURCE = ".agent-loop/tools/verifier"
 DIMENSIONS = [
     "inventory_coverage", "parser_validity", "source_graph_consistency",
     "semantic_type_quality", "semantic_graph_provenance", "assertion_grounding",
-    "report_coverage", "unknowns_handling", "reproducibility",
+    "journey_corroboration", "report_coverage", "unknowns_handling",
+    "reproducibility",
+]
+
+# RT-8 normalization rule for runtime artefacts: journeys.json and its trace
+# files must be written pre-normalized. These patterns must not occur anywhere
+# in the serialized artefact; screenshots are exempt from cross-run byte
+# identity and are checked by recorded-hash integrity instead.
+VOLATILE_PATTERNS = [
+    (re.compile(r"jsessionid", re.IGNORECASE), "session id"),
+    (re.compile(r"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}"), "wall-clock timestamp"),
+    (re.compile(r'"(?:timestamp|started_at|finished_at|duration(?:_ms)?|session_id|cookies?|set-cookie|date)"', re.IGNORECASE), "volatile field name"),
+    (re.compile(r"/(?:home|Users)/[A-Za-z0-9_.-]+/"), "absolute user path"),
 ]
 
 EVIDENCE_KINDS = {"parsed", "observed", "asserted"}
@@ -96,6 +108,7 @@ class Artefacts:
         self.types = self._load("semantic-types.json")
         self.semantic = self._load("semantic-graph.json")
         self.doc_claims = self._load("doc-claims.json", optional=True)
+        self.journeys = self._load("runtime/journeys.json", optional=True)
         self.assumptions = self._load("assumptions.json")
         self.state = self._load("state.json", optional=True) or {}
         report = work / "reports" / "application-structure.md"
@@ -292,6 +305,8 @@ def score_provenance(a: Artefacts, r: Result) -> None:
     bad_files, bad_spans = [], []
     for n in nodes:
         for g in n.get("grounded_in", []):
+            if g.get("kind") == "observed":
+                continue  # journey-shaped evidence; re-resolved by journey_corroboration
             f = a.repo / g.get("file", "")
             if not f.is_file():
                 bad_files.append(f"{n['id']} -> {g.get('file')}")
@@ -433,6 +448,91 @@ def score_assertions(a: Artefacts, r: Result) -> None:
             f"{len(orphaned) + len(dangling_conflicts)} broken claim links")
 
 
+def score_journeys(a: Artefacts, r: Result) -> None:
+    """Runtime journeys re-resolved (runtime/journeys.json).
+
+    The phase is degradable: an absent artefact is a recorded unknown, not a
+    gate failure — but observed evidence in the semantic graph without a
+    journeys artefact behind it is a violation either way. When the artefact
+    is present the verifier re-derives, not trusts: it recomputes every
+    recorded trace/screenshot hash, re-resolves journey and node references,
+    matches walked routes against parsed Route nodes, and recomputes the
+    committed database file's hash to prove the source tree was untouched.
+    """
+    sem_nodes = a.semantic.get("nodes", [])
+    observed_refs = [(n["id"], g) for n in sem_nodes for g in n.get("grounded_in", [])
+                     if g.get("kind") == "observed"]
+
+    if a.journeys is None:
+        r.check("journey_corroboration", "jr-journeys-present", True,
+                "runtime/journeys.json absent: runtime phase not run (no approval, "
+                "missing dependency, or target not launchable); layer stands as a "
+                "recorded unknown", warn=True)
+        orphaned = [nid for nid, _ in observed_refs]
+        ok = r.check("journey_corroboration", "jr-observed-backed", not orphaned,
+                     f"observed evidence with no journeys artefact behind it: {orphaned[:5]}")
+        r.score("journey_corroboration", 10 if ok else 4,
+                "runtime phase not run; "
+                f"{len(orphaned)} unbacked observed provenance entries")
+        return
+
+    journeys = a.journeys.get("journeys", [])
+    jids = {j.get("id") for j in journeys}
+    sem_ids = {n["id"] for n in sem_nodes}
+
+    approval = a.journeys.get("approval") or {}
+    r.check("journey_corroboration", "jr-approval-recorded", bool(approval.get("granted")),
+            "explicit user approval recorded for executing the target"
+            if approval.get("granted") else
+            "journeys artefact present without recorded user approval (RT-3)")
+
+    orphaned = [f"{nid} -> {g.get('journey_ref')}" for nid, g in observed_refs
+                if g.get("journey_ref") not in jids]
+    r.check("journey_corroboration", "jr-refs-resolve", not orphaned,
+            f"observed provenance without a resolvable journey_ref: {orphaned[:5]}")
+
+    bad_refs = []
+    for j in journeys:
+        for s in j.get("steps", []):
+            for ref in (s.get("trace_ref"), s.get("screenshot")):
+                if not ref:
+                    continue
+                p = a.work / ref.get("path", "")
+                if not p.is_file() or sha256(p) != ref.get("sha256"):
+                    bad_refs.append(f"{j.get('id', '?')}#s{s.get('index')} {ref.get('path')}")
+    r.check("journey_corroboration", "jr-traces-resolve", not bad_refs,
+            f"trace/screenshot refs whose file is missing or whose recomputed sha256 "
+            f"differs from the recorded one: {bad_refs[:5]}")
+
+    bad_nodes = [f"{j.get('id', '?')} -> {nid}" for j in journeys
+                 for nid in j.get("corroborates", []) if nid not in sem_ids]
+    r.check("journey_corroboration", "jr-corroborates-resolve", not bad_nodes,
+            f"corroborated node ids missing from the semantic graph: {bad_nodes[:5]}")
+
+    route_paths = {n["properties"].get("path") for n in a.source.get("nodes", [])
+                   if n.get("type") == "Route"}
+    bad_routes = [f"{j.get('id', '?')}#s{s.get('index')} {s.get('route')}"
+                  for j in journeys for s in j.get("steps", [])
+                  if s.get("route") and s["route"] not in route_paths]
+    r.check("journey_corroboration", "jr-routes-match", not bad_routes,
+            f"walked routes with no matching parsed Route node: {bad_routes[:5]}")
+
+    snap = a.journeys.get("db_snapshot") or {}
+    src = a.repo / snap.get("source_file", "")
+    snap_ok = src.is_file() and sha256(src) == snap.get("source_sha256")
+    r.check("journey_corroboration", "jr-source-db-untouched", snap_ok,
+            f"committed database file {snap.get('source_file')} recomputed hash "
+            f"{'matches' if snap_ok else 'DIFFERS from'} the recorded launch-time hash (RT-2)")
+
+    counts = sum(len(j.get("steps", [])) for j in journeys)
+    value = 10 - 3 * r.failed("journey_corroboration")
+    r.score("journey_corroboration", value,
+            f"{len(journeys)} journeys / {counts} steps re-resolved; "
+            f"{len(orphaned)} broken journey refs, {len(bad_refs)} trace integrity failures, "
+            f"{len(bad_nodes)} node-mapping problems, {len(bad_routes)} route mismatches, "
+            f"source db untouched={snap_ok}")
+
+
 def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
     if a.report_text is None:
         r.check("report_coverage", "report-exists", False, "report not written yet")
@@ -443,6 +543,8 @@ def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
     required = list(REQUIRED_REPORT_SECTIONS)
     if a.doc_claims is not None:
         required.append("Documentation drift")
+    if a.journeys is not None:
+        required.append("Runtime journeys")
     text = a.report_text.lower()
     missing = [s for s in required if s.lower() not in text]
     r.check("report_coverage", "report-sections", not missing,
@@ -491,9 +593,11 @@ def score_unknowns(a: Artefacts, r: Result) -> None:
 
 
 def score_reproducibility(a: Artefacts, r: Result, run_subprocesses: bool) -> None:
-    fingerprints = {name: art.get("repo_fingerprint") for name, art in
-                    (("inventory", a.inventory), ("source-graph", a.source),
-                     ("semantic-graph", a.semantic), ("state", a.state))}
+    artefact_list = [("inventory", a.inventory), ("source-graph", a.source),
+                     ("semantic-graph", a.semantic), ("state", a.state)]
+    if a.journeys is not None:
+        artefact_list.append(("journeys", a.journeys))
+    fingerprints = {name: art.get("repo_fingerprint") for name, art in artefact_list}
     distinct = set(fingerprints.values())
     head = None
     if run_subprocesses:
@@ -522,6 +626,30 @@ def score_reproducibility(a: Artefacts, r: Result, run_subprocesses: bool) -> No
     r.check("reproducibility", "rep-assumptions-stored", assumptions_stored,
             "assumptions.json present" if assumptions_stored else "assumptions.json missing")
 
+    # RT-8 split standard: static artefacts stay byte-identical (checks above);
+    # dynamic runtime artefacts must be *semantically* reproducible, which the
+    # contract operationalizes as pre-normalization — volatile content
+    # (timestamps, session ids, cookie/date values, durations, absolute user
+    # paths) is prohibited in journeys.json and its trace files outright, so
+    # two runs over the same state compare equal without a fuzzy diff.
+    if a.journeys is not None:
+        volatile: list[str] = []
+        blobs = [("runtime/journeys.json", json.dumps(a.journeys))]
+        for j in a.journeys.get("journeys", []):
+            for s in j.get("steps", []):
+                ref = s.get("trace_ref") or {}
+                p = a.work / ref.get("path", "")
+                if ref.get("path") and p.is_file():
+                    blobs.append((ref["path"], p.read_text(encoding="utf-8", errors="replace")))
+        for name, blob in blobs:
+            for pattern, label in VOLATILE_PATTERNS:
+                m = pattern.search(blob)
+                if m:
+                    volatile.append(f"{name}: {label} ({m.group(0)[:40]!r})")
+        r.check("reproducibility", "rep-journeys-normalized", not volatile,
+                f"volatile content prohibited by the normalization rule found in "
+                f"runtime artefacts: {volatile[:5]}")
+
     value = 10 - 3 * r.failed("reproducibility")
     r.score("reproducibility", value,
             f"fingerprints consistent={consistent}; "
@@ -540,6 +668,7 @@ def run_verification(work: Path, repo: Path, iteration: int,
     score_types(a, r)
     score_provenance(a, r)
     score_assertions(a, r)
+    score_journeys(a, r)
     score_unknowns(a, r)
     score_reproducibility(a, r, run_subprocesses)
     provisional_pass = all(s["value"] >= 8 for s in r.scores.values())
@@ -665,6 +794,47 @@ def _mutate_asserted_existence(work: Path) -> str:
     return "semantic_graph_provenance"
 
 
+def _mutate_trace_ref(work: Path) -> str:
+    # Corrupt a journey's trace reference: flip a recorded sha256 so the
+    # recomputed hash no longer matches. When no journeys.json exists, plant
+    # one whose step cites a trace file that is not on disk — either way the
+    # broken observed evidence must be caught.
+    p = work / "runtime" / "journeys.json"
+    if p.exists():
+        data = json.loads(p.read_text())
+        data["journeys"][0]["steps"][0]["trace_ref"]["sha256"] = "0" * 64
+    else:
+        p.parent.mkdir(parents=True, exist_ok=True)
+        data = {"repo_fingerprint": None, "produced_by": "selftest",
+                "approval": {"granted": True, "statement": "selftest"},
+                "environment": {"declared_dependencies": [], "app_base_url": "http://selftest"},
+                "db_snapshot": {"source_file": "selftest/missing.sqlite",
+                                "source_sha256": "0" * 64,
+                                "copy_path": "runtime/db/selftest.sqlite"},
+                "journeys": [{"id": "journey:selftest", "name": "selftest",
+                              "flow_hypothesis": "selftest", "actor": "selftest",
+                              "steps": [{"index": 1, "action": "goto", "url": "/x",
+                                         "response_status": 200,
+                                         "trace_ref": {"path": "runtime/traces/missing.json",
+                                                       "sha256": "0" * 64}}],
+                              "corroborates": []}]}
+    p.write_text(json.dumps(data))
+    return "journey_corroboration"
+
+
+def _mutate_observed_unbacked(work: Path) -> str:
+    # Break the observed-evidence discipline: attach observed provenance whose
+    # journey_ref resolves to nothing (or, with no journeys artefact at all,
+    # observed evidence with nothing behind it).
+    p = work / "semantic-graph.json"
+    data = json.loads(p.read_text())
+    data["nodes"][0].setdefault("grounded_in", []).append({
+        "source_node": None, "evidence_type": "selftest-observed",
+        "kind": "observed", "journey_ref": "journey:selftest-does-not-exist"})
+    p.write_text(json.dumps(data))
+    return "journey_corroboration"
+
+
 MUTATIONS = [
     ("strip-provenance", _mutate_provenance),
     ("dangling-edge", _mutate_dangling_edge),
@@ -672,6 +842,8 @@ MUTATIONS = [
     ("inventory-gap", _mutate_inventory_gap),
     ("forged-doc-claim", _mutate_doc_claim),
     ("asserted-only-accepted", _mutate_asserted_existence),
+    ("corrupted-trace-ref", _mutate_trace_ref),
+    ("observed-unbacked", _mutate_observed_unbacked),
 ]
 
 
@@ -737,15 +909,37 @@ def smoke() -> None:
     with tempfile.TemporaryDirectory(prefix="verifier-smoke-") as tmp:
         work = Path(tmp) / "work"
         (work / "reports").mkdir(parents=True)
+        (work / "runtime" / "traces").mkdir(parents=True)
         repo = Path(tmp) / "repo"
         repo.mkdir()
         (repo / "a.java").write_text("class A {\n}\n")
         (repo / "NOTES.md").write_text("# Notes\nThe system is built around class A.\n")
+        (repo / "demo.sqlite").write_bytes(b"smoke-db")
+        trace = work / "runtime" / "traces" / "t1.json"
+        trace.write_text('{"url": "/a.do", "status": 200}\n')
+        clean["runtime/journeys.json"] = {
+            "repo_fingerprint": "f" * 40, "produced_by": "runtime/scripts/smoke.mjs",
+            "approval": {"granted": True, "statement": "smoke fixture"},
+            "environment": {"declared_dependencies": [], "app_base_url": "http://localhost:0"},
+            "db_snapshot": {"source_file": "demo.sqlite",
+                            "source_sha256": hashlib.sha256(b"smoke-db").hexdigest(),
+                            "copy_path": "runtime/db/demo.sqlite"},
+            "journeys": [{"id": "journey:smoke", "name": "smoke journey",
+                          "flow_hypothesis": "claim:notes:a", "actor": "smoke",
+                          "steps": [{"index": 1, "action": "goto", "url": "/a.do",
+                                     "route": None, "response_status": 200,
+                                     "trace_ref": {"path": "runtime/traces/t1.json",
+                                                   "sha256": sha256(trace)}}],
+                          "corroborates": ["sem:unknown:x"]}]}
+        clean["semantic-graph.json"]["nodes"][0]["grounded_in"].append(
+            {"source_node": None, "evidence_type": "journey-step", "kind": "observed",
+             "journey_ref": "journey:smoke"})
         for name, data in clean.items():
             (work / name).write_text(json.dumps(data))
         (work / "reports" / "application-structure.md").write_text(
             "Status: FINAL\n" + "\n".join(
-                f"## {s}" for s in REQUIRED_REPORT_SECTIONS + ["Documentation drift"]))
+                f"## {s}" for s in REQUIRED_REPORT_SECTIONS
+                + ["Documentation drift", "Runtime journeys"]))
 
         result = run_verification(work, repo, iteration=0, run_subprocesses=False)
         assert result["passed"], f"clean fixture must pass, got {result['gate_failures']}"
@@ -771,6 +965,7 @@ def smoke() -> None:
         corrupt = copy.deepcopy(clean)
         node = corrupt["semantic-graph.json"]["nodes"][0]
         node["type"] = "Action"
+        node["grounded_in"] = [node["grounded_in"][0]]
         node["grounded_in"][0]["kind"] = "asserted"
         node["grounded_in"][0]["claim_ref"] = "claim:notes:a"
         for name, data in corrupt.items():
@@ -778,6 +973,24 @@ def smoke() -> None:
         result = run_verification(work, repo, iteration=0, run_subprocesses=False)
         assert not result["passed"], "asserted-only accepted node must fail the gate"
         assert result["scores"]["semantic_graph_provenance"]["value"] <= 5
+
+        corrupt = copy.deepcopy(clean)
+        corrupt["runtime/journeys.json"]["journeys"][0]["steps"][0]["trace_ref"]["sha256"] = "0" * 64
+        for name, data in corrupt.items():
+            (work / name).write_text(json.dumps(data))
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert not result["passed"], "corrupted trace hash must fail the gate"
+        assert result["scores"]["journey_corroboration"]["value"] < 8
+
+        corrupt = copy.deepcopy(clean)
+        corrupt["runtime/journeys.json"]["journeys"][0]["properties"] = {
+            "started_at": "2026-07-07T12:00:00Z"}
+        for name, data in corrupt.items():
+            (work / name).write_text(json.dumps(data))
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert not result["passed"], "volatile field in journeys.json must fail the gate"
+        assert result["scores"]["reproducibility"]["value"] < 8, \
+            "normalization rule (RT-8) must be enforced by reproducibility"
 
         for name, data in clean.items():
             (work / name).write_text(json.dumps(data))

@@ -9,8 +9,17 @@ defines the requirements this work implements, with numbered requirement IDs
 analysis it was distilled from is `extend-semantic-layer.md` at the repository root
 (background reading; the spec supersedes it).
 
-**State of the work:** Milestones 1 and 2 of the spec (section 7) are
-**code-complete but uncommitted**, and Milestone 2's end-to-end validating loop run
+> **UPDATE 2026-07-07: all three milestones are complete.** Milestone 2's validating
+> loop run was performed and its example committed; Milestone 3 (runtime journeys,
+> contract version 2) was then implemented and validated end-to-end — all ten gate
+> dimensions at 10, 8/8 mutation self-test, `sem:flow:login-task-review` instantiated
+> from replayable traces, source tree byte-identical before/after, repeat-run
+> reproducibility confirmed. See the 2026-07-07 addenda in
+> `docs/loop-implementation-report.md`. The text below is the original handoff and is
+> kept as the record of what was planned; sections 3a/3b are now history, not TODO.
+
+**State of the work (original handoff):** Milestones 1 and 2 of the spec (section 7)
+are **code-complete but uncommitted**, and Milestone 2's end-to-end validating loop run
 has **not** been performed. Milestone 3 is **entirely unimplemented** (deliberately —
 the spec sequences it last). Details below.
 

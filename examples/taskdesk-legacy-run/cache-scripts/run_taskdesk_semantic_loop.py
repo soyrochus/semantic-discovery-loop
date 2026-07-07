@@ -359,6 +359,17 @@ DOC_CLAIMS: list[dict] = [
         "status_evidence": "db/sql/002_seed_data.sql inserts ('operator1','demo',...), ('operator2','demo',...), ('manager1','demo',...) into APP_USER (sql-ddl-v1 statement node, lines 3-7); db/sql/003_reset_database.sql repeats the same inserts.",
     },
     {
+        "id": "claim:taskdesk-readme:login-entry",
+        "claim_type": "feature",
+        "text": "The application is entered through the login page at /taskdesk-legacy/login.do.",
+        "excerpt": "http://localhost:8080/taskdesk-legacy/login.do",
+        "file": TASKDESK_README,
+        "span": {"start_line": 121, "end_line": 124},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:action:login", "sem:entrypoint:struts-action-servlet-do"],
+        "status_evidence": "struts-config.xml maps /login to com.example.taskdesk.action.LoginAction (struts-config-v1 Route node) and web.xml maps *.do to the Struts ActionServlet. This claim seeds the login-task-review Flow hypothesis walked by the runtime journey phase.",
+    },
+    {
         "id": "claim:db-readme:seed-row-counts",
         "claim_type": "data",
         "text": "The runtime demo database initially contains 3 APP_USER, 6 TASK, 5 TASK_COMMENT, and 8 TASK_AUDIT rows.",
@@ -392,7 +403,7 @@ def doc_claims() -> dict:
     }
 
 
-def build_semantic(source: dict) -> dict:
+def build_semantic(source: dict, journeys: dict | None) -> dict:
     source_nodes = {n["id"]: n for n in source["nodes"]}
     sem_nodes: dict[str, dict] = {}
     sem_edges: list[dict] = []
@@ -651,8 +662,60 @@ def build_semantic(source: dict) -> dict:
     edge("sem:security:session-login", "sem:rule:manager-role-checks", "secured-by", 0.8)
 
     apply_doc_alignment(sem_nodes)
+    if journeys is not None:
+        apply_runtime_journeys(sem_nodes, add, edge, journeys)
 
     return {"repo_fingerprint": HEAD, "nodes": list(sem_nodes.values()), "edges": sem_edges}
+
+
+def apply_runtime_journeys(sem_nodes: dict[str, dict], add, edge, journeys: dict) -> None:
+    """Skill 09 application (RT-5/EV-6): observed evidence confirms and adds,
+    never vetoes. Corroborated nodes gain an observed provenance entry and a
+    bounded, deterministic confidence boost (min(0.99, c + 0.02)); each
+    completed journey instantiates a Flow node grounded in its replayable
+    per-step traces — the one construct class where observed evidence is
+    existence proof."""
+    for j in journeys.get("journeys", []):
+        jref = j["id"]
+        for nid in j.get("corroborates", []):
+            node = sem_nodes.get(nid)
+            if node is None:
+                continue
+            node["grounded_in"].append({
+                "source_node": None, "evidence_type": "journey-corroboration",
+                "kind": "observed", "journey_ref": jref})
+            node["confidence"] = min(0.99, round(node["confidence"] + 0.02, 2))
+            node["properties"]["runtime_corroborated"] = True
+
+        fid = "sem:flow:" + jref.split(":", 1)[1]
+        grounded = [{
+            "source_node": None,
+            "evidence_type": f"journey-step-{s['index']}:{s.get('route') or s['url']}",
+            "kind": "observed", "journey_ref": jref,
+            "trace_ref": s["trace_ref"]["path"],
+        } for s in j.get("steps", [])]
+        add(fid, "Flow", j["name"], 0.9, grounded, {
+            "actor": j.get("actor"),
+            "flow_hypothesis": j.get("flow_hypothesis"),
+            "walked_routes": [s.get("route") for s in j.get("steps", []) if s.get("route")],
+            "replayable_script": journeys.get("produced_by"),
+        })
+        edge(fid, "sem:application:taskdesk-legacy", "part-of", 0.95)
+        seen: set[str] = set()
+        for s in j.get("steps", []):
+            targets = []
+            if s.get("route"):
+                targets.append("sem:action:" + s["route"].strip("/"))
+            if s.get("rendered_view"):
+                targets.append("sem:view:" + Path(s["rendered_view"]).stem)
+            for t in targets:
+                if t in sem_nodes and t not in seen:
+                    seen.add(t)
+                    edge(fid, t, "traverses", 0.9, [{
+                        "source_node": None,
+                        "evidence_type": f"journey-step-{s['index']}",
+                        "kind": "observed", "journey_ref": jref,
+                        "trace_ref": s["trace_ref"]["path"]}])
 
 
 def apply_doc_alignment(sem_nodes: dict[str, dict]) -> None:
@@ -702,8 +765,13 @@ def apply_doc_alignment(sem_nodes: dict[str, dict]) -> None:
     unknown["properties"]["documented_row_counts"] = {"APP_USER": 3, "TASK": 6, "TASK_COMMENT": 5, "TASK_AUDIT": 8}
 
 
-def assumptions() -> dict:
+def assumptions(journeys: dict | None) -> dict:
+    runtime_assumption = (
+        {"id": "assumption:runtime-journeys", "statement": "The runtime journey phase ran with explicit user approval against a disposable copy of the demo database in the sandboxed runtime directory; the source tree, including the committed SQLite file, was left byte-identical (hash recorded and re-checked by the verifier).", "reason": "User approval recorded in runtime/journeys.json; Tomcat was launched with TASKDESK_DB_URL pointing at the runtime copy.", "confidence": 1.0, "status": "accepted"}
+        if journeys is not None else
+        {"id": "assumption:runtime-journeys", "statement": "The runtime journey phase did not run; behavioural evidence (Flow instantiation, runtime corroboration) is absent and the layer stands as an explicit unknown.", "reason": "Runtime execution requires explicit user approval, a satisfied environment, and a startable target (RT-3/RT-4/RT-6); one of these was not available for this run.", "confidence": 1.0, "status": "accepted"})
     return {"assumptions": [
+        runtime_assumption,
         {"id": "assumption:scope", "statement": "The requested analysis scope is taskdesk-legacy plus db after user permission to incorporate db.", "reason": "User first requested taskdesk-legacy scope, then explicitly allowed DB incorporation.", "confidence": 1.0, "status": "accepted"},
         {"id": "assumption:java-package-modules", "statement": "Immediate Java package directories action/service/dao/form/model/util represent source modules.", "reason": "Directory names and package declarations align across source files.", "confidence": 0.9, "status": "accepted"},
         {"id": "assumption:do-suffix", "statement": "Struts action paths map to .do URLs through the web.xml url-pattern.", "reason": "The parsed web.xml url-pattern element maps ActionServlet to *.do and struts-config declares action paths without suffix.", "confidence": 1.0, "status": "accepted"},
@@ -733,7 +801,7 @@ def run_verifier(iteration: int) -> tuple[dict, int]:
     return json.loads((WORK / "verification.json").read_text(encoding="utf-8")), proc.returncode
 
 
-def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, ver: dict | None) -> None:
+def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, journeys: dict | None, ver: dict | None) -> None:
     actions = [n for n in sem["nodes"] if n["type"] == "Action"]
     views = [n for n in sem["nodes"] if n["type"] == "View"]
     components = [n for n in sem["nodes"] if n["type"] == "Component"]
@@ -786,7 +854,7 @@ def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, ver: dict | 
         verification_lines = [
             f"- Verified by `{ver['verifier']['tool']}` ({ver['verifier'].get('gallery_source')}); "
             f"self-test caught {st.get('mutations_detected', '?')}/{st.get('mutations_applied', '?')} seeded mutations.",
-            "- Scores (measured, nine dimensions): " + json.dumps({k: v["value"] for k, v in ver["scores"].items()}, sort_keys=True) + ".",
+            "- Scores (measured, ten dimensions): " + json.dumps({k: v["value"] for k, v in ver["scores"].items()}, sort_keys=True) + ".",
         ]
     lines = [
         "# TaskDesk Legacy Application Structure",
@@ -837,6 +905,7 @@ def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, ver: dict | 
         "## Documentation drift",
         *drift_lines,
         "",
+        *runtime_section(sem, journeys),
         "## Unresolved unknowns",
         "- `sem:unknown:runtime-row-semantics`: schema and documented row counts are known, but row contents and business meaning of seed records in the live database file were not read by the schema parser. The documented counts are recorded as asserted evidence (`claim:db-readme:seed-row-counts`), which cannot prove the live file's contents.",
         "",
@@ -859,6 +928,34 @@ def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, ver: dict | 
         *(verification_lines or []),
     ]
     (REPORTS / "application-structure.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def runtime_section(sem: dict, journeys: dict | None) -> list[str]:
+    if journeys is None:
+        return []
+    lines = ["## Runtime journeys"]
+    snap = journeys.get("db_snapshot", {})
+    lines.append(
+        f"- The runtime phase ran with recorded user approval against a **disposable copy** of "
+        f"`{snap.get('source_file')}` (`{snap.get('copy_path')}`); the committed file's sha256 was "
+        f"recorded at launch and is re-verified by the gate (`jr-source-db-untouched`).")
+    flows = {n["id"]: n for n in sem["nodes"] if n["type"] == "Flow"}
+    for j in journeys.get("journeys", []):
+        steps = j.get("steps", [])
+        chain = " -> ".join(f"{s.get('route') or s['url']} ({s['response_status']})" for s in steps)
+        lines.append(
+            f"- `{j['id']}` ({j.get('actor')}): {chain}. Corroborates {len(j.get('corroborates', []))} "
+            f"statically derived nodes; instantiates `sem:flow:{j['id'].split(':', 1)[1]}` from "
+            f"{len(steps)} replayable trace files under `runtime/traces/` (sha256-referenced, "
+            f"screenshots included). Hypothesis: {j.get('flow_hypothesis')}.")
+    lines.append(
+        "- Traces are normalized per the RT-8 rule (no timestamps, session ids, cookie/date values); "
+        "observed evidence carries `kind: \"observed\"` with a `journey_ref` and boosts confidence "
+        "without ever being required for existence of statically grounded nodes.")
+    if flows:
+        lines.append(f"- Flow nodes instantiated from observed evidence: {', '.join(sorted(flows))}.")
+    lines.append("")
+    return lines
 
 
 def load_state() -> dict:
@@ -899,17 +996,20 @@ def main() -> int:
     state = load_state()
     state["repo_fingerprint"] = HEAD
     iteration = state["iteration"]
-    state["history"].append({"iteration": iteration, "summary": "Started scoped semantic discovery for taskdesk-legacy plus db (nine-dimension contract with doc alignment).", "timestamp": datetime.now(timezone.utc).isoformat()})
+    state["history"].append({"iteration": iteration, "summary": "Started scoped semantic discovery for taskdesk-legacy plus db (ten-dimension contract with doc alignment and runtime journeys).", "timestamp": datetime.now(timezone.utc).isoformat()})
     write_json(WORK / "state.json", state)
+
+    journeys_path = WORK / "runtime" / "journeys.json"
+    journeys = json.loads(journeys_path.read_text(encoding="utf-8")) if journeys_path.exists() else None
 
     inv = inventory(files, skipped)
     write_json(WORK / "inventory.json", inv)
-    write_json(WORK / "assumptions.json", assumptions())
+    write_json(WORK / "assumptions.json", assumptions(journeys))
     write_json(WORK / "parser-registry.json", parser_registry())
     src = build_source(files)
     write_json(WORK / "source-graph.json", src)
     write_json(WORK / "semantic-types.json", semantic_types())
-    sem = build_semantic(src)
+    sem = build_semantic(src, journeys)
     write_json(WORK / "semantic-graph.json", sem)
     claims_doc = doc_claims()
     write_json(WORK / "doc-claims.json", claims_doc)
@@ -918,9 +1018,9 @@ def main() -> int:
     # Report first (status pending), then the independent verifier, then the
     # report's status is aligned with the verdict and re-verified so the final
     # verification.json measures the final report.
-    write_report(inv, src, sem, claims_doc, None)
+    write_report(inv, src, sem, claims_doc, journeys, None)
     ver, _ = run_verifier(iteration)
-    write_report(inv, src, sem, claims_doc, ver)
+    write_report(inv, src, sem, claims_doc, journeys, ver)
     ver, rc = run_verifier(iteration)
 
     state["status"] = "complete" if ver["passed"] else "iterating"

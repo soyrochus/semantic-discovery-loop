@@ -1,5 +1,5 @@
 {
-  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
+  "repo_fingerprint": "f944873f50f565b872c246e3a5c942dbf107bed6",
   "nodes": [
     {
       "id": "sem:application:taskdesk-legacy",
@@ -230,7 +230,7 @@
       "layer": "semantic",
       "type": "EntryPoint",
       "name": "Struts ActionServlet *.do",
-      "confidence": 1.0,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -261,12 +261,19 @@
           "evidence_type": "documented-runtime-constraint",
           "kind": "asserted",
           "claim_ref": "claim:taskdesk-readme:javax-servlet-tomcat9"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
         "url_pattern": "*.do",
-        "documented_intent": "javax.servlet-era ActionServlet: the reason the README pins Tomcat 9 over Tomcat 10"
+        "documented_intent": "javax.servlet-era ActionServlet: the reason the README pins Tomcat 9 over Tomcat 10",
+        "runtime_corroborated": true
       }
     },
     {
@@ -274,7 +281,7 @@
       "layer": "semantic",
       "type": "Action",
       "name": "LoginAction (/login.do)",
-      "confidence": 0.97,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -294,13 +301,20 @@
             "end_line": 36
           },
           "evidence_type": "action-class"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
         "route": "/login.do",
         "form": "loginForm",
-        "action_class": "com.example.taskdesk.action.LoginAction"
+        "action_class": "com.example.taskdesk.action.LoginAction",
+        "runtime_corroborated": true
       }
     },
     {
@@ -308,7 +322,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/login.jsp",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -319,11 +333,18 @@
             "end_line": 32
           },
           "evidence_type": "jsp-template"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
-        "view_path": "/jsp/login.jsp"
+        "view_path": "/jsp/login.jsp",
+        "runtime_corroborated": true
       }
     },
     {
@@ -365,7 +386,7 @@
       "layer": "semantic",
       "type": "Action",
       "name": "TaskListAction (/tasks.do)",
-      "confidence": 0.97,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -385,13 +406,20 @@
             "end_line": 55
           },
           "evidence_type": "action-class"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
         "route": "/tasks.do",
         "form": "taskSearchForm",
-        "action_class": "com.example.taskdesk.action.TaskListAction"
+        "action_class": "com.example.taskdesk.action.TaskListAction",
+        "runtime_corroborated": true
       }
     },
     {
@@ -399,7 +427,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/taskList.jsp",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -410,11 +438,18 @@
             "end_line": 119
           },
           "evidence_type": "jsp-template"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
-        "view_path": "/jsp/taskList.jsp"
+        "view_path": "/jsp/taskList.jsp",
+        "runtime_corroborated": true
       }
     },
     {
@@ -422,7 +457,7 @@
       "layer": "semantic",
       "type": "Action",
       "name": "TaskDetailAction (/taskDetail.do)",
-      "confidence": 0.97,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -442,13 +477,20 @@
             "end_line": 41
           },
           "evidence_type": "action-class"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
         "route": "/taskDetail.do",
         "form": "taskForm",
-        "action_class": "com.example.taskdesk.action.TaskDetailAction"
+        "action_class": "com.example.taskdesk.action.TaskDetailAction",
+        "runtime_corroborated": true
       }
     },
     {
@@ -456,7 +498,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/taskDetail.jsp",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -467,11 +509,18 @@
             "end_line": 85
           },
           "evidence_type": "jsp-template"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review"
         }
       ],
       "unknowns": [],
       "properties": {
-        "view_path": "/jsp/taskDetail.jsp"
+        "view_path": "/jsp/taskDetail.jsp",
+        "runtime_corroborated": true
       }
     },
     {
@@ -1782,6 +1831,48 @@
           "TASK_COMMENT": 5,
           "TASK_AUDIT": 8
         }
+      }
+    },
+    {
+      "id": "sem:flow:login-task-review",
+      "layer": "semantic",
+      "type": "Flow",
+      "name": "Login and review a task (operator1)",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1:/login",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-1.json"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2:/login",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-2.json"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-3:/taskDetail",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-3.json"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "actor": "operator1",
+        "flow_hypothesis": "claim:taskdesk-readme:login-entry (documented login URL and demo users) plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
+        "walked_routes": [
+          "/login",
+          "/login",
+          "/taskDetail"
+        ],
+        "replayable_script": "runtime/scripts/walk-journeys.mjs"
       }
     }
   ],
@@ -5844,6 +5935,100 @@
       "type": "secured-by",
       "confidence": 0.8,
       "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:167:sem:flow:login-task-review:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.95,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:168:sem:flow:login-task-review:traverses:sem:action:login",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:action:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:169:sem:flow:login-task-review:traverses:sem:view:login",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:view:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:170:sem:flow:login-task-review:traverses:sem:view:taskList",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:view:taskList",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-2.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:171:sem:flow:login-task-review:traverses:sem:action:taskDetail",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:action:taskDetail",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-3",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-3.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:172:sem:flow:login-task-review:traverses:sem:view:taskDetail",
+      "source_id": "sem:flow:login-task-review",
+      "target_id": "sem:view:taskDetail",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-3",
+          "kind": "observed",
+          "journey_ref": "journey:login-task-review",
+          "trace_ref": "runtime/traces/login-task-review/step-3.json"
+        }
+      ],
       "properties": {}
     }
   ]

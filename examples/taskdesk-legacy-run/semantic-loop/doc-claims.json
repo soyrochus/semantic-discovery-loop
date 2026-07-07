@@ -1,5 +1,5 @@
 {
-  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
+  "repo_fingerprint": "f944873f50f565b872c246e3a5c942dbf107bed6",
   "extracted_by": "doc-claims-v1",
   "documents": [
     "taskdesk-legacy/README.md",
@@ -103,6 +103,23 @@
         "sem:datastore:table:app_user"
       ],
       "status_evidence": "db/sql/002_seed_data.sql inserts ('operator1','demo',...), ('operator2','demo',...), ('manager1','demo',...) into APP_USER (sql-ddl-v1 statement node, lines 3-7); db/sql/003_reset_database.sql repeats the same inserts."
+    },
+    {
+      "id": "claim:taskdesk-readme:login-entry",
+      "claim_type": "feature",
+      "text": "The application is entered through the login page at /taskdesk-legacy/login.do.",
+      "excerpt": "http://localhost:8080/taskdesk-legacy/login.do",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 121,
+        "end_line": 124
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:action:login",
+        "sem:entrypoint:struts-action-servlet-do"
+      ],
+      "status_evidence": "struts-config.xml maps /login to com.example.taskdesk.action.LoginAction (struts-config-v1 Route node) and web.xml maps *.do to the Struts ActionServlet. This claim seeds the login-task-review Flow hypothesis walked by the runtime journey phase."
     },
     {
       "id": "claim:db-readme:seed-row-counts",
