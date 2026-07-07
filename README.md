@@ -33,7 +33,7 @@ This repository is the working example for a two-part article series,
 | `.agent-loop/` | The tool-neutral method: loop definition, contracts, skills, prompts, parser gallery. |
 | `.agent-loop/LOOP.md` | The governing loop definition: layers, phases, constraints, verification gate. |
 | `.agent-loop/contracts/` | JSON Schemas every generated artefact must validate against. |
-| `.agent-loop/skills/` | Phase-specific operational instructions (`00` conducts, `01`–`08` execute phases). |
+| `.agent-loop/skills/` | Phase-specific operational instructions (`00` conducts, `01`–`08` build the static graphs and report, `09` walks runtime journeys, `10` aligns documentation). |
 | `.agent-loop/prompts/` | Ready-to-use prompts to start, continue, or verify a loop run. |
 | `.agent-loop/tools/` | Curated gallery of prepared parsers/extractors and the verifier. The loop copies these into `.cache/scripts/` and adapts the copies — never the originals. |
 | `taskdesk-legacy/` + `db/` | Bundled example target (see below). |
@@ -75,6 +75,30 @@ committed database — byte-identical. Both layers are degradable: absent approv
 or a startable target, the loop completes static-only and records the missing layer as an
 explicit unknown. The verifier scores ten dimensions; all must be ≥ 8.
 
+### Running the optional runtime journey phase
+
+The static and documentation layers only *read* the repository — no build or run needed.
+The runtime journey phase (skill 09) is the exception: it drives the live app with
+Playwright to gather `observed` evidence (instantiating `Flow` nodes, corroborating
+statically-derived routes, and behaviourally testing access-control and validation
+rules). It needs a one-time environment, none of which is committed to the repo:
+
+1. Build and deploy the example app to Tomcat 9 — see `taskdesk-legacy/README.md`.
+2. Install the browser driver: `npm install playwright && npx playwright install chromium`.
+3. Start Tomcat against a **disposable copy** of the database (never the committed file),
+   e.g. `TASKDESK_DB_URL=jdbc:sqlite:/abs/path/.work/semantic-loop/runtime/db/taskdesk-demo.sqlite`.
+4. Walk the journeys with the phase's script (see the committed reference at
+   [`examples/…/runtime/scripts/walk-journeys.mjs`](examples/taskdesk-legacy-run/semantic-loop/runtime/scripts/walk-journeys.mjs)),
+   then run the verifier.
+
+The walk records **normalized, replayable traces** (no timestamps or session ids, so
+re-runs compare byte-equal) and screenshots. Runtime evidence only ever confirms and
+adds — it never vetoes a statically-grounded node; a runtime contradiction is recorded
+as a conflict, and behaviour the phase did not probe (e.g. database write side-effects)
+is recorded as an explicit unknown rather than assumed. See the
+[example run's report](examples/taskdesk-legacy-run/semantic-loop/reports/application-structure.md)
+for what this produces, including its "what runtime did NOT verify" section.
+
 ## The bundled example: TaskDesk Legacy
 
 `taskdesk-legacy/` is a synthetic but realistic legacy Struts 1 / JSP web application,
@@ -87,8 +111,9 @@ configuration) to exercise every phase.
 this example, so you can see what a finished run produces without running one yourself.
 
 The example app is runnable (Java 8+, Maven, Tomcat 9); see `taskdesk-legacy/README.md`.
-Running it is not required for the discovery loop — the loop only reads the source tree
-and the SQLite file.
+Running it is not required for the static and documentation layers — those only read the
+source tree and the SQLite file — but it *is* what the optional runtime journey phase
+drives (see "Running the optional runtime journey phase" above).
 
 ---
 
