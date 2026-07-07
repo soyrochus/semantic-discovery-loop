@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "doc-claims.schema.json",
+  "title": "Documentation Claims",
+  "description": "Claims extracted from documentation files inside the repository, each resolved against the discovered graphs. Docs propose, the repository proves: a claim never instantiates an accepted semantic node by itself. Stored at .work/semantic-loop/doc-claims.json. Optional artefact — absent when the doc-alignment phase found no documentation (recorded as an explicit unknown, never a gate failure).",
+  "type": "object",
+  "required": ["repo_fingerprint", "extracted_by", "claims"],
+  "properties": {
+    "repo_fingerprint": { "type": ["string", "null"] },
+    "extracted_by": {
+      "type": "string",
+      "description": "parser_id of the registered claim extractor (see parser-registry.json). Extraction is model-driven interpretation; registering it makes that fallibility visible."
+    },
+    "documents": {
+      "type": "array",
+      "description": "Documentation files that were read for claims, whether or not any claim was extracted from them.",
+      "items": { "type": "string" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "required": ["id", "claim_type", "text", "excerpt", "file", "span", "status", "mapped_nodes", "status_evidence"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^claim:",
+          "description": "Stable id, e.g. 'claim:readme:task-lifecycle'."
+        },
+        "claim_type": {
+          "type": "string",
+          "enum": ["terminology", "feature", "rule", "boundary", "intent", "data", "other"],
+          "description": "terminology = business term for a construct; feature = user-visible capability; rule = business/validation/authorization rule; boundary = module/integration partitioning; intent = the why behind a construct; data = meaning of stored data."
+        },
+        "text": {
+          "type": "string",
+          "description": "The claim as normalized by the extractor, e.g. 'users can export the activity report as CSV'."
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "Verbatim quote from the document that the claim was read from. Must appear within the cited span — the verifier re-resolves it, so a human can always check the reading."
+        },
+        "file": {
+          "type": "string",
+          "description": "Repository-relative path of the documentation file. Must be inside the repository; external sources must be snapshotted in first."
+        },
+        "span": {
+          "type": "object",
+          "required": ["start_line", "end_line"],
+          "properties": {
+            "start_line": { "type": "integer", "minimum": 1 },
+            "end_line": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "status": {
+          "type": "string",
+          "enum": ["confirmed", "contradicted", "unverifiable"],
+          "description": "confirmed = parsed evidence supports it (mapped_nodes required); contradicted = parsed evidence refutes it (a conflict must be recorded on the affected node, or the claim stands alone as drift); unverifiable = nothing in the repository can settle it."
+        },
+        "mapped_nodes": {
+          "type": "array",
+          "description": "Ids of semantic-graph nodes this claim maps onto. Required non-empty for confirmed claims.",
+          "items": { "type": "string", "pattern": "^sem:" }
+        },
+        "status_evidence": {
+          "type": "string",
+          "description": "How the status was established: which nodes/files confirm it, what contradicts it, or what was searched without result."
+        },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "confirmed" } } },
+          "then": { "properties": { "mapped_nodes": { "minItems": 1 } } }
+        }
+      ]
+    }
+  }
+}

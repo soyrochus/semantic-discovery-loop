@@ -42,7 +42,42 @@
         "evidence_type": {
           "type": "string",
           "description": "What kind of evidence this is, e.g. 'action-mapping', 'handler-method', 'route-definition', 'ddl-statement'."
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["parsed", "observed", "asserted"],
+          "description": "Evidence class. parsed = deterministic parser output over the source tree; observed = recorded from executing the target; asserted = claim extracted from in-repository documentation. Absent means parsed (backward compatibility). Authority order for existence: parsed > observed > asserted; see LOOP.md."
+        },
+        "claim_ref": {
+          "type": ["string", "null"],
+          "description": "For kind 'asserted': id of the claim in doc-claims.json this evidence derives from."
         }
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "description": "A recorded disagreement between evidence classes. Conflicts are represented, never silently resolved: both the claim and the counter-evidence stay in the graph.",
+      "required": ["claim", "counter_evidence", "status"],
+      "properties": {
+        "claim": {
+          "type": "string",
+          "description": "The disputed assertion, e.g. 'docs state managers approve tasks'."
+        },
+        "claim_ref": {
+          "type": ["string", "null"],
+          "description": "Id of the originating claim in doc-claims.json, when the claim came from documentation."
+        },
+        "counter_evidence": {
+          "type": "string",
+          "description": "What contradicts the claim and where, e.g. 'no approval action in WEB-INF/struts-config.xml; no handler method found'."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "resolved"],
+          "description": "resolved only when a later iteration found evidence settling the disagreement; the resolution must be stated in counter_evidence or properties."
+        },
+        "properties": { "type": "object" }
       },
       "additionalProperties": false
     },
@@ -77,9 +112,34 @@
           "description": "Aspects of this construct that could not be determined from local evidence.",
           "items": { "type": "string" }
         },
+        "conflicts": {
+          "type": "array",
+          "description": "Recorded disagreements between evidence classes affecting this node (e.g. a documentation claim the code contradicts).",
+          "items": { "$ref": "#/$defs/conflict" }
+        },
         "properties": { "type": "object" }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "Authority rule: asserted (documentation) evidence is never sufficient for existence. A node grounded only in asserted evidence may hold candidate/proposed status, or be an UnknownSemanticConstruct — never validated/accepted.",
+          "if": {
+            "properties": {
+              "type": { "not": { "const": "UnknownSemanticConstruct" } },
+              "grounded_in": {
+                "items": {
+                  "required": ["kind"],
+                  "properties": { "kind": { "const": "asserted" } }
+                }
+              }
+            },
+            "required": ["type", "grounded_in"]
+          },
+          "then": {
+            "properties": { "status": { "enum": ["candidate", "proposed", "deprecated"] } }
+          }
+        }
+      ]
     },
     "semanticEdge": {
       "type": "object",

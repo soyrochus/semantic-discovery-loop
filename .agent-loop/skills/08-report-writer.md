@@ -17,6 +17,11 @@ expected shape.
   this analysis (parser gaps, unexamined areas, low-confidence regions).
 - **Include the semantic type summary**: which types were used, which were proposed and
   at what status, and clearly mark `candidate`/`proposed` types as not yet accepted.
+- **Include documentation drift whenever doc alignment ran** (`doc-claims.json`
+  exists): claim counts per status, every `contradicted` claim with its
+  counter-evidence, and `unverifiable` claims worth an owner's attention. Use the
+  business terminology confirmed by the claims when naming constructs, citing the
+  claim id. If the phase did not run, say so under Limitations instead.
 - **Include evidence notes**: for the main claims, note the evidence kind and location
   (e.g. "grounded in action mapping, `WEB-INF/struts-config.xml:42–49`") and the
   confidence recorded in the graph.
@@ -43,6 +48,7 @@ Services/domain logic (if detected)
 Data access and persistence (if detected)
 External integrations (if detected)
 Semantic type registry summary
+Documentation drift (required whenever doc alignment ran)
 Unresolved unknowns
 Assumptions
 Confidence and evidence notes

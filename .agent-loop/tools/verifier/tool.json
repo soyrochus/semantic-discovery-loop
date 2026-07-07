@@ -6,9 +6,9 @@
   "invocation": "python3 verify.py --work .work/semantic-loop --iteration <n>",
   "smoke_test": "python3 verify.py --smoke",
   "output_schema": "verification.schema.json",
-  "parsing_approach": "Not a parser: an independent verifier. Derives every gate score from named, measured checks — recounts dangling edges, re-resolves every provenance reference into the source graph and onto disk, recomputes inventory hashes, re-runs each registered parser's smoke test, double-runs parsers on repository samples for determinism, cross-checks every node's parser_id against the registry and its input patterns, and compares gallery copies byte-for-byte when no adaptations are claimed. Scores are fixed formulas over check outcomes; there are no assertable score constants.",
+  "parsing_approach": "Not a parser: an independent verifier. Derives every gate score from named, measured checks — recounts dangling edges, re-resolves every provenance reference into the source graph and onto disk, recomputes inventory hashes, re-runs each registered parser's smoke test, double-runs parsers on repository samples for determinism, cross-checks every node's parser_id against the registry and its input patterns, compares gallery copies byte-for-byte when no adaptations are claimed, re-resolves every documentation claim's excerpt onto its cited span, and enforces the authority rule (a node validated/accepted on asserted evidence alone fails the gate). Scores are fixed formulas over check outcomes; there are no assertable score constants.",
   "extracts": [
-    "verification.json with all eight gate dimensions as {value, derived_from, measurement} objects",
+    "verification.json with all nine gate dimensions as {value, derived_from, measurement} objects",
     "checks[] with each check tied to the score it feeds",
     "self_test result proving the gate can fail (mutation testing over artefact copies)"
   ],

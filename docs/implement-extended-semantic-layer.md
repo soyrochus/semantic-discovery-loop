@@ -132,10 +132,10 @@ from them today) and produces three outputs:
    documentation is first-class output, not noise; the repository has already
    demonstrated this pattern manually in `article-repo-drift.md`.
 
-The bundled example provides the natural first test case:
-`taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md` is a hand-authored catalog of routes,
-actions, and business rules that can be parsed into claims and cross-checked against
-the discovered graph.
+The bundled example provides natural first test cases: `taskdesk-legacy/README.md`
+(setup, roles, and behavioural notes) and `db/runtime-data/README.md` (documented
+seed-row counts — the very file whose undisciplined use as evidence motivated this
+extension) can be parsed into claims and cross-checked against the discovered graph.
 
 ### 4.2 Requirements
 
@@ -299,9 +299,9 @@ contract delta: `evidence.kind`, conflict representation, authority rule in
 
 **Milestone 2 — Documentation alignment (Extension A).** Phase
 `10-doc-alignment.md`, `doc-claims.json`, `assertion_grounding` dimension,
-mutation self-test. Validate against `taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md`
-as the first fixture: the discovered graph already exists, so confirmed /
-contradicted / unverifiable statuses are checkable by hand.
+mutation self-test. Validate against `taskdesk-legacy/README.md` and
+`db/runtime-data/README.md` as the first fixtures: the discovered graph already
+exists, so confirmed / contradicted / unverifiable statuses are checkable by hand.
 
 **Milestone 3 — Runtime journeys (Extension B).** Phase `09-journey-walker.md`,
 built on the extended evidence model, starting with the narrowest valuable slice:
@@ -335,9 +335,9 @@ goes first.
 The extension is complete when:
 
 1. A loop run over `taskdesk-legacy/` with documentation alignment enabled produces
-   a `doc-claims.json` in which every claim from `MIGRATION_SOURCE_CATALOG.md`
-   carries span provenance and a definite status, and the final report contains a
-   drift section.
+   a `doc-claims.json` in which every claim from the in-scope documentation
+   (`taskdesk-legacy/README.md`, `db/runtime-data/README.md`) carries span
+   provenance and a definite status, and the final report contains a drift section.
 2. No node in the resulting semantic graph holds `validated` or `accepted` status
    on asserted evidence alone (verifier-enforced).
 3. A loop run with the runtime phase enabled produces at least one `Flow` node

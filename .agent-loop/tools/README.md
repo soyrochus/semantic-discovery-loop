@@ -56,12 +56,18 @@ mid-loop tends to reach for line regexes; a prepared tool can afford to do it pr
 | `properties-config/` | `.properties` files | Line parser with comments, separators, continuations |
 | `sql-ddl/` | `.sql` scripts | Comment/string-aware statement splitter + DDL object extraction |
 | `sqlite-schema/` | SQLite database files | Schema introspection via stdlib `sqlite3` (read-only), incl. foreign-key edges |
-| `verifier/` | Loop artefacts (not a parser) | Independent gate: measures all eight verification scores from named checks and proves the gate can fail via mutation self-test |
+| `doc-claims/` | Documentation claims (`doc-claims.json`) | Deterministic half of doc alignment (skill 10): anchor mode lists a document's claimable units (headings, list items, table rows) with spans; check mode re-resolves every extracted claim's excerpt/span/node mappings onto the repository. The claim *reading* itself is model-driven and stays outside this tool |
+| `verifier/` | Loop artefacts (not a parser) | Independent gate: measures all nine verification scores from named checks and proves the gate can fail via mutation self-test |
 
 The `verifier/` tool is special: it is not registered in `parser-registry.json`
 (it emits `verification.json`, not source-graph fragments). Its cache copy goes to
 `.cache/scripts/verifier-v1/`, and its identity plus self-test result are recorded in
 `verification.json` under `verifier`.
+
+The `doc-claims/` tool is also special: it emits claim anchors and check reports, not
+source-graph fragments, and it *is* registered in `parser-registry.json` — as the
+manifest of the model-driven claim extraction it disciplines (see skill
+10-doc-alignment), so that extraction's fallibility is visible in the registry.
 
 ## Growing the gallery
 

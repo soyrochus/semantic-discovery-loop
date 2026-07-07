@@ -34,7 +34,37 @@ evidence.
   it as **unknown**, with evidence and assumptions.
 - Web search may explain framework concepts, but is never evidence that something exists
   in this repository. Only local repository evidence may instantiate semantic nodes.
+  Documentation counts as evidence only when it is a file inside the repository;
+  external sources (wikis, Confluence, tickets) must first be snapshotted into the
+  repository, with retrieval date recorded, before the loop may cite them.
 - Never mark the loop complete while verification fails.
+
+## Evidence classes and the authority rule
+
+Every provenance entry in the semantic graph carries an evidence `kind`
+(`semantic-graph.schema.json`); an absent `kind` means `parsed`:
+
+```text
+kind        source                                        answers
+parsed      deterministic parser output over the tree     what exists
+observed    recorded from executing the target (v2+)      what happens
+asserted    claims extracted from in-repo documentation   what is meant
+```
+
+For **existence** claims the authority order is `parsed > observed > asserted`:
+
+- `parsed` evidence instantiates nodes of any type.
+- `observed` evidence is reserved for a future loop version (see out-of-scope); when
+  admitted it may instantiate behavioural types and corroborate structural ones.
+- `asserted` evidence is authoritative for **naming and intent only** — it is never
+  sufficient for existence. A node grounded solely in asserted evidence may exist only
+  as `candidate`, `proposed`, or as an `UnknownSemanticConstruct`, never as
+  `validated`/`accepted`. Documentation claims otherwise feed the hypothesis agenda:
+  docs propose, the repository must still prove.
+- Evidence classes may disagree, and **the graph must say so**: a documented claim the
+  code contradicts becomes a recorded conflict (`conflicts` on the affected node —
+  claim, counter-evidence, status), never a silent resolution in either direction.
+  Absence of one class is not veto power for another.
 
 ## Kernel semantic vocabulary
 
@@ -95,6 +125,7 @@ and the parser's input patterns.
   source-graph.json     # Layer 1                         (contracts/source-graph.schema.json)
   semantic-types.json   # type registry                   (contracts/semantic-types.schema.json)
   semantic-graph.json   # Layer 2                         (contracts/semantic-graph.schema.json)
+  doc-claims.json       # documentation claims — optional (contracts/doc-claims.schema.json)
   verification.json     # gate scores                     (contracts/verification.schema.json)
   reports/
     application-structure.md
@@ -116,26 +147,30 @@ Markdown.
  7. Build the Source Construct Graph               (skills/04-source-graph-builder.md).
  8. Build/update the Semantic Type Registry        (skills/05-semantic-type-discovery.md).
  9. Build the Semantic Construct Graph             (skills/06-semantic-graph-builder.md).
-10. Verify all artefacts                           (skills/07-verifier.md).
-11. If verification passes, write the final report (skills/08-report-writer.md).
-12. If verification fails:
+10. Align documentation claims                     (skills/10-doc-alignment.md) —
+    optional and degradable: with no documentation in scope, record the layer as an
+    explicit unknown and continue; never fail the gate for its absence.
+11. Verify all artefacts                           (skills/07-verifier.md).
+12. If verification passes, write the final report (skills/08-report-writer.md).
+13. If verification fails:
     a. print ITERATING;
     b. identify the weakest score;
     c. improve the weakest score first;
     d. update state.json;
     e. continue until verification passes or max_iterations is reached.
-13. If max_iterations is reached, write a partial report with unresolved items,
+14. If max_iterations is reached, write a partial report with unresolved items,
     clearly marked as partial.
 ```
 
 ## Verification gate
 
-The verifier scores eight dimensions from 0–10:
+The verifier scores nine dimensions from 0–10:
 
 ```text
 inventory_coverage        parser_validity         source_graph_consistency
 semantic_type_quality     semantic_graph_provenance
-report_coverage           unknowns_handling       reproducibility
+assertion_grounding       report_coverage
+unknowns_handling         reproducibility
 ```
 
 **The loop may only be marked complete if all scores are 8 or higher.** If any score is
@@ -161,3 +196,8 @@ Verification must be **independent and measured** (see `skills/07-verifier.md`):
 No SQLite/graph databases, no vector search, no web automation, no scheduling, no
 persistent background agents, no platform integration. This version is a manually
 invoked, file-based, prompt/skill-driven demonstrator.
+
+The `observed` evidence kind is declared in the schema but **reserved**: no phase in
+this version executes the target application. Admitting observed evidence (runtime
+journeys) is a versioned contract change with its own approval, sandboxing, and
+reproducibility rules — see `docs/implement-extended-semantic-layer.md`, Extension B.

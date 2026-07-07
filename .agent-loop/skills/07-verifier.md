@@ -26,9 +26,10 @@ A verifier the generator wrote for itself, with scores it chose, is not verifica
   cross-check every node's `parser_id` against the registry and its input patterns.
 - **Prove the gate can fail before trusting a pass.** Run the mutation self-test
   (corrupt copies of the artefacts — strip provenance, add a dangling edge, forge a
-  `parser_id`, break an inventory path — and require the gate to catch each one).
-  A verdict without a passing self-test is not a verdict. Record the self-test result
-  in `verification.json` under `verifier.self_test`.
+  `parser_id`, break an inventory path, forge a documentation claim's excerpt,
+  promote a node to accepted on asserted evidence alone — and require the gate to
+  catch each one). A verdict without a passing self-test is not a verdict. Record the
+  self-test result in `verification.json` under `verifier.self_test`.
 
 ## Scores
 
@@ -50,8 +51,18 @@ feeds):
   detection rules and required evidence operational, not vague; no ontology sprawl.
 - **semantic_graph_provenance** — every semantic node has non-empty `grounded_in`;
   every `source_node` resolves; cited files exist and spans fit within them;
-  confidences explicit in [0,1]. **Any ungrounded node or unresolved reference caps
-  this score at 5.**
+  confidences explicit in [0,1]; evidence `kind`s valid. **Any ungrounded node,
+  unresolved reference, or node validated/accepted on asserted evidence alone caps
+  this score at 5** (the authority rule in LOOP.md — documentation never proves
+  existence).
+- **assertion_grounding** — documentation claims re-resolved onto the repository:
+  every claim in `doc-claims.json` cites an in-repo file, its span fits, its verbatim
+  excerpt occurs within that span, statuses are definite
+  (`confirmed | contradicted | unverifiable`), confirmed claims map to nodes that
+  exist, and every asserted provenance entry / node conflict links back to a real
+  claim. When the doc-alignment phase did not run, an absent `doc-claims.json` is a
+  recorded unknown, not a failure — but asserted evidence with no claims artefact
+  behind it fails.
 - **report_coverage** — required sections present; status marker (`FINAL`/`PARTIAL`)
   consistent with the gate outcome — a report claiming FINAL while the gate fails caps
   this at 7.
