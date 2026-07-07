@@ -185,6 +185,32 @@
       ],
       "writes_source_tree": false,
       "network_required": false
+    },
+    {
+      "parser_id": "doc-claims-v1",
+      "artifact_type": "documentation-claims",
+      "input_patterns": [
+        "taskdesk-legacy/README.md",
+        "db/runtime-data/README.md"
+      ],
+      "origin": "gallery",
+      "gallery_source": ".agent-loop/tools/doc-claims",
+      "adaptations": [],
+      "script_path": ".cache/scripts/parsers/doc-claims-v1/parser.py",
+      "invocation": "python3 .cache/scripts/parsers/doc-claims-v1/parser.py <docs...> | --check <doc-claims.json> --repo . --semantic-graph <semantic-graph.json>",
+      "output_schema": "doc-claims-v1",
+      "validation_status": "validated",
+      "tests": [
+        "python3 .cache/scripts/parsers/doc-claims-v1/parser.py --smoke",
+        "anchor mode run on taskdesk-legacy/README.md and db/runtime-data/README.md",
+        "check mode re-resolved every extracted claim against the repository and semantic graph"
+      ],
+      "known_limitations": [
+        "Anchor and check modes are deterministic; the claim reading itself is model-driven interpretation by the loop agent and cannot be reproduced by re-running this script. Every claim carries a verbatim excerpt and span so the reading can always be re-checked.",
+        "Markdown-oriented: prose paragraphs are cited by line span directly, without an extracted anchor."
+      ],
+      "writes_source_tree": false,
+      "network_required": false
     }
   ]
 }

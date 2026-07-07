@@ -1,16 +1,17 @@
 {
-  "repo_fingerprint": "3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a",
+  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
   "generated_by": "git ls-files taskdesk-legacy db with deterministic extension classification",
   "summary": {
-    "total_files": 55,
+    "total_files": 56,
     "scope_roots": [
       "taskdesk-legacy",
       "db"
     ],
     "languages": {
-      "Markdown": 3,
+      "Markdown": 2,
       "SQLite": 1,
       "SQL": 3,
+      "Shell": 2,
       "XML": 5,
       "Java": 31,
       "Properties": 3,
@@ -126,21 +127,21 @@
       "uncertainty": null
     },
     {
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "language": "Markdown",
-      "role": "documentation",
-      "artifact_types": [],
-      "size_bytes": 5649,
-      "hash": "4ae45762ad4e0c4a43c2a33e80b5606cc93ad6b7d3ae880d07936b18192d35eb",
-      "uncertainty": null
-    },
-    {
       "path": "taskdesk-legacy/README.md",
       "language": "Markdown",
       "role": "documentation",
       "artifact_types": [],
-      "size_bytes": 4861,
-      "hash": "68d035b65905f42254fdc165caef0fbf6a16e2d9cd6b25c24bdde48812fc0abf",
+      "size_bytes": 5427,
+      "hash": "d75e225b96714f53ea5de7fef7b5c8a509d3c3571ecf5944b2e13a9469e99baf",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/paths.sh",
+      "language": "Shell",
+      "role": "build",
+      "artifact_types": [],
+      "size_bytes": 1549,
+      "hash": "d01f02fcafc47e4016ceb6471abb5813ba49177eacc268f8835c0d999b64322b",
       "uncertainty": null
     },
     {
@@ -153,6 +154,15 @@
       ],
       "size_bytes": 2331,
       "hash": "5e137682dc3d438c35f3cf7d0e03f63e032987930214e44ba51c753a1b09724b",
+      "uncertainty": null
+    },
+    {
+      "path": "taskdesk-legacy/redeploy.sh",
+      "language": "Shell",
+      "role": "build",
+      "artifact_types": [],
+      "size_bytes": 538,
+      "hash": "2d63413d409178ef690409fb643fe3f30854c51100e728ff00bb3a5b851bb424",
       "uncertainty": null
     },
     {
@@ -514,8 +524,8 @@
       "artifact_types": [
         "properties-file"
       ],
-      "size_bytes": 112,
-      "hash": "7c6e035d62bfce5a4e8c4e76ac1dddcd928426d43525863e043e3852c846868d",
+      "size_bytes": 103,
+      "hash": "5663ebdf2291fac571b745ab3990da63b2c3fd0013d0532581955f4be8c292af",
       "uncertainty": null
     },
     {
@@ -676,6 +686,7 @@
   "uncertainties": [
     "SQLite schema and DDL are analyzed, but row-level data semantics are not read by the sqlite-schema parser.",
     "The scope is taskdesk-legacy plus db; other repository areas are not analyzed as application evidence.",
+    "Shell scripts (paths.sh, redeploy.sh) are deployment tooling; no parser extracts their content, they are inventoried structurally only.",
     "Tracked path taskdesk-legacy/runtime-data/taskdesk-demo.sqlite is not a regular file (symlink or special file) and was skipped; its link target was not followed."
   ]
 }

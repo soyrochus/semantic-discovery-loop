@@ -1,0 +1,22 @@
+{
+  "tool_id": "doc-claims-v1",
+  "artifact_type": "documentation-claims",
+  "input_patterns": ["**/*.md", "**/*.markdown", "**/*.txt"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <docs...> | python3 parser.py --check <doc-claims.json> --repo <dir> [--semantic-graph <file>]",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "doc-claim-anchors-v1 (anchor mode); check report (check mode)",
+  "parsing_approach": "Anchor mode deterministically lists the claimable units of a documentation file (headings, list items with continuation lines, table rows) with line spans. Claim extraction itself is model-driven (skill 10-doc-alignment) and must state each claim against these anchors; check mode then re-resolves every claim in doc-claims.json onto the repository: cited file inside the repo, span within the file, verbatim excerpt present in the span, confirmed claims mapped to nodes that exist in the semantic graph, conflict claim_refs resolvable.",
+  "extracts": [
+    "anchor mode: one anchor per heading / list item / table row, with span and text (capped at 300 chars)",
+    "check mode: pass/fail per doc-claims.json with one error string per violated claim"
+  ],
+  "known_limitations": [
+    "Anchor extraction is markdown-oriented; plain-text and reStructuredText files only match the list-item heuristics.",
+    "Prose paragraphs are not anchored; claims read from a paragraph must cite its line span directly, and only the excerpt check guards them.",
+    "Whether an excerpt faithfully supports the stated claim text remains a human judgement; the checker proves location, not interpretation.",
+    "Setext-style (underlined) markdown headings are not recognized as anchors."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

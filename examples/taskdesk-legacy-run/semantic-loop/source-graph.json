@@ -1,5 +1,5 @@
 {
-  "repo_fingerprint": "3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a",
+  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
   "nodes": [
     {
       "id": "src:file:taskdesk-legacy/src/main/java/com/example/taskdesk/action/BaseTaskDeskAction.java",
@@ -13527,7 +13527,7 @@
       "hash": null,
       "parser_id": "properties-config-v1",
       "properties": {
-        "value": "jdbc:sqlite:/Users/ivanderk/src/semantic-discovery-loop/db/runtime-data/taskdesk-demo.sqlite"
+        "value": "jdbc:sqlite:/home/iwk/src/semantic-discovery-loop/db/runtime-data/taskdesk-demo.sqlite"
       }
     },
     {
@@ -15277,191 +15277,6 @@
       "properties": {}
     },
     {
-      "id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "layer": "source",
-      "type": "File",
-      "name": "MIGRATION_SOURCE_CATALOG.md",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 1,
-        "end_line": 110
-      },
-      "hash": "4ae45762ad4e0c4a43c2a33e80b5606cc93ad6b7d3ae880d07936b18192d35eb",
-      "parser_id": null,
-      "properties": {
-        "language": "Markdown",
-        "role": "documentation"
-      }
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:1",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "TaskDesk Legacy Migration Source Catalog",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 1,
-        "end_line": 1
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:3",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Struts Routes",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 3,
-        "end_line": 3
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:19",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Action Classes",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 19,
-        "end_line": 19
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:32",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Form Classes",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 32,
-        "end_line": 32
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:40",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "JSP Views",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 40,
-        "end_line": 40
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:53",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "DAO Methods",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 53,
-        "end_line": 53
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:55",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "`TaskDAO`",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 55,
-        "end_line": 55
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:66",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "`UserDAO`",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 66,
-        "end_line": 66
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:72",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "`AuditDAO`",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 72,
-        "end_line": 72
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:78",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Validation Sources",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 78,
-        "end_line": 78
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:87",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Session Attributes",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 87,
-        "end_line": 87
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
-      "id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:95",
-      "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Database Tables By Flow",
-      "path": "taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "span": {
-        "start_line": 95,
-        "end_line": 95
-      },
-      "hash": null,
-      "parser_id": null,
-      "properties": {}
-    },
-    {
       "id": "src:file:taskdesk-legacy/README.md",
       "layer": "source",
       "type": "File",
@@ -15469,9 +15284,9 @@
       "path": "taskdesk-legacy/README.md",
       "span": {
         "start_line": 1,
-        "end_line": 235
+        "end_line": 172
       },
-      "hash": "68d035b65905f42254fdc165caef0fbf6a16e2d9cd6b25c24bdde48812fc0abf",
+      "hash": "d75e225b96714f53ea5de7fef7b5c8a509d3c3571ecf5944b2e13a9469e99baf",
       "parser_id": null,
       "properties": {
         "language": "Markdown",
@@ -15496,7 +15311,7 @@
       "id": "src:doc-heading:taskdesk-legacy/README.md:7",
       "layer": "source",
       "type": "DocumentationSection",
-      "name": "Prerequisites",
+      "name": "Requirements",
       "path": "taskdesk-legacy/README.md",
       "span": {
         "start_line": 7,
@@ -15507,158 +15322,276 @@
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:24",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:13",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "macOS install",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 13,
+        "end_line": 13
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:19",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "Linux install",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 19,
+        "end_line": 19
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:26",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "Temurin JDK 17",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 26,
+        "end_line": 26
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:28",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "Maven (check https://maven.apache.org/download.cgi for the current version)",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 28,
+        "end_line": 28
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:30",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "Tomcat 9 (check https://tomcat.apache.org/download-90.cgi for the current version)",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 30,
+        "end_line": 30
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:41",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "Environment: paths.sh",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 41,
+        "end_line": 41
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:59",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "Database",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 24,
-        "end_line": 24
+        "start_line": 59,
+        "end_line": 59
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:71",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:84",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "Build",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 71,
-        "end_line": 71
+        "start_line": 84,
+        "end_line": 84
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:85",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:95",
       "layer": "source",
       "type": "DocumentationSection",
-      "name": "Run On Tomcat 9",
+      "name": "Deploy And Run",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 85,
-        "end_line": 85
+        "start_line": 95,
+        "end_line": 95
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:118",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:110",
       "layer": "source",
       "type": "DocumentationSection",
-      "name": "Redeploy Script",
+      "name": "Foreground (both platforms) \u2014 inherits TASKDESK_DB_URL from your shell:",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 118,
-        "end_line": 118
+        "start_line": 110,
+        "end_line": 110
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:143",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:113",
       "layer": "source",
       "type": "DocumentationSection",
-      "name": "Running With A DB Override",
+      "name": "Background (both platforms):",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 143,
-        "end_line": 143
+        "start_line": 113,
+        "end_line": 113
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:171",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:117",
       "layer": "source",
       "type": "DocumentationSection",
-      "name": "Useful Tomcat Commands",
+      "name": "macOS service alternative:",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 171,
-        "end_line": 171
+        "start_line": 117,
+        "end_line": 117
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:180",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:133",
+      "layer": "source",
+      "type": "DocumentationSection",
+      "name": "DB override for background/service Tomcat",
+      "path": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 133,
+        "end_line": 133
+      },
+      "hash": null,
+      "parser_id": null,
+      "properties": {}
+    },
+    {
+      "id": "src:doc-heading:taskdesk-legacy/README.md:144",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "Common Issues",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 180,
-        "end_line": 180
+        "start_line": 144,
+        "end_line": 144
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:182",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:146",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "Missing Struts Messages",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 182,
-        "end_line": 182
+        "start_line": 146,
+        "end_line": 146
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:196",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:160",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "SQLite Path Does Not Exist",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 196,
-        "end_line": 196
+        "start_line": 160,
+        "end_line": 160
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:206",
+      "id": "src:doc-heading:taskdesk-legacy/README.md:170",
       "layer": "source",
       "type": "DocumentationSection",
       "name": "Wrong Tomcat Version",
       "path": "taskdesk-legacy/README.md",
       "span": {
-        "start_line": 206,
-        "end_line": 206
+        "start_line": 170,
+        "end_line": 170
       },
       "hash": null,
       "parser_id": null,
       "properties": {}
     },
     {
-      "id": "src:doc-heading:taskdesk-legacy/README.md:214",
+      "id": "src:file:taskdesk-legacy/paths.sh",
       "layer": "source",
-      "type": "DocumentationSection",
-      "name": "Clean Redeploy",
-      "path": "taskdesk-legacy/README.md",
+      "type": "File",
+      "name": "paths.sh",
+      "path": "taskdesk-legacy/paths.sh",
       "span": {
-        "start_line": 214,
-        "end_line": 214
+        "start_line": 1,
+        "end_line": 42
       },
-      "hash": null,
+      "hash": "d01f02fcafc47e4016ceb6471abb5813ba49177eacc268f8835c0d999b64322b",
       "parser_id": null,
-      "properties": {}
+      "properties": {
+        "language": "Shell",
+        "role": "build"
+      }
+    },
+    {
+      "id": "src:file:taskdesk-legacy/redeploy.sh",
+      "layer": "source",
+      "type": "File",
+      "name": "redeploy.sh",
+      "path": "taskdesk-legacy/redeploy.sh",
+      "span": {
+        "start_line": 1,
+        "end_line": 17
+      },
+      "hash": "2d63413d409178ef690409fb643fe3f30854c51100e728ff00bb3a5b851bb424",
+      "parser_id": null,
+      "properties": {
+        "language": "Shell",
+        "role": "build"
+      }
     },
     {
       "id": "src:file:taskdesk-legacy/src/main/webapp/css/taskdesk-legacy.css",
@@ -22012,102 +21945,6 @@
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:1:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:1",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:3:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:3",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:19:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:19",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:32:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:32",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:40:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:40",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:53:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:53",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:55:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:55",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:66:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:66",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:72:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:72",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:78:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:78",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:87:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:87",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
-      "id": "edge:src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:95:contained-by-file",
-      "source_id": "src:file:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/MIGRATION_SOURCE_CATALOG.md:95",
-      "type": "contains",
-      "confidence": 1.0,
-      "properties": {}
-    },
-    {
       "id": "edge:src:doc-heading:taskdesk-legacy/README.md:1:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
       "target_id": "src:doc-heading:taskdesk-legacy/README.md:1",
@@ -22124,89 +21961,137 @@
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:24:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:13:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:24",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:13",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:71:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:19:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:71",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:19",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:85:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:26:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:85",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:26",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:118:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:28:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:118",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:28",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:143:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:30:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:143",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:30",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:171:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:41:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:171",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:41",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:180:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:59:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:180",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:59",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:182:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:84:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:182",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:84",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:196:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:95:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:196",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:95",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:206:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:110:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:206",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:110",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}
     },
     {
-      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:214:contained-by-file",
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:113:contained-by-file",
       "source_id": "src:file:taskdesk-legacy/README.md",
-      "target_id": "src:doc-heading:taskdesk-legacy/README.md:214",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:113",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:117:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:117",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:133:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:133",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:144:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:144",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:146:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:146",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:160:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:160",
+      "type": "contains",
+      "confidence": 1.0,
+      "properties": {}
+    },
+    {
+      "id": "edge:src:doc-heading:taskdesk-legacy/README.md:170:contained-by-file",
+      "source_id": "src:file:taskdesk-legacy/README.md",
+      "target_id": "src:doc-heading:taskdesk-legacy/README.md:170",
       "type": "contains",
       "confidence": 1.0,
       "properties": {}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """verifier — independent verification tool for the semantic discovery loop.
 
-Scores all eight gate dimensions by *measuring* the artefacts in
+Scores all nine gate dimensions by *measuring* the artefacts in
 .work/semantic-loop/ against the repository — never by asserting. Every score
 is derived from named checks; the formulas are fixed in this file, which is
 human-reviewed gallery code, not generated during the loop.
@@ -43,9 +43,12 @@ GALLERY_SOURCE = ".agent-loop/tools/verifier"
 
 DIMENSIONS = [
     "inventory_coverage", "parser_validity", "source_graph_consistency",
-    "semantic_type_quality", "semantic_graph_provenance", "report_coverage",
-    "unknowns_handling", "reproducibility",
+    "semantic_type_quality", "semantic_graph_provenance", "assertion_grounding",
+    "report_coverage", "unknowns_handling", "reproducibility",
 ]
+
+EVIDENCE_KINDS = {"parsed", "observed", "asserted"}
+CLAIM_STATUSES = {"confirmed", "contradicted", "unverifiable"}
 
 KERNEL_TYPES = {
     "Application", "Module", "EntryPoint", "Interface", "Flow", "Action",
@@ -92,6 +95,7 @@ class Artefacts:
         self.source = self._load("source-graph.json")
         self.types = self._load("semantic-types.json")
         self.semantic = self._load("semantic-graph.json")
+        self.doc_claims = self._load("doc-claims.json", optional=True)
         self.assumptions = self._load("assumptions.json")
         self.state = self._load("state.json", optional=True) or {}
         report = work / "reports" / "application-structure.md"
@@ -304,14 +308,129 @@ def score_provenance(a: Artefacts, r: Result) -> None:
     r.check("semantic_graph_provenance", "sem-confidence", not bad_conf,
             f"nodes without explicit confidence in [0,1]: {bad_conf[:5]}")
 
-    if ungrounded or bad_refs:
+    # Authority rule (LOOP.md): kind absent = parsed; asserted evidence is
+    # never sufficient for existence, so an asserted-only node must stay
+    # candidate/proposed (or be an UnknownSemanticConstruct).
+    bad_kinds = [f"{n['id']} ({g.get('kind')})"
+                 for n in nodes for g in n.get("grounded_in", [])
+                 if g.get("kind") is not None and g["kind"] not in EVIDENCE_KINDS]
+    r.check("semantic_graph_provenance", "sem-kind-valid", not bad_kinds,
+            f"provenance entries with unknown evidence kind: {bad_kinds[:5]}")
+
+    asserted_existence = [
+        n["id"] for n in nodes
+        if n.get("grounded_in")
+        and all(g.get("kind") == "asserted" for g in n["grounded_in"])
+        and n["type"] != "UnknownSemanticConstruct"
+        and n.get("status") in ("validated", "accepted")]
+    r.check("semantic_graph_provenance", "sem-asserted-not-sufficient", not asserted_existence,
+            f"nodes validated/accepted on asserted (documentation) evidence alone: "
+            f"{asserted_existence[:5]}")
+
+    if ungrounded or bad_refs or asserted_existence:
         value = min(5, 10 - 3 * r.failed("semantic_graph_provenance"))
     else:
-        value = 10 - 2 * (len(bad_files) + len(bad_spans)) - (2 if bad_conf else 0)
+        value = (10 - 2 * (len(bad_files) + len(bad_spans))
+                 - (2 if bad_conf else 0) - (2 if bad_kinds else 0))
     r.score("semantic_graph_provenance", value,
             f"{len(nodes)} nodes, {sum(len(n.get('grounded_in', [])) for n in nodes)} grounding entries; "
             f"{len(ungrounded)} ungrounded, {len(bad_refs)} unresolved refs, "
-            f"{len(bad_files) + len(bad_spans)} evidence file/span problems")
+            f"{len(bad_files) + len(bad_spans)} evidence file/span problems, "
+            f"{len(asserted_existence)} asserted-only existence violations")
+
+
+def _norm_ws(s: str) -> str:
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def score_assertions(a: Artefacts, r: Result) -> None:
+    """Documentation claims re-resolved onto the repository (doc-claims.json).
+
+    The phase is degradable: an absent artefact is a recorded unknown, not a
+    gate failure — but asserted evidence in the semantic graph without a
+    claims artefact behind it is a violation either way.
+    """
+    sem_nodes = a.semantic.get("nodes", [])
+    asserted_refs = [(n["id"], g) for n in sem_nodes for g in n.get("grounded_in", [])
+                     if g.get("kind") == "asserted"]
+
+    if a.doc_claims is None:
+        r.check("assertion_grounding", "doc-claims-present", True,
+                "doc-claims.json absent: doc-alignment phase not run or no "
+                "documentation in scope; layer stands as a recorded unknown", warn=True)
+        orphaned = [nid for nid, _ in asserted_refs]
+        ok = r.check("assertion_grounding", "doc-asserted-backed", not orphaned,
+                     f"asserted evidence with no doc-claims artefact behind it: {orphaned[:5]}")
+        r.score("assertion_grounding", 10 if ok else 4,
+                "doc alignment not run; "
+                f"{len(orphaned)} unbacked asserted provenance entries")
+        return
+
+    claims = a.doc_claims.get("claims", [])
+    claim_ids = {c.get("id") for c in claims}
+    sem_ids = {n["id"] for n in sem_nodes}
+
+    unresolved, bad_excerpts = [], []
+    for c in claims:
+        cid = c.get("id", "?")
+        rel = c.get("file", "")
+        parts = Path(rel).parts
+        if Path(rel).is_absolute() or ".." in parts:
+            unresolved.append(f"{cid} (path escapes repo: {rel})")
+            continue
+        f = a.repo / rel
+        if not f.is_file():
+            unresolved.append(f"{cid} (missing {rel})")
+            continue
+        lines = f.read_text(encoding="utf-8", errors="replace").splitlines()
+        span = c.get("span") or {}
+        if not (1 <= span.get("start_line", 0) <= span.get("end_line", 0) <= max(1, len(lines))):
+            unresolved.append(f"{cid} (span {span} beyond {rel})")
+            continue
+        span_text = _norm_ws(" ".join(lines[span["start_line"] - 1:span["end_line"]]))
+        excerpt = _norm_ws(c.get("excerpt", ""))
+        if not excerpt or excerpt not in span_text:
+            bad_excerpts.append(f"{cid} ({rel}:{span['start_line']}-{span['end_line']})")
+    r.check("assertion_grounding", "doc-spans-resolve", not unresolved,
+            f"{len(claims)} claims; provenance that does not resolve onto the "
+            f"repository: {unresolved[:5]}")
+    r.check("assertion_grounding", "doc-excerpts-match", not bad_excerpts,
+            f"claims whose verbatim excerpt is not found within the cited span: "
+            f"{bad_excerpts[:5]}")
+
+    indefinite = [c.get("id", "?") for c in claims
+                  if c.get("status") not in CLAIM_STATUSES]
+    r.check("assertion_grounding", "doc-status-definite", not indefinite,
+            f"claims without a definite confirmed/contradicted/unverifiable "
+            f"status: {indefinite[:5]}")
+
+    bad_maps = [f"{c.get('id', '?')} -> {nid}"
+                for c in claims for nid in c.get("mapped_nodes", [])
+                if nid not in sem_ids]
+    unmapped_confirmed = [c.get("id", "?") for c in claims
+                          if c.get("status") == "confirmed" and not c.get("mapped_nodes")]
+    r.check("assertion_grounding", "doc-nodes-resolve",
+            not bad_maps and not unmapped_confirmed,
+            f"mapped nodes missing from semantic graph: {bad_maps[:5]}; "
+            f"confirmed claims mapping to nothing: {unmapped_confirmed[:5]}")
+
+    orphaned = [f"{nid} -> {g.get('claim_ref')}" for nid, g in asserted_refs
+                if g.get("claim_ref") not in claim_ids]
+    dangling_conflicts = [f"{n['id']} -> {c.get('claim_ref')}"
+                          for n in sem_nodes for c in n.get("conflicts", [])
+                          if c.get("claim_ref") and c["claim_ref"] not in claim_ids]
+    r.check("assertion_grounding", "doc-refs-linked",
+            not orphaned and not dangling_conflicts,
+            f"asserted provenance without a resolvable claim_ref: {orphaned[:5]}; "
+            f"node conflicts referencing unknown claims: {dangling_conflicts[:5]}")
+
+    counts = {s: sum(1 for c in claims if c.get("status") == s) for s in sorted(CLAIM_STATUSES)}
+    value = 10 - 3 * r.failed("assertion_grounding")
+    r.score("assertion_grounding", value,
+            f"{len(claims)} claims re-resolved ({counts}); {len(unresolved)} unresolved, "
+            f"{len(bad_excerpts)} excerpt mismatches, {len(indefinite)} indefinite, "
+            f"{len(bad_maps) + len(unmapped_confirmed)} node-mapping problems, "
+            f"{len(orphaned) + len(dangling_conflicts)} broken claim links")
 
 
 def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
@@ -321,10 +440,13 @@ def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
         return
     r.check("report_coverage", "report-exists", True, "report present")
 
+    required = list(REQUIRED_REPORT_SECTIONS)
+    if a.doc_claims is not None:
+        required.append("Documentation drift")
     text = a.report_text.lower()
-    missing = [s for s in REQUIRED_REPORT_SECTIONS if s.lower() not in text]
+    missing = [s for s in required if s.lower() not in text]
     r.check("report_coverage", "report-sections", not missing,
-            f"{len(REQUIRED_REPORT_SECTIONS) - len(missing)}/{len(REQUIRED_REPORT_SECTIONS)} "
+            f"{len(required) - len(missing)}/{len(required)} "
             f"required sections present; missing: {missing}")
 
     says_final = bool(re.search(r"status:\s*final", text))
@@ -336,13 +458,13 @@ def score_report(a: Artefacts, r: Result, provisional_pass: bool) -> None:
             f"other dimensions pass={provisional_pass} — a FINAL claim requires a passing gate",
             warn=(says_partial and provisional_pass))
 
-    value = round(10 * (len(REQUIRED_REPORT_SECTIONS) - len(missing)) / len(REQUIRED_REPORT_SECTIONS))
+    value = round(10 * (len(required) - len(missing)) / len(required))
     if not (says_final or says_partial):
         value -= 2
     if says_final and not provisional_pass:
         value = min(value, 7)
     r.score("report_coverage", value,
-            f"{len(REQUIRED_REPORT_SECTIONS) - len(missing)}/{len(REQUIRED_REPORT_SECTIONS)} sections; "
+            f"{len(required) - len(missing)}/{len(required)} sections; "
             f"status marker final={says_final}/partial={says_partial}")
 
 
@@ -417,6 +539,7 @@ def run_verification(work: Path, repo: Path, iteration: int,
     score_source_graph(a, r)
     score_types(a, r)
     score_provenance(a, r)
+    score_assertions(a, r)
     score_unknowns(a, r)
     score_reproducibility(a, r, run_subprocesses)
     provisional_pass = all(s["value"] >= 8 for s in r.scores.values())
@@ -493,11 +616,62 @@ def _mutate_inventory_gap(work: Path) -> str:
     return "inventory_coverage"
 
 
+def _mutate_doc_claim(work: Path) -> str:
+    # Forge a documentation claim's provenance: shift its span/excerpt so the
+    # quoted text no longer occurs where cited. When no doc-claims.json
+    # exists, plant one whose claim cites a file that is not on disk — either
+    # way the forged reading must be caught.
+    p = work / "doc-claims.json"
+    if p.exists():
+        data = json.loads(p.read_text())
+    else:
+        data = {"repo_fingerprint": None, "extracted_by": "selftest", "claims": []}
+    if data["claims"]:
+        c = data["claims"][0]
+        c["excerpt"] = "selftest: text that the cited span does not contain"
+    else:
+        data["claims"].append({
+            "id": "claim:selftest:forged", "claim_type": "feature",
+            "text": "selftest forged claim",
+            "excerpt": "selftest forged claim",
+            "file": "selftest/does-not-exist.md",
+            "span": {"start_line": 1, "end_line": 1},
+            "status": "unverifiable", "mapped_nodes": [],
+            "status_evidence": "selftest"})
+    p.write_text(json.dumps(data))
+    return "assertion_grounding"
+
+
+def _mutate_asserted_existence(work: Path) -> str:
+    # Break the authority rule: promote a node to accepted on documentation
+    # evidence alone.
+    p = work / "semantic-graph.json"
+    data = json.loads(p.read_text())
+    node = next((n for n in data["nodes"]
+                 if n["type"] != "UnknownSemanticConstruct" and n.get("grounded_in")),
+                None)
+    if node is None:
+        data["nodes"].append({
+            "id": "sem:selftest:asserted-only", "layer": "semantic", "type": "Action",
+            "name": "SelfTest", "confidence": 0.9, "status": "accepted",
+            "grounded_in": [{"source_node": None, "file": "README.md", "span": None,
+                             "evidence_type": "doc-claim", "kind": "asserted"}],
+            "unknowns": [], "properties": {}})
+    else:
+        node["status"] = "accepted"
+        for g in node["grounded_in"]:
+            g["kind"] = "asserted"
+    p.write_text(json.dumps(data))
+    return "semantic_graph_provenance"
+
+
 MUTATIONS = [
     ("strip-provenance", _mutate_provenance),
     ("dangling-edge", _mutate_dangling_edge),
     ("bogus-parser-id", _mutate_parser_attribution),
     ("inventory-gap", _mutate_inventory_gap),
+    ("forged-doc-claim", _mutate_doc_claim),
+    ("asserted-only-accepted", _mutate_asserted_existence),
 ]
 
 
@@ -547,6 +721,14 @@ def smoke() -> None:
              "grounded_in": [{"source_node": "src:file:a.java", "file": "a.java",
                               "span": None, "evidence_type": "smoke"}],
              "unknowns": [], "properties": {}}], "edges": []},
+        "doc-claims.json": {"repo_fingerprint": "f" * 40, "extracted_by": "doc-claims-v1",
+                            "documents": ["NOTES.md"], "claims": [
+            {"id": "claim:notes:a", "claim_type": "feature",
+             "text": "the app has an A class",
+             "excerpt": "The system is built around class A.",
+             "file": "NOTES.md", "span": {"start_line": 2, "end_line": 2},
+             "status": "confirmed", "mapped_nodes": ["sem:unknown:x"],
+             "status_evidence": "src:file:a.java"}]},
         "assumptions.json": {"assumptions": [
             {"id": "a1", "statement": "s", "reason": "r", "confidence": 1.0,
              "status": "accepted"}]},
@@ -558,10 +740,12 @@ def smoke() -> None:
         repo = Path(tmp) / "repo"
         repo.mkdir()
         (repo / "a.java").write_text("class A {\n}\n")
+        (repo / "NOTES.md").write_text("# Notes\nThe system is built around class A.\n")
         for name, data in clean.items():
             (work / name).write_text(json.dumps(data))
         (work / "reports" / "application-structure.md").write_text(
-            "Status: FINAL\n" + "\n".join(f"## {s}" for s in REQUIRED_REPORT_SECTIONS))
+            "Status: FINAL\n" + "\n".join(
+                f"## {s}" for s in REQUIRED_REPORT_SECTIONS + ["Documentation drift"]))
 
         result = run_verification(work, repo, iteration=0, run_subprocesses=False)
         assert result["passed"], f"clean fixture must pass, got {result['gate_failures']}"
@@ -576,6 +760,27 @@ def smoke() -> None:
         assert result["weakest_score"] == "semantic_graph_provenance"
         assert result["required_next_action"], "failing gate must define a next action"
 
+        corrupt = copy.deepcopy(clean)
+        corrupt["doc-claims.json"]["claims"][0]["excerpt"] = "class B is the core"
+        for name, data in corrupt.items():
+            (work / name).write_text(json.dumps(data))
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert not result["passed"], "forged doc excerpt must fail the gate"
+        assert result["scores"]["assertion_grounding"]["value"] < 8
+
+        corrupt = copy.deepcopy(clean)
+        node = corrupt["semantic-graph.json"]["nodes"][0]
+        node["type"] = "Action"
+        node["grounded_in"][0]["kind"] = "asserted"
+        node["grounded_in"][0]["claim_ref"] = "claim:notes:a"
+        for name, data in corrupt.items():
+            (work / name).write_text(json.dumps(data))
+        result = run_verification(work, repo, iteration=0, run_subprocesses=False)
+        assert not result["passed"], "asserted-only accepted node must fail the gate"
+        assert result["scores"]["semantic_graph_provenance"]["value"] <= 5
+
+        for name, data in clean.items():
+            (work / name).write_text(json.dumps(data))
         st = run_self_test(work, repo)
         assert st["mutations_applied"] == len(MUTATIONS)
     print("SMOKE PASS")

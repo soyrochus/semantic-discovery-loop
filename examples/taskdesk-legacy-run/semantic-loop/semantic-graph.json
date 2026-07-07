@@ -1,5 +1,5 @@
 {
-  "repo_fingerprint": "3caaeaf45b3f644e57ade62fddf81a4cdadb7e6a",
+  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
   "nodes": [
     {
       "id": "sem:application:taskdesk-legacy",
@@ -26,11 +26,35 @@
             "end_line": 26
           },
           "evidence_type": "struts-servlet-mapping"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "documented-description",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:struts-war-app"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 11,
+            "end_line": 11
+          },
+          "evidence_type": "documented-runtime-constraint",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:javax-servlet-tomcat9"
         }
       ],
       "unknowns": [],
       "properties": {
-        "packaging": "war"
+        "packaging": "war",
+        "business_description": "Simulated Struts 1.x / JSP / JDBC application packaged as a WAR, using SQLite for the local demo database",
+        "documented_constraint": "Requires a javax.servlet container (Tomcat 9); Tomcat 10 (jakarta.servlet) will not run this WAR"
       }
     },
     {
@@ -226,11 +250,23 @@
             "end_line": 20
           },
           "evidence_type": "servlet-url-pattern"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 11,
+            "end_line": 11
+          },
+          "evidence_type": "documented-runtime-constraint",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:javax-servlet-tomcat9"
         }
       ],
       "unknowns": [],
       "properties": {
-        "url_pattern": "*.do"
+        "url_pattern": "*.do",
+        "documented_intent": "javax.servlet-era ActionServlet: the reason the README pins Tomcat 9 over Tomcat 10"
       }
     },
     {
@@ -837,10 +873,23 @@
             "end_line": 65
           },
           "evidence_type": "dao-class"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 67,
+            "end_line": 67
+          },
+          "evidence_type": "documented-config-override",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:db-url-override"
         }
       ],
       "unknowns": [],
-      "properties": {}
+      "properties": {
+        "business_description": "Resolves the JDBC URL with the override precedence documented in the README"
+      }
     },
     {
       "id": "sem:component:dao:TaskDAO",
@@ -1274,11 +1323,34 @@
             "end_line": 1
           },
           "evidence_type": "sqlite-database-file"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 3,
+            "end_line": 3
+          },
+          "evidence_type": "documented-description",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:sqlite-demo-db"
+        },
+        {
+          "source_node": "src:file:db/runtime-data/README.md",
+          "file": "db/runtime-data/README.md",
+          "span": {
+            "start_line": 20,
+            "end_line": 23
+          },
+          "evidence_type": "documented-reset-procedure",
+          "kind": "asserted",
+          "claim_ref": "claim:db-readme:regenerate-reset"
         }
       ],
       "unknowns": [],
       "properties": {
-        "jdbc": "sqlite"
+        "jdbc": "sqlite",
+        "business_description": "Local demo database; regenerable from db/sql/003_reset_database.sql per db/runtime-data/README.md"
       }
     },
     {
@@ -1388,13 +1460,29 @@
             "end_line": 15
           },
           "evidence_type": "sql-ddl-create-table"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 69,
+            "end_line": 74
+          },
+          "evidence_type": "documented-demo-users",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:demo-users"
         }
       ],
       "unknowns": [],
       "properties": {
         "table": "APP_USER",
         "reference_count": 10,
-        "schema_verified": true
+        "schema_verified": true,
+        "documented_demo_users": [
+          "operator1",
+          "operator2",
+          "manager1"
+        ]
       }
     },
     {
@@ -1635,10 +1723,34 @@
             "end_line": 1
           },
           "evidence_type": "properties-entry"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 67,
+            "end_line": 67
+          },
+          "evidence_type": "documented-config-source",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:db-url-properties"
+        },
+        {
+          "source_node": "src:file:taskdesk-legacy/README.md",
+          "file": "taskdesk-legacy/README.md",
+          "span": {
+            "start_line": 67,
+            "end_line": 67
+          },
+          "evidence_type": "documented-config-override",
+          "kind": "asserted",
+          "claim_ref": "claim:taskdesk-readme:db-url-override"
         }
       ],
       "unknowns": [],
-      "properties": {}
+      "properties": {
+        "documented_override_order": "-Dtaskdesk.db.url system property, then TASKDESK_DB_URL environment variable, then classpath taskdesk.properties"
+      }
     },
     {
       "id": "sem:unknown:runtime-row-semantics",
@@ -1652,16 +1764,25 @@
           "source_node": "src:file:db/runtime-data/README.md",
           "file": "db/runtime-data/README.md",
           "span": {
-            "start_line": 1,
-            "end_line": 24
+            "start_line": 9,
+            "end_line": 17
           },
-          "evidence_type": "documented-row-counts"
+          "evidence_type": "documented-row-counts",
+          "kind": "asserted",
+          "claim_ref": "claim:db-readme:seed-row-counts"
         }
       ],
       "unknowns": [
-        "The SQLite schema is analyzed, but row contents and business meaning of seed records were not read by the schema parser."
+        "The SQLite schema is analyzed, but row contents and business meaning of seed records in the live database file were not read by the schema parser."
       ],
-      "properties": {}
+      "properties": {
+        "documented_row_counts": {
+          "APP_USER": 3,
+          "TASK": 6,
+          "TASK_COMMENT": 5,
+          "TASK_AUDIT": 8
+        }
+      }
     }
   ],
   "edges": [

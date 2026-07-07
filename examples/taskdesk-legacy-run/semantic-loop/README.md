@@ -14,6 +14,7 @@ parser-registry.json  parser/extractor manifests          (contracts/parser-regi
 source-graph.json     Layer 1 — deterministic source facts (contracts/source-graph.schema.json)
 semantic-types.json   semantic type registry              (contracts/semantic-types.schema.json)
 semantic-graph.json   Layer 2 — evidence-backed semantics (contracts/semantic-graph.schema.json)
+doc-claims.json       documentation claims — optional     (contracts/doc-claims.schema.json)
 verification.json     gate scores, 8+ required on all     (contracts/verification.schema.json)
 reports/
   application-structure.md   final (or clearly marked partial) report

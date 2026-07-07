@@ -1,0 +1,140 @@
+{
+  "repo_fingerprint": "431f0c71eafeeb480584e518b9e430453f702411",
+  "extracted_by": "doc-claims-v1",
+  "documents": [
+    "taskdesk-legacy/README.md",
+    "db/runtime-data/README.md"
+  ],
+  "claims": [
+    {
+      "id": "claim:taskdesk-readme:struts-war-app",
+      "claim_type": "boundary",
+      "text": "TaskDesk Legacy is a Struts 1.x / JSP / JDBC application packaged as a WAR.",
+      "excerpt": "TaskDesk Legacy is a simulated Struts 1.x / JSP / JDBC application packaged as a WAR.",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 3,
+        "end_line": 3
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:application:taskdesk-legacy"
+      ],
+      "status_evidence": "war packaging in taskdesk-legacy/pom.xml (maven-pom-v1 build module), Struts ActionServlet mapping in web.xml, action routes in struts-config.xml (struts-config-v1), JDBC access in dao classes (java-structure-v1)."
+    },
+    {
+      "id": "claim:taskdesk-readme:sqlite-demo-db",
+      "claim_type": "data",
+      "text": "The application uses SQLite for its local demo database.",
+      "excerpt": "It uses SQLite for the local demo database",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 3,
+        "end_line": 3
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:datastore:sqlite"
+      ],
+      "status_evidence": "sem:datastore:sqlite is grounded in the taskdesk.db.url property (properties-config-v1), JdbcConnectionManager (java-structure-v1), and schema introspection of db/runtime-data/taskdesk-demo.sqlite (sqlite-schema-v1)."
+    },
+    {
+      "id": "claim:taskdesk-readme:javax-servlet-tomcat9",
+      "claim_type": "intent",
+      "text": "The application requires a javax.servlet container (Tomcat 9); Tomcat 10 (jakarta.servlet) cannot run it \u2014 the why behind the documented Tomcat 9 requirement.",
+      "excerpt": "Struts 1.x and this application use the older `javax.servlet` APIs; Tomcat 10 moved to `jakarta.servlet` and will not run this WAR.",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 11,
+        "end_line": 11
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:application:taskdesk-legacy",
+        "sem:entrypoint:struts-action-servlet-do"
+      ],
+      "status_evidence": "pom.xml declares javax.servlet:servlet-api 2.5 and javax.servlet.jsp:jsp-api 2.2 as provided dependencies (maven-pom-v1); web.xml maps org.apache.struts.action.ActionServlet; no jakarta.* import appears in any parsed Java source."
+    },
+    {
+      "id": "claim:taskdesk-readme:db-url-properties",
+      "claim_type": "feature",
+      "text": "The application reads its JDBC URL from src/main/resources/taskdesk.properties.",
+      "excerpt": "The app reads the JDBC URL from `src/main/resources/taskdesk.properties`",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 67,
+        "end_line": 67
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:configuration:taskdesk-db-url"
+      ],
+      "status_evidence": "taskdesk.properties defines taskdesk.db.url (properties-config-v1 entry node); JdbcConnectionManager.loadDatabaseUrl loads taskdesk.properties from the classpath and reads that key."
+    },
+    {
+      "id": "claim:taskdesk-readme:db-url-override",
+      "claim_type": "feature",
+      "text": "The TASKDESK_DB_URL environment variable and the taskdesk.db.url JVM system property override the packaged JDBC URL without rebuilding.",
+      "excerpt": "Prefer the `TASKDESK_DB_URL` environment variable, which overrides it without rebuilding",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 67,
+        "end_line": 67
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:configuration:taskdesk-db-url",
+        "sem:component:dao:JdbcConnectionManager"
+      ],
+      "status_evidence": "JdbcConnectionManager.loadDatabaseUrl checks the taskdesk.db.url system property, then the TASKDESK_DB_URL environment variable, before falling back to the classpath properties file (taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java lines 33-41, java-structure-v1 method node)."
+    },
+    {
+      "id": "claim:taskdesk-readme:demo-users",
+      "claim_type": "data",
+      "text": "Demo users operator1, operator2, and manager1 (password 'demo') exist in the demo database.",
+      "excerpt": "operator1 / demo operator2 / demo manager1 / demo",
+      "file": "taskdesk-legacy/README.md",
+      "span": {
+        "start_line": 69,
+        "end_line": 74
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:datastore:table:app_user"
+      ],
+      "status_evidence": "db/sql/002_seed_data.sql inserts ('operator1','demo',...), ('operator2','demo',...), ('manager1','demo',...) into APP_USER (sql-ddl-v1 statement node, lines 3-7); db/sql/003_reset_database.sql repeats the same inserts."
+    },
+    {
+      "id": "claim:db-readme:seed-row-counts",
+      "claim_type": "data",
+      "text": "The runtime demo database initially contains 3 APP_USER, 6 TASK, 5 TASK_COMMENT, and 8 TASK_AUDIT rows.",
+      "excerpt": "\"APP_USER\": 3, \"TASK\": 6, \"TASK_COMMENT\": 5, \"TASK_AUDIT\": 8",
+      "file": "db/runtime-data/README.md",
+      "span": {
+        "start_line": 9,
+        "end_line": 17
+      },
+      "status": "unverifiable",
+      "mapped_nodes": [
+        "sem:unknown:runtime-row-semantics"
+      ],
+      "status_evidence": "sqlite-schema-v1 introspects schema only and no parser reads row data from db/runtime-data/taskdesk-demo.sqlite, so the documented counts of the live database file cannot be settled statically. The seed SQL suggests but does not prove the current file contents. Recorded as asserted evidence on sem:unknown:runtime-row-semantics."
+    },
+    {
+      "id": "claim:db-readme:regenerate-reset",
+      "claim_type": "data",
+      "text": "The demo database can be regenerated from db/sql/003_reset_database.sql.",
+      "excerpt": "sqlite3 taskdesk-demo.sqlite < ../sql/003_reset_database.sql",
+      "file": "db/runtime-data/README.md",
+      "span": {
+        "start_line": 20,
+        "end_line": 23
+      },
+      "status": "confirmed",
+      "mapped_nodes": [
+        "sem:datastore:sqlite"
+      ],
+      "status_evidence": "db/sql/003_reset_database.sql exists and is parsed by sql-ddl-v1; its CREATE TABLE statements match the introspected schema of db/runtime-data/taskdesk-demo.sqlite (sqlite-schema-v1) and it re-inserts the seed rows."
+    }
+  ]
+}

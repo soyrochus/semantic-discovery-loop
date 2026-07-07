@@ -20,6 +20,13 @@
       "reason": "The parsed web.xml url-pattern element maps ActionServlet to *.do and struts-config declares action paths without suffix.",
       "confidence": 1.0,
       "status": "accepted"
+    },
+    {
+      "id": "assumption:doc-scope",
+      "statement": "Documentation alignment reads taskdesk-legacy/README.md and db/runtime-data/README.md; build/deploy instructions in them are environment guidance and are not extracted as application-semantics claims.",
+      "reason": "These are the only documentation files under the analysis scope roots; install/run steps describe the operator's machine, not the application's structure.",
+      "confidence": 0.9,
+      "status": "accepted"
     }
   ]
 }

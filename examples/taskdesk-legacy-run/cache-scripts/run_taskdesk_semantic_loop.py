@@ -6,6 +6,12 @@ under .cache/scripts/parsers/ (gallery copies), and verification is delegated
 to the independent verifier at .cache/scripts/verifier-v1/. This script builds
 no source nodes beyond structural File/DocumentationSection listing, and it
 never writes verification.json itself.
+
+Doc alignment (skill 10): the claims in DOC_CLAIMS are the model-driven
+reading of the in-scope documentation, performed by the loop agent and fixed
+here so the run is re-assemblable. Their spans/excerpts are re-resolved by
+doc-claims-v1 --check and independently by the verifier; the reading itself
+is interpretation and is registered as such in parser-registry.json.
 """
 
 from __future__ import annotations
@@ -26,7 +32,11 @@ REPORTS = WORK / "reports"
 CACHE = Path(".cache/scripts")
 PARSERS = CACHE / "parsers"
 VERIFIER = CACHE / "verifier-v1" / "verify.py"
+DOC_CHECKER = PARSERS / "doc-claims-v1" / "parser.py"
 HEAD = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True).stdout.strip() or None
+
+TASKDESK_README = "taskdesk-legacy/README.md"
+DB_README = "db/runtime-data/README.md"
 
 
 def read(path: Path) -> str:
@@ -95,6 +105,8 @@ def classify(path: str) -> tuple[str | None, str, list[str], str | None]:
         return "SQLite", "data", ["sqlite-database"], None
     if path.endswith(".css"):
         return "CSS", "source", [], None
+    if path.endswith(".sh"):
+        return "Shell", "build", [], None
     if path.endswith(".md"):
         return "Markdown", "documentation", [], None
     return None, "unknown", [], "No deterministic classification rule matched."
@@ -125,6 +137,7 @@ def inventory(files: list[str], skipped_tracked: list[str]) -> dict:
     uncertainties = [
         "SQLite schema and DDL are analyzed, but row-level data semantics are not read by the sqlite-schema parser.",
         "The scope is taskdesk-legacy plus db; other repository areas are not analyzed as application evidence.",
+        "Shell scripts (paths.sh, redeploy.sh) are deployment tooling; no parser extracts their content, they are inventoried structurally only.",
     ]
     for path in skipped_tracked:
         uncertainties.append(
@@ -168,7 +181,7 @@ def parser_registry() -> dict:
             "writes_source_tree": False,
             "network_required": False,
         }
-    return {"parsers": [
+    registry = {"parsers": [
         tool("java-structure-v1", "java-source", ["taskdesk-legacy/**/*.java"], ".agent-loop/tools/java-structure", ["python3 .cache/scripts/parsers/java-structure-v1/parser.py --smoke", "parsed LoginAction.java real sample"], ["No expression-level symbol resolution; method bodies are not fully parsed."]),
         tool("xml-structure-v1", "xml-file", ["taskdesk-legacy/**/*.xml", "taskdesk-legacy/pom.xml"], ".agent-loop/tools/xml-structure", ["python3 .cache/scripts/parsers/xml-structure-v1/parser.py --smoke", "parsed struts-config.xml real sample"], ["Generic XML structure only; Struts and Maven interpretation come from struts-config-v1 and maven-pom-v1."]),
         tool("struts-config-v1", "struts-xml", ["taskdesk-legacy/**/struts-config.xml", "taskdesk-legacy/**/validation.xml"], ".agent-loop/tools/struts-config", ["python3 .cache/scripts/parsers/struts-config-v1/parser.py --smoke", "parsed struts-config.xml and validation.xml real samples"], ["Struts 1.x vocabulary only; URL suffix derivation (e.g. '.do' from web.xml) is the semantic builder's job."]),
@@ -178,6 +191,26 @@ def parser_registry() -> dict:
         tool("sql-ddl-v1", "sql-script", ["db/**/*.sql"], ".agent-loop/tools/sql-ddl", ["python3 .cache/scripts/parsers/sql-ddl-v1/parser.py --smoke", "parsed db/sql/001_schema_sqlite.sql real sample"], ["Not a full SQL grammar; seed/reset statements are kept as statement nodes, while table/foreign-key details come from CREATE TABLE statements."]),
         tool("sqlite-schema-v1", "sqlite-database", ["db/**/*.sqlite"], ".agent-loop/tools/sqlite-schema", ["python3 .cache/scripts/parsers/sqlite-schema-v1/parser.py --smoke", "introspected db/runtime-data/taskdesk-demo.sqlite real sample"], ["Schema only; row data is not read."]),
     ]}
+    # Skill 10: the claim extraction is registered so its fallibility is
+    # visible. Anchor/check modes are deterministic; the reading is not.
+    doc_tool = tool(
+        "doc-claims-v1", "documentation-claims",
+        [TASKDESK_README, DB_README],
+        ".agent-loop/tools/doc-claims",
+        ["python3 .cache/scripts/parsers/doc-claims-v1/parser.py --smoke",
+         "anchor mode run on taskdesk-legacy/README.md and db/runtime-data/README.md",
+         "check mode re-resolved every extracted claim against the repository and semantic graph"],
+        ["Anchor and check modes are deterministic; the claim reading itself is "
+         "model-driven interpretation by the loop agent and cannot be reproduced by "
+         "re-running this script. Every claim carries a verbatim excerpt and span so "
+         "the reading can always be re-checked.",
+         "Markdown-oriented: prose paragraphs are cited by line span directly, without "
+         "an extracted anchor."])
+    doc_tool["output_schema"] = "doc-claims-v1"
+    doc_tool["invocation"] = ("python3 .cache/scripts/parsers/doc-claims-v1/parser.py <docs...> | "
+                              "--check <doc-claims.json> --repo . --semantic-graph <semantic-graph.json>")
+    registry["parsers"].append(doc_tool)
+    return registry
 
 
 def build_source(files: list[str]) -> dict:
@@ -213,6 +246,8 @@ def build_source(files: list[str]) -> dict:
                     edges[f"edge:{hid}:contained-by-file"] = {"id": f"edge:{hid}:contained-by-file", "source_id": node["id"], "target_id": hid, "type": "contains", "confidence": 1.0, "properties": {}}
         elif path.endswith(".css"):
             nodes.setdefault(f"src:file:{path}", file_node(path, "CSS", "source"))
+        elif path.endswith(".sh"):
+            nodes.setdefault(f"src:file:{path}", file_node(path, "Shell", "build"))
 
     return {"repo_fingerprint": HEAD, "nodes": list(nodes.values()), "edges": [e for e in edges.values() if e["source_id"] in nodes and e["target_id"] in nodes]}
 
@@ -248,6 +283,113 @@ def semantic_types() -> dict:
         "status": "accepted",
         "version": 1,
     } for t, d in defs.items()]}
+
+
+# --------------------------------------------------------------- doc claims
+#
+# The model-driven reading of the in-scope documentation (skill 10 step 3).
+# Every claim cites a verbatim excerpt within a line span of the document it
+# was read from; doc-claims-v1 --check and the verifier re-resolve both.
+
+DOC_CLAIMS: list[dict] = [
+    {
+        "id": "claim:taskdesk-readme:struts-war-app",
+        "claim_type": "boundary",
+        "text": "TaskDesk Legacy is a Struts 1.x / JSP / JDBC application packaged as a WAR.",
+        "excerpt": "TaskDesk Legacy is a simulated Struts 1.x / JSP / JDBC application packaged as a WAR.",
+        "file": TASKDESK_README,
+        "span": {"start_line": 3, "end_line": 3},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:application:taskdesk-legacy"],
+        "status_evidence": "war packaging in taskdesk-legacy/pom.xml (maven-pom-v1 build module), Struts ActionServlet mapping in web.xml, action routes in struts-config.xml (struts-config-v1), JDBC access in dao classes (java-structure-v1).",
+    },
+    {
+        "id": "claim:taskdesk-readme:sqlite-demo-db",
+        "claim_type": "data",
+        "text": "The application uses SQLite for its local demo database.",
+        "excerpt": "It uses SQLite for the local demo database",
+        "file": TASKDESK_README,
+        "span": {"start_line": 3, "end_line": 3},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:datastore:sqlite"],
+        "status_evidence": "sem:datastore:sqlite is grounded in the taskdesk.db.url property (properties-config-v1), JdbcConnectionManager (java-structure-v1), and schema introspection of db/runtime-data/taskdesk-demo.sqlite (sqlite-schema-v1).",
+    },
+    {
+        "id": "claim:taskdesk-readme:javax-servlet-tomcat9",
+        "claim_type": "intent",
+        "text": "The application requires a javax.servlet container (Tomcat 9); Tomcat 10 (jakarta.servlet) cannot run it — the why behind the documented Tomcat 9 requirement.",
+        "excerpt": "Struts 1.x and this application use the older `javax.servlet` APIs; Tomcat 10 moved to `jakarta.servlet` and will not run this WAR.",
+        "file": TASKDESK_README,
+        "span": {"start_line": 11, "end_line": 11},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:application:taskdesk-legacy", "sem:entrypoint:struts-action-servlet-do"],
+        "status_evidence": "pom.xml declares javax.servlet:servlet-api 2.5 and javax.servlet.jsp:jsp-api 2.2 as provided dependencies (maven-pom-v1); web.xml maps org.apache.struts.action.ActionServlet; no jakarta.* import appears in any parsed Java source.",
+    },
+    {
+        "id": "claim:taskdesk-readme:db-url-properties",
+        "claim_type": "feature",
+        "text": "The application reads its JDBC URL from src/main/resources/taskdesk.properties.",
+        "excerpt": "The app reads the JDBC URL from `src/main/resources/taskdesk.properties`",
+        "file": TASKDESK_README,
+        "span": {"start_line": 67, "end_line": 67},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:configuration:taskdesk-db-url"],
+        "status_evidence": "taskdesk.properties defines taskdesk.db.url (properties-config-v1 entry node); JdbcConnectionManager.loadDatabaseUrl loads taskdesk.properties from the classpath and reads that key.",
+    },
+    {
+        "id": "claim:taskdesk-readme:db-url-override",
+        "claim_type": "feature",
+        "text": "The TASKDESK_DB_URL environment variable and the taskdesk.db.url JVM system property override the packaged JDBC URL without rebuilding.",
+        "excerpt": "Prefer the `TASKDESK_DB_URL` environment variable, which overrides it without rebuilding",
+        "file": TASKDESK_README,
+        "span": {"start_line": 67, "end_line": 67},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:configuration:taskdesk-db-url", "sem:component:dao:JdbcConnectionManager"],
+        "status_evidence": "JdbcConnectionManager.loadDatabaseUrl checks the taskdesk.db.url system property, then the TASKDESK_DB_URL environment variable, before falling back to the classpath properties file (taskdesk-legacy/src/main/java/com/example/taskdesk/dao/JdbcConnectionManager.java lines 33-41, java-structure-v1 method node).",
+    },
+    {
+        "id": "claim:taskdesk-readme:demo-users",
+        "claim_type": "data",
+        "text": "Demo users operator1, operator2, and manager1 (password 'demo') exist in the demo database.",
+        "excerpt": "operator1 / demo operator2 / demo manager1 / demo",
+        "file": TASKDESK_README,
+        "span": {"start_line": 69, "end_line": 74},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:datastore:table:app_user"],
+        "status_evidence": "db/sql/002_seed_data.sql inserts ('operator1','demo',...), ('operator2','demo',...), ('manager1','demo',...) into APP_USER (sql-ddl-v1 statement node, lines 3-7); db/sql/003_reset_database.sql repeats the same inserts.",
+    },
+    {
+        "id": "claim:db-readme:seed-row-counts",
+        "claim_type": "data",
+        "text": "The runtime demo database initially contains 3 APP_USER, 6 TASK, 5 TASK_COMMENT, and 8 TASK_AUDIT rows.",
+        "excerpt": "\"APP_USER\": 3, \"TASK\": 6, \"TASK_COMMENT\": 5, \"TASK_AUDIT\": 8",
+        "file": DB_README,
+        "span": {"start_line": 9, "end_line": 17},
+        "status": "unverifiable",
+        "mapped_nodes": ["sem:unknown:runtime-row-semantics"],
+        "status_evidence": "sqlite-schema-v1 introspects schema only and no parser reads row data from db/runtime-data/taskdesk-demo.sqlite, so the documented counts of the live database file cannot be settled statically. The seed SQL suggests but does not prove the current file contents. Recorded as asserted evidence on sem:unknown:runtime-row-semantics.",
+    },
+    {
+        "id": "claim:db-readme:regenerate-reset",
+        "claim_type": "data",
+        "text": "The demo database can be regenerated from db/sql/003_reset_database.sql.",
+        "excerpt": "sqlite3 taskdesk-demo.sqlite < ../sql/003_reset_database.sql",
+        "file": DB_README,
+        "span": {"start_line": 20, "end_line": 23},
+        "status": "confirmed",
+        "mapped_nodes": ["sem:datastore:sqlite"],
+        "status_evidence": "db/sql/003_reset_database.sql exists and is parsed by sql-ddl-v1; its CREATE TABLE statements match the introspected schema of db/runtime-data/taskdesk-demo.sqlite (sqlite-schema-v1) and it re-inserts the seed rows.",
+    },
+]
+
+
+def doc_claims() -> dict:
+    return {
+        "repo_fingerprint": HEAD,
+        "extracted_by": "doc-claims-v1",
+        "documents": [TASKDESK_README, DB_README],
+        "claims": DOC_CLAIMS,
+    }
 
 
 def build_semantic(source: dict) -> dict:
@@ -499,14 +641,65 @@ def build_semantic(source: dict) -> dict:
         prov_node("src:config:taskdesk-legacy/src/main/resources/taskdesk.properties:taskdesk.db.url", "properties-entry")
     ])
     add("sem:unknown:runtime-row-semantics", "UnknownSemanticConstruct", "Runtime seed row semantics", 0.7, [
-        prov_node("src:file:db/runtime-data/README.md", "documented-row-counts")
-    ], unknowns=["The SQLite schema is analyzed, but row contents and business meaning of seed records were not read by the schema parser."])
+        # Asserted grounding is applied below from the doc-claims layer; the
+        # placeholder keeps the node instantiated even if claims were removed.
+        prov_node("src:file:db/runtime-data/README.md", "documented-row-counts"),
+    ], unknowns=["The SQLite schema is analyzed, but row contents and business meaning of seed records in the live database file were not read by the schema parser."])
 
     for sid in ["sem:security:session-login", "sem:rule:manager-role-checks", "sem:rule:validator-required-fields", "sem:rule:database-check-constraints", "sem:configuration:taskdesk-db-url"]:
         edge(sid, "sem:application:taskdesk-legacy", "part-of", 0.9)
     edge("sem:security:session-login", "sem:rule:manager-role-checks", "secured-by", 0.8)
 
+    apply_doc_alignment(sem_nodes)
+
     return {"repo_fingerprint": HEAD, "nodes": list(sem_nodes.values()), "edges": sem_edges}
+
+
+def apply_doc_alignment(sem_nodes: dict[str, dict]) -> None:
+    """Skill 10 step 5: apply confirmed terminology/intent to mapped nodes as
+    asserted provenance (kind + claim_ref), and ground the runtime-row unknown
+    in its documentation claim instead of an undisciplined file reference.
+    Asserted evidence adds naming and intent; it never changes status or
+    confidence of parsed-grounded nodes (EV-6: docs do not veto, or prove)."""
+    claims = {c["id"]: c for c in DOC_CLAIMS}
+
+    def asserted(claim_id: str, evidence_type: str) -> dict:
+        c = claims[claim_id]
+        return {"source_node": f"src:file:{c['file']}", "file": c["file"],
+                "span": dict(c["span"]), "evidence_type": evidence_type,
+                "kind": "asserted", "claim_ref": claim_id}
+
+    app = sem_nodes["sem:application:taskdesk-legacy"]
+    app["grounded_in"].append(asserted("claim:taskdesk-readme:struts-war-app", "documented-description"))
+    app["grounded_in"].append(asserted("claim:taskdesk-readme:javax-servlet-tomcat9", "documented-runtime-constraint"))
+    app["properties"]["business_description"] = "Simulated Struts 1.x / JSP / JDBC application packaged as a WAR, using SQLite for the local demo database"
+    app["properties"]["documented_constraint"] = "Requires a javax.servlet container (Tomcat 9); Tomcat 10 (jakarta.servlet) will not run this WAR"
+
+    entry = sem_nodes["sem:entrypoint:struts-action-servlet-do"]
+    entry["grounded_in"].append(asserted("claim:taskdesk-readme:javax-servlet-tomcat9", "documented-runtime-constraint"))
+    entry["properties"]["documented_intent"] = "javax.servlet-era ActionServlet: the reason the README pins Tomcat 9 over Tomcat 10"
+
+    store = sem_nodes["sem:datastore:sqlite"]
+    store["grounded_in"].append(asserted("claim:taskdesk-readme:sqlite-demo-db", "documented-description"))
+    store["grounded_in"].append(asserted("claim:db-readme:regenerate-reset", "documented-reset-procedure"))
+    store["properties"]["business_description"] = "Local demo database; regenerable from db/sql/003_reset_database.sql per db/runtime-data/README.md"
+
+    cfg = sem_nodes["sem:configuration:taskdesk-db-url"]
+    cfg["grounded_in"].append(asserted("claim:taskdesk-readme:db-url-properties", "documented-config-source"))
+    cfg["grounded_in"].append(asserted("claim:taskdesk-readme:db-url-override", "documented-config-override"))
+    cfg["properties"]["documented_override_order"] = "-Dtaskdesk.db.url system property, then TASKDESK_DB_URL environment variable, then classpath taskdesk.properties"
+
+    jdbc = sem_nodes["sem:component:dao:JdbcConnectionManager"]
+    jdbc["grounded_in"].append(asserted("claim:taskdesk-readme:db-url-override", "documented-config-override"))
+    jdbc["properties"]["business_description"] = "Resolves the JDBC URL with the override precedence documented in the README"
+
+    users = sem_nodes["sem:datastore:table:app_user"]
+    users["grounded_in"].append(asserted("claim:taskdesk-readme:demo-users", "documented-demo-users"))
+    users["properties"]["documented_demo_users"] = ["operator1", "operator2", "manager1"]
+
+    unknown = sem_nodes["sem:unknown:runtime-row-semantics"]
+    unknown["grounded_in"] = [asserted("claim:db-readme:seed-row-counts", "documented-row-counts")]
+    unknown["properties"]["documented_row_counts"] = {"APP_USER": 3, "TASK": 6, "TASK_COMMENT": 5, "TASK_AUDIT": 8}
 
 
 def assumptions() -> dict:
@@ -514,7 +707,19 @@ def assumptions() -> dict:
         {"id": "assumption:scope", "statement": "The requested analysis scope is taskdesk-legacy plus db after user permission to incorporate db.", "reason": "User first requested taskdesk-legacy scope, then explicitly allowed DB incorporation.", "confidence": 1.0, "status": "accepted"},
         {"id": "assumption:java-package-modules", "statement": "Immediate Java package directories action/service/dao/form/model/util represent source modules.", "reason": "Directory names and package declarations align across source files.", "confidence": 0.9, "status": "accepted"},
         {"id": "assumption:do-suffix", "statement": "Struts action paths map to .do URLs through the web.xml url-pattern.", "reason": "The parsed web.xml url-pattern element maps ActionServlet to *.do and struts-config declares action paths without suffix.", "confidence": 1.0, "status": "accepted"},
+        {"id": "assumption:doc-scope", "statement": "Documentation alignment reads taskdesk-legacy/README.md and db/runtime-data/README.md; build/deploy instructions in them are environment guidance and are not extracted as application-semantics claims.", "reason": "These are the only documentation files under the analysis scope roots; install/run steps describe the operator's machine, not the application's structure.", "confidence": 0.9, "status": "accepted"},
     ]}
+
+
+def run_doc_check() -> None:
+    proc = subprocess.run(
+        ["python3", str(DOC_CHECKER), "--check", str(WORK / "doc-claims.json"),
+         "--repo", ".", "--semantic-graph", str(WORK / "semantic-graph.json")],
+        cwd=ROOT, text=True, capture_output=True)
+    if proc.returncode != 0:
+        print(proc.stdout, end="")
+        print(proc.stderr, file=sys.stderr, end="")
+        raise RuntimeError("doc-claims check mode found unresolved claims")
 
 
 def run_verifier(iteration: int) -> tuple[dict, int]:
@@ -528,7 +733,7 @@ def run_verifier(iteration: int) -> tuple[dict, int]:
     return json.loads((WORK / "verification.json").read_text(encoding="utf-8")), proc.returncode
 
 
-def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
+def write_report(inv: dict, src: dict, sem: dict, claims_doc: dict, ver: dict | None) -> None:
     actions = [n for n in sem["nodes"] if n["type"] == "Action"]
     views = [n for n in sem["nodes"] if n["type"] == "View"]
     components = [n for n in sem["nodes"] if n["type"] == "Component"]
@@ -540,6 +745,33 @@ def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
     table_ref_lines = [
         f"- `{t}` is referenced by: {', '.join(sorted(set(cs)))}."
         for t, cs in sorted(table_refs.items())]
+
+    claims = claims_doc["claims"]
+    counts = {s: sum(1 for c in claims if c["status"] == s)
+              for s in ("confirmed", "contradicted", "unverifiable")}
+    drift_lines = [
+        f"- {len(claims)} claims were extracted from {', '.join('`' + d + '`' for d in claims_doc['documents'])} "
+        f"by `doc-claims-v1` (model-driven reading; every claim carries a verbatim excerpt and span, "
+        f"re-resolved deterministically by check mode and the verifier): "
+        f"{counts['confirmed']} confirmed, {counts['contradicted']} contradicted, {counts['unverifiable']} unverifiable.",
+    ]
+    for c in claims:
+        if c["status"] == "contradicted":
+            drift_lines.append(
+                f"- CONTRADICTED `{c['id']}` ({c['file']}:{c['span']['start_line']}): {c['text']} — {c['status_evidence']}")
+    for c in claims:
+        if c["status"] == "unverifiable":
+            drift_lines.append(
+                f"- Unverifiable `{c['id']}` ({c['file']}:{c['span']['start_line']}): {c['text']} — {c['status_evidence']}")
+    if not counts["contradicted"]:
+        drift_lines.append("- No contradicted claims: documentation and code agree everywhere a claim could be checked against parsed evidence.")
+    drift_lines.append(
+        "- Confirmed claims were applied to the semantic graph as asserted evidence "
+        "(naming and intent only, per the authority rule): business descriptions on the application "
+        "and SQLite datastore, the documented DB-URL override order on `sem:configuration:taskdesk-db-url` "
+        "and `JdbcConnectionManager`, documented demo users on `sem:datastore:table:app_user`, and the "
+        "documented runtime row counts now ground `sem:unknown:runtime-row-semantics` via `claim_ref`.")
+
     if ver is None:
         status = "Status: PARTIAL - verification pending"
         verification_lines = ["- Verification pending: see verification.json after the verifier runs."]
@@ -554,7 +786,7 @@ def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
         verification_lines = [
             f"- Verified by `{ver['verifier']['tool']}` ({ver['verifier'].get('gallery_source')}); "
             f"self-test caught {st.get('mutations_detected', '?')}/{st.get('mutations_applied', '?')} seeded mutations.",
-            "- Scores (measured): " + json.dumps({k: v["value"] for k, v in ver["scores"].items()}, sort_keys=True) + ".",
+            "- Scores (measured, nine dimensions): " + json.dumps({k: v["value"] for k, v in ver["scores"].items()}, sort_keys=True) + ".",
         ]
     lines = [
         "# TaskDesk Legacy Application Structure",
@@ -562,10 +794,11 @@ def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
         status,
         "",
         "## Application overview",
-        "TaskDesk Legacy is represented as `sem:application:taskdesk-legacy`, grounded in the Maven WAR module (`taskdesk-legacy/pom.xml`) and the Struts servlet mapping (`taskdesk-legacy/src/main/webapp/WEB-INF/web.xml`).",
+        "TaskDesk Legacy is represented as `sem:application:taskdesk-legacy`, grounded in the Maven WAR module (`taskdesk-legacy/pom.xml`) and the Struts servlet mapping (`taskdesk-legacy/src/main/webapp/WEB-INF/web.xml`). Its README describes it as a simulated Struts 1.x / JSP / JDBC application packaged as a WAR — a description confirmed by, and recorded as asserted evidence alongside, the parsed build and configuration facts.",
         "",
         "## Detected technology stack",
         "- Maven WAR packaging, Struts 1.x, JSP/JSTL, Servlet 2.5, SQLite JDBC, SQL DDL, and a live SQLite demo database are detected from `pom.xml`, `web.xml`, `struts-config.xml`, `taskdesk.properties`, `db/sql/001_schema_sqlite.sql`, and `db/runtime-data/taskdesk-demo.sqlite`.",
+        "- The documented Tomcat 9 requirement (javax.servlet, not jakarta.servlet) is confirmed by the provided-scope `javax.servlet:servlet-api` 2.5 dependency.",
         "",
         "## Source inventory summary",
         f"- Scope: `taskdesk-legacy/**` plus `db/**`; files inventoried: {inv['summary']['total_files']}.",
@@ -590,7 +823,7 @@ def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
         "",
         "## Data access and persistence (if detected)",
         "- DAO components touch `TASK`, `APP_USER`, `TASK_COMMENT`, and `TASK_AUDIT`; each table is represented as a `DataStore` from Java SQL literals, `db/sql/001_schema_sqlite.sql`, and live SQLite schema introspection.",
-        "- `sem:datastore:sqlite` is grounded in the `taskdesk.db.url` configuration entry, `JdbcConnectionManager.java`, and `db/runtime-data/taskdesk-demo.sqlite`.",
+        "- `sem:datastore:sqlite` is grounded in the `taskdesk.db.url` configuration entry, `JdbcConnectionManager.java`, and `db/runtime-data/taskdesk-demo.sqlite`; the README-documented override order (system property, then `TASKDESK_DB_URL`, then classpath properties) is confirmed by `JdbcConnectionManager.loadDatabaseUrl`.",
         "- Foreign-key and index evidence is present in the source graph from `sqlite-schema-v1`, including TASK to APP_USER, comments/audit to TASK and APP_USER, and indexes on status, priority, owner, due date, comment task, and audit task.",
         "- Class-to-table `references` edges (word-boundary literal match, confidence 0.85, line evidence on every edge):",
         *table_ref_lines,
@@ -601,21 +834,26 @@ def write_report(inv: dict, src: dict, sem: dict, ver: dict | None) -> None:
         "## Semantic type registry summary",
         "- The kernel semantic vocabulary is used with accepted status only; no project-specific candidate types were needed.",
         "",
+        "## Documentation drift",
+        *drift_lines,
+        "",
         "## Unresolved unknowns",
-        "- `sem:unknown:runtime-row-semantics`: schema and row counts are known, but row contents and business meaning of seed records were not read by the schema parser.",
+        "- `sem:unknown:runtime-row-semantics`: schema and documented row counts are known, but row contents and business meaning of seed records in the live database file were not read by the schema parser. The documented counts are recorded as asserted evidence (`claim:db-readme:seed-row-counts`), which cannot prove the live file's contents.",
         "",
         "## Assumptions",
-        "- Scope is limited to `taskdesk-legacy/**` plus `db/**`; package directories are treated as modules; Struts paths use the `.do` suffix from the parsed `web.xml` url-pattern.",
+        "- Scope is limited to `taskdesk-legacy/**` plus `db/**`; package directories are treated as modules; Struts paths use the `.do` suffix from the parsed `web.xml` url-pattern; documentation alignment reads the two in-scope READMEs only.",
         "- A tracked symlink under `taskdesk-legacy/runtime-data/` is recorded as an inventory uncertainty rather than followed.",
         "",
         "## Confidence and evidence notes",
         "- Route/action/view claims are high confidence because the struts-config-v1 parser extracts action paths, action classes, forms, and forwards with element spans.",
         "- Table claims are high confidence because they are grounded in Java SQL literals, SQL DDL, and SQLite schema introspection.",
+        "- Asserted (documentation) evidence carries `kind: \"asserted\"` and a `claim_ref` into `doc-claims.json`; it contributes naming and intent only and never raises a node's status or confidence.",
         "",
         "## Limitations",
         "- JSP extraction is lexical and does not parse scriptlet Java.",
         "- Java parsing is structural and does not do expression-level symbol resolution.",
         "- SQLite parser reads schema only, not row data.",
+        "- Claim extraction is model-driven interpretation; anchors, spans, and excerpts are deterministic and re-checked, the reading is not.",
         "",
         "## Verification",
         *(verification_lines or []),
@@ -661,7 +899,7 @@ def main() -> int:
     state = load_state()
     state["repo_fingerprint"] = HEAD
     iteration = state["iteration"]
-    state["history"].append({"iteration": iteration, "summary": "Started scoped semantic discovery for taskdesk-legacy plus db.", "timestamp": datetime.now(timezone.utc).isoformat()})
+    state["history"].append({"iteration": iteration, "summary": "Started scoped semantic discovery for taskdesk-legacy plus db (nine-dimension contract with doc alignment).", "timestamp": datetime.now(timezone.utc).isoformat()})
     write_json(WORK / "state.json", state)
 
     inv = inventory(files, skipped)
@@ -673,13 +911,16 @@ def main() -> int:
     write_json(WORK / "semantic-types.json", semantic_types())
     sem = build_semantic(src)
     write_json(WORK / "semantic-graph.json", sem)
+    claims_doc = doc_claims()
+    write_json(WORK / "doc-claims.json", claims_doc)
+    run_doc_check()
 
     # Report first (status pending), then the independent verifier, then the
     # report's status is aligned with the verdict and re-verified so the final
     # verification.json measures the final report.
-    write_report(inv, src, sem, None)
+    write_report(inv, src, sem, claims_doc, None)
     ver, _ = run_verifier(iteration)
-    write_report(inv, src, sem, ver)
+    write_report(inv, src, sem, claims_doc, ver)
     ver, rc = run_verifier(iteration)
 
     state["status"] = "complete" if ver["passed"] else "iterating"
@@ -691,7 +932,8 @@ def main() -> int:
     print(json.dumps({"passed": ver["passed"],
                       "scores": {k: v["value"] for k, v in ver["scores"].items()},
                       "self_test": ver["verifier"]["self_test"],
-                      "nodes": len(src["nodes"]), "semantic_nodes": len(sem["nodes"])}, indent=2))
+                      "nodes": len(src["nodes"]), "semantic_nodes": len(sem["nodes"]),
+                      "doc_claims": len(claims_doc["claims"])}, indent=2))
     return rc
 
 
