@@ -62,9 +62,20 @@ target that will not start is a finding, not an obstacle.
 - **Hypothesis-driven, not exploratory.** Each journey names its
   `flow_hypothesis`: the doc-claims claim id and/or static route chain that
   predicted it. Walk what the graph predicts; do not free-crawl.
-- **Narrow slice first** (spec §7 Milestone 3): corroboration and `Flow`
-  instantiation only. Security-role diffing, invalid-form probing, and DB-diff
-  side-effect proof come after the corroboration slice has passed the gate.
+- **Grow the slices deliberately** (spec §7 Milestone 3). In order of arrival:
+  1. *Corroboration + `Flow` instantiation* — walk a predicted user journey, confirm
+     the Entry/Action/View chain, instantiate a `Flow` from the trace.
+  2. *Access-control diffing* — walk the **same** protected route as two actors
+     (e.g. operator vs manager) and record the diff. A rule that denies one and
+     admits the other is behaviourally proven, not merely declared.
+  3. *Validation probing* — submit a deliberately invalid form and observe the
+     rejection, grounding the validation rule behaviourally.
+  4. *DB-diff side-effect proof* — snapshot the disposable database, perform a write
+     journey, diff the rows. **Deferred**: until it runs, write actions that were
+     reached but whose persistence was not observed MUST be recorded as an explicit
+     `UnknownSemanticConstruct` (the runtime layer says what it did *not* verify,
+     rather than implying full behavioural cover).
+  Each slice is additive and must keep the gate green before the next is added.
 - Every step records: normalized URL, matched `route` (must correspond to a parsed
   `Route` node — the verifier cross-checks), response status, matched
   `rendered_view` with the page evidence that matched it, and a `trace_ref`

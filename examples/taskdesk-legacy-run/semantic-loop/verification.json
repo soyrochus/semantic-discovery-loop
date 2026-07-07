@@ -59,7 +59,7 @@
         "sem-kind-valid",
         "sem-asserted-not-sufficient"
       ],
-      "measurement": "62 nodes, 110 grounding entries; 0 ungrounded, 0 unresolved refs, 0 evidence file/span problems, 0 asserted-only existence violations"
+      "measurement": "66 nodes, 127 grounding entries; 0 ungrounded, 0 unresolved refs, 0 evidence file/span problems, 0 asserted-only existence violations"
     },
     "assertion_grounding": {
       "value": 10,
@@ -82,7 +82,7 @@
         "jr-routes-match",
         "jr-source-db-untouched"
       ],
-      "measurement": "1 journeys / 3 steps re-resolved; 0 broken journey refs, 0 trace integrity failures, 0 node-mapping problems, 0 route mismatches, source db untouched=True"
+      "measurement": "4 journeys / 9 steps re-resolved; 0 broken journey refs, 0 trace integrity failures, 0 node-mapping problems, 0 route mismatches, source db untouched=True"
     },
     "report_coverage": {
       "value": 10,
@@ -100,7 +100,7 @@
         "unk-inventory-uncertainties",
         "unk-assumptions-explicit"
       ],
-      "measurement": "1 unknown constructs, 4 uncertainties, 5 assumptions"
+      "measurement": "2 unknown constructs, 4 uncertainties, 5 assumptions"
     },
     "reproducibility": {
       "value": 10,
@@ -205,7 +205,7 @@
       "check": "sem-all-grounded",
       "score": "semantic_graph_provenance",
       "result": "pass",
-      "detail": "62 semantic nodes; without provenance: []"
+      "detail": "66 semantic nodes; without provenance: []"
     },
     {
       "check": "sem-refs-resolve",
@@ -307,7 +307,7 @@
       "check": "unk-represented",
       "score": "unknowns_handling",
       "result": "pass",
-      "detail": "UnknownSemanticConstruct nodes: 1"
+      "detail": "UnknownSemanticConstruct nodes: 2"
     },
     {
       "check": "unk-inventory-uncertainties",
@@ -325,7 +325,7 @@
       "check": "rep-fingerprint-consistent",
       "score": "reproducibility",
       "result": "pass",
-      "detail": "artefact fingerprints {'inventory': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'source-graph': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'semantic-graph': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'state': 'f944873f50f565b872c246e3a5c942dbf107bed6', 'journeys': 'f944873f50f565b872c246e3a5c942dbf107bed6'}; git HEAD f944873f50f565b872c246e3a5c942dbf107bed6"
+      "detail": "artefact fingerprints {'inventory': 'aaa948fffcdc369e6f10956cb4c336e8cd876c78', 'source-graph': 'aaa948fffcdc369e6f10956cb4c336e8cd876c78', 'semantic-graph': 'aaa948fffcdc369e6f10956cb4c336e8cd876c78', 'state': 'aaa948fffcdc369e6f10956cb4c336e8cd876c78', 'journeys': 'aaa948fffcdc369e6f10956cb4c336e8cd876c78'}; git HEAD aaa948fffcdc369e6f10956cb4c336e8cd876c78"
     },
     {
       "check": "rep-parsers-deterministic",

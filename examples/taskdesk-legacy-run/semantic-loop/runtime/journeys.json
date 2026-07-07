@@ -1,9 +1,9 @@
 {
-  "repo_fingerprint": "f944873f50f565b872c246e3a5c942dbf107bed6",
+  "repo_fingerprint": "aaa948fffcdc369e6f10956cb4c336e8cd876c78",
   "produced_by": "runtime/scripts/walk-journeys.mjs",
   "approval": {
     "granted": true,
-    "statement": "User instructed \"ok, lets finish it\" for Milestone 3 (runtime journeys) in the Claude Code session of 2026-07-07, covering execution of the bundled taskdesk-legacy target."
+    "statement": "User approved executing the bundled taskdesk-legacy target for Milestone 3 runtime journeys in the Claude Code session of 2026-07-07 (\"ok, lets finish it\"; \"do what is sensible\")."
   },
   "environment": {
     "declared_dependencies": [
@@ -45,7 +45,7 @@
     {
       "id": "journey:login-task-review",
       "name": "Login and review a task (operator1)",
-      "flow_hypothesis": "claim:taskdesk-readme:login-entry (documented login URL and demo users) plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
+      "flow_hypothesis": "claim:taskdesk-readme:login-entry plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
       "actor": "operator1",
       "steps": [
         {
@@ -65,7 +65,7 @@
           },
           "screenshot": {
             "path": "runtime/traces/login-task-review/step-1.png",
-            "sha256": "f3d486edc17188959d988cfafa482a4750fb973a87cdb6e1a71f89e9cc205d96"
+            "sha256": "195e48b7f26ee325c263048119dc41acead8d32fd3c1e4b5c9c463b47964da00"
           },
           "db_diff": null
         },
@@ -89,7 +89,7 @@
           },
           "screenshot": {
             "path": "runtime/traces/login-task-review/step-2.png",
-            "sha256": "fa937d5f4e01ecd72dff74b83fc11ae1f34f8ac9c9d88f037868ab24dc9cd16b"
+            "sha256": "98fe38beab7acfd6a8a07dbdda21c6b384690981e333e6abbbff3f5fae33e228"
           },
           "db_diff": null
         },
@@ -110,7 +110,7 @@
           },
           "screenshot": {
             "path": "runtime/traces/login-task-review/step-3.png",
-            "sha256": "e3b2d5041cef4797c829f5496adfc8eec80f6303586c812b90290423a5bd1b66"
+            "sha256": "0354e0a5c143d4bd0779d7b885bc09fc94d888588f0d963689696fe53a9279ac"
           },
           "db_diff": null
         }
@@ -125,7 +125,187 @@
         "sem:view:taskDetail"
       ],
       "properties": {
-        "slice": "corroboration-only (spec §7 Milestone 3); no security diffing or DB-diff proof yet"
+        "slice": "corroboration (spec §7 Milestone 3)"
+      }
+    },
+    {
+      "id": "journey:role-denied-operator",
+      "name": "Operator is denied a manager-only action",
+      "flow_hypothesis": "static role check in TaskAssignAction (SecurityUtils.isManager -> findForward(\"denied\")); tests sem:rule:manager-role-checks behaviourally",
+      "actor": "operator1",
+      "steps": [
+        {
+          "index": 1,
+          "action": "submit-form",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "POST",
+          "form_fields": [
+            "username",
+            "password"
+          ],
+          "response_status": 302,
+          "redirect_location": "/taskdesk-legacy/tasks.do",
+          "rendered_view": "/jsp/taskList.jsp",
+          "view_evidence": "logged in as operator1; title: Task List",
+          "trace_ref": {
+            "path": "runtime/traces/role-denied-operator/step-1.json",
+            "sha256": "9644c85cd1acfe656cb51a20a57f121ee8fef1474f8eab38183f37003488b32d"
+          },
+          "screenshot": null,
+          "db_diff": null
+        },
+        {
+          "index": 2,
+          "action": "goto",
+          "url": "/taskdesk-legacy/taskAssign.do?taskId=1",
+          "route": "/taskAssign",
+          "request_method": "GET",
+          "form_fields": [],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/accessDenied.jsp",
+          "view_evidence": "title: Access denied",
+          "trace_ref": {
+            "path": "runtime/traces/role-denied-operator/step-2.json",
+            "sha256": "d8206f9be943b8d27a37ac253cbdab4a784c732afb52471f85c962c7fdbfe674"
+          },
+          "screenshot": {
+            "path": "runtime/traces/role-denied-operator/step-2.png",
+            "sha256": "78e7d9d95b45d7ea45e057c131b9c1ea2272b45a217b2bac8844d8351384cf84"
+          },
+          "db_diff": null
+        }
+      ],
+      "corroborates": [
+        "sem:security:session-login",
+        "sem:rule:manager-role-checks",
+        "sem:view:accessDenied"
+      ],
+      "properties": {
+        "access_control_outcome": "denied",
+        "probed_route": "/taskAssign"
+      }
+    },
+    {
+      "id": "journey:role-allowed-manager",
+      "name": "Manager is allowed the same manager-only action",
+      "flow_hypothesis": "same route as journey:role-denied-operator, walked as a manager; the diff proves the role rule is enforced, not merely declared",
+      "actor": "manager1",
+      "steps": [
+        {
+          "index": 1,
+          "action": "submit-form",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "POST",
+          "form_fields": [
+            "username",
+            "password"
+          ],
+          "response_status": 302,
+          "redirect_location": "/taskdesk-legacy/tasks.do",
+          "rendered_view": "/jsp/taskList.jsp",
+          "view_evidence": "logged in as manager1; title: Task List",
+          "trace_ref": {
+            "path": "runtime/traces/role-allowed-manager/step-1.json",
+            "sha256": "547dc2d0721868ad20e8b161bcb42063a75134c3a4675e1210b2d8ee70496ad8"
+          },
+          "screenshot": null,
+          "db_diff": null
+        },
+        {
+          "index": 2,
+          "action": "goto",
+          "url": "/taskdesk-legacy/taskAssign.do?taskId=1",
+          "route": "/taskAssign",
+          "request_method": "GET",
+          "form_fields": [],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/taskAssign.jsp",
+          "view_evidence": "title: Assign Task",
+          "trace_ref": {
+            "path": "runtime/traces/role-allowed-manager/step-2.json",
+            "sha256": "62d8c1b5fa4c70dd89e56f765f053568b0fabc10000d8727ab4cbf17f626d4bd"
+          },
+          "screenshot": {
+            "path": "runtime/traces/role-allowed-manager/step-2.png",
+            "sha256": "f27d9e764389d9ccdfafa7f45aa0c4d5ea0355d332604566800939ed65d6684f"
+          },
+          "db_diff": null
+        }
+      ],
+      "corroborates": [
+        "sem:security:session-login",
+        "sem:rule:manager-role-checks",
+        "sem:action:taskAssign",
+        "sem:view:taskAssign"
+      ],
+      "properties": {
+        "access_control_outcome": "allowed",
+        "probed_route": "/taskAssign"
+      }
+    },
+    {
+      "id": "journey:login-validation",
+      "name": "Empty login is rejected by required-field validation",
+      "flow_hypothesis": "Struts validator required fields on loginForm (validation.xml username/password); tests sem:rule:validator-required-fields behaviourally",
+      "actor": "anonymous",
+      "steps": [
+        {
+          "index": 1,
+          "action": "goto",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "GET",
+          "form_fields": [],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/login.jsp",
+          "view_evidence": "title: TaskDesk Login",
+          "trace_ref": {
+            "path": "runtime/traces/login-validation/step-1.json",
+            "sha256": "a4441effe18d9571743a0d3e068c42be84b9d69e0c871a4be8d3cd5451edf865"
+          },
+          "screenshot": {
+            "path": "runtime/traces/login-validation/step-1.png",
+            "sha256": "195e48b7f26ee325c263048119dc41acead8d32fd3c1e4b5c9c463b47964da00"
+          },
+          "db_diff": null
+        },
+        {
+          "index": 2,
+          "action": "submit-form",
+          "url": "/taskdesk-legacy/login.do",
+          "route": "/login",
+          "request_method": "POST",
+          "form_fields": [
+            "username",
+            "password"
+          ],
+          "response_status": 200,
+          "redirect_location": null,
+          "rendered_view": "/jsp/login.jsp",
+          "view_evidence": "error banner present: true; returned to login: true",
+          "trace_ref": {
+            "path": "runtime/traces/login-validation/step-2.json",
+            "sha256": "95279668b29f958cd17e5bffe180a21d64d05558367244e69fe9178e3c936c00"
+          },
+          "screenshot": {
+            "path": "runtime/traces/login-validation/step-2.png",
+            "sha256": "4f1433f3b0141eb3baf19ab98e71ac76cb6a2214ea616549b9000c5c01287cd7"
+          },
+          "db_diff": null
+        }
+      ],
+      "corroborates": [
+        "sem:action:login",
+        "sem:view:login",
+        "sem:rule:validator-required-fields"
+      ],
+      "properties": {
+        "validation_outcome": "rejected"
       }
     }
   ]

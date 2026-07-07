@@ -717,6 +717,84 @@ def apply_runtime_journeys(sem_nodes: dict[str, dict], add, edge, journeys: dict
                         "kind": "observed", "journey_ref": jref,
                         "trace_ref": s["trace_ref"]["path"]}])
 
+    jmap = {j["id"]: j for j in journeys.get("journeys", [])}
+
+    def outcome(jid: str, key: str) -> str | None:
+        j = jmap.get(jid)
+        return j["properties"].get(key) if j else None
+
+    # Behavioural verification of the manager-role rule: the SAME route walked
+    # by two actors must diff (operator denied, manager allowed). This is the
+    # honest test — the outcome is read from what the app actually did, and a
+    # mismatch is recorded as a conflict, never smoothed over. Static evidence
+    # says the code *contains* a role check; the diff says the check *fires*.
+    role = sem_nodes.get("sem:rule:manager-role-checks")
+    if role is not None and "journey:role-denied-operator" in jmap and "journey:role-allowed-manager" in jmap:
+        denied = outcome("journey:role-denied-operator", "access_control_outcome") == "denied"
+        allowed = outcome("journey:role-allowed-manager", "access_control_outcome") == "allowed"
+        probed = jmap["journey:role-denied-operator"]["properties"].get("probed_route", "/taskAssign")
+        if denied and allowed:
+            role["properties"]["runtime_behavior"] = (
+                f"Behaviourally confirmed on {probed}.do: operator1 was denied (accessDenied) and "
+                f"manager1 was allowed (the action's own view). The role check fires at runtime, "
+                f"not merely in source.")
+        else:
+            # Documented drift, not a silent pass: the code declares a check the
+            # runtime did not enforce as expected.
+            role.setdefault("conflicts", []).append({
+                "claim": "TaskAssignAction/TaskReportAction enforce manager-only access (SecurityUtils.isManager -> denied forward).",
+                "counter_evidence": (
+                    f"Runtime diff on {probed}.do did not match: operator denied={denied} "
+                    f"(journey:role-denied-operator), manager allowed={allowed} "
+                    f"(journey:role-allowed-manager)."),
+                "status": "open",
+                "properties": {"evidence_kind": "observed"},
+            })
+
+    # Behavioural verification of the required-field validation rule.
+    validator = sem_nodes.get("sem:rule:validator-required-fields")
+    if validator is not None and "journey:login-validation" in jmap:
+        rejected = outcome("journey:login-validation", "validation_outcome") == "rejected"
+        if rejected:
+            validator["properties"]["runtime_behavior"] = (
+                "Behaviourally confirmed: an empty login submission was rejected and returned to the "
+                "login view with an error banner (journey:login-validation).")
+        else:
+            validator.setdefault("conflicts", []).append({
+                "claim": "loginForm requires username and password (Struts validator required fields).",
+                "counter_evidence": "Empty login submission was not rejected as expected (journey:login-validation).",
+                "status": "open",
+                "properties": {"evidence_kind": "observed"},
+            })
+
+    # Explicit, honest gap: the runtime phase walked read and access-control
+    # paths only. Write actions were reached and authorized but their database
+    # side-effects were NOT observed via before/after DB-diff (spec §5.1 item 3,
+    # deliberately deferred). Recorded as an unknown so the report says what the
+    # runtime layer did NOT verify, rather than implying full behavioural cover.
+    write_grounds = []
+    if "journey:role-allowed-manager" in jmap:
+        j = jmap["journey:role-allowed-manager"]
+        write_grounds.append({
+            "source_node": None,
+            "evidence_type": "reached-write-entrypoint-without-observing-persistence",
+            "kind": "observed", "journey_ref": j["id"],
+            "trace_ref": j["steps"][-1]["trace_ref"]["path"]})
+    if write_grounds:
+        add("sem:unknown:runtime-write-side-effects", "UnknownSemanticConstruct",
+            "Runtime write side-effects (not observed)", 0.6, write_grounds,
+            {"deferred_slice": "DB-diff side-effect proof (spec §5.1 item 3)",
+             "reached_write_entrypoints": ["/taskAssign (GET form, manager)"],
+             "not_verified": ["/taskSave", "/taskAssign POST", "/taskComplete", "/taskReopen"]},
+            unknowns=[
+                "The runtime phase walked read and access-control journeys. It confirmed write "
+                "actions are reachable and authorization-gated, but did NOT observe that a save "
+                "actually persists: no before/after database diff was taken. Whether these actions "
+                "commit the rows they claim to is unverified by runtime evidence — only by static "
+                "SQL reading. This gap is deliberate (corroboration slice first) and reported rather "
+                "than hidden."])
+        edge("sem:unknown:runtime-write-side-effects", "sem:datastore:sqlite", "part-of", 0.6)
+
 
 def apply_doc_alignment(sem_nodes: dict[str, dict]) -> None:
     """Skill 10 step 5: apply confirmed terminology/intent to mapped nodes as
@@ -954,6 +1032,45 @@ def runtime_section(sem: dict, journeys: dict | None) -> list[str]:
         "without ever being required for existence of statically grounded nodes.")
     if flows:
         lines.append(f"- Flow nodes instantiated from observed evidence: {', '.join(sorted(flows))}.")
+
+    # Behavioural findings: rules that runtime confirmed (or would flag).
+    role = next((n for n in sem["nodes"] if n["id"] == "sem:rule:manager-role-checks"), None)
+    validator = next((n for n in sem["nodes"] if n["id"] == "sem:rule:validator-required-fields"), None)
+    conflicts = [(n["id"], c) for n in sem["nodes"] for c in n.get("conflicts", [])]
+    lines.append("")
+    lines.append("### Behaviourally verified rules")
+    if role and role["properties"].get("runtime_behavior"):
+        lines.append(f"- **Manager-only access is really enforced.** {role['properties']['runtime_behavior']} "
+                     f"This is the operator-vs-manager diff: the same route, two actors, opposite outcomes — "
+                     f"stronger than the source-only evidence, which could only show the check *exists*.")
+    if validator and validator["properties"].get("runtime_behavior"):
+        lines.append(f"- **Required-field validation really fires.** {validator['properties']['runtime_behavior']}")
+    if conflicts:
+        lines.append("- **Runtime contradictions found (recorded as conflicts, not resolved):**")
+        for nid, c in conflicts:
+            lines.append(f"  - `{nid}`: {c['counter_evidence']}")
+    else:
+        lines.append("- No runtime contradictions: every rule the journeys probed behaved as the static "
+                     "evidence predicted. (A mismatch would have been recorded as an open `conflicts` "
+                     "entry on the affected node, never silently passed.)")
+
+    # Honesty about coverage — what the runtime layer did NOT verify.
+    walked = sorted({s.get("route") for j in journeys.get("journeys", []) for s in j.get("steps", []) if s.get("route")})
+    lines.append("")
+    lines.append("### Runtime coverage and what it does NOT show")
+    lines.append(f"- **Walked routes:** {', '.join('`'+r+'`' for r in walked)}. Absence of observation is not "
+                 f"absence of behaviour — unwalked routes keep their static grounding untouched (EV-6); runtime "
+                 f"only ever confirms and adds.")
+    gap = next((n for n in sem["nodes"] if n["id"] == "sem:unknown:runtime-write-side-effects"), None)
+    if gap:
+        lines.append(f"- **Write side-effects were NOT verified.** `{gap['id']}` records this explicitly: the "
+                     f"phase confirmed write actions are reachable and authorization-gated, but took no "
+                     f"before/after database diff, so whether a save actually persists rows is unverified by "
+                     f"runtime evidence (only by static SQL reading). Deferred deliberately — the corroboration "
+                     f"and access-control slices come first. This is reported, not hidden.")
+    lines.append("- The runtime picture is intentionally partial: it demonstrates login, navigation, "
+                 "access control, and validation, and is honest about the persistence behaviour it has "
+                 "not yet observed.")
     lines.append("")
     return lines
 

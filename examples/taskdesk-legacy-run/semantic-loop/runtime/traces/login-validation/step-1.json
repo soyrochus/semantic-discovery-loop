@@ -1,0 +1,12 @@
+{
+  "step": 1,
+  "action": "goto",
+  "url": "/taskdesk-legacy/login.do",
+  "route": "/login",
+  "request_method": "GET",
+  "form_fields": [],
+  "response_status": 200,
+  "redirect_location": null,
+  "rendered_view": "/jsp/login.jsp",
+  "view_evidence": "title: TaskDesk Login"
+}

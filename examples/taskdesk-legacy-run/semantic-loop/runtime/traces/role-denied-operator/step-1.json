@@ -1,0 +1,15 @@
+{
+  "step": 1,
+  "action": "submit-form",
+  "url": "/taskdesk-legacy/login.do",
+  "route": "/login",
+  "request_method": "POST",
+  "form_fields": [
+    "username",
+    "password"
+  ],
+  "response_status": 302,
+  "redirect_location": "/taskdesk-legacy/tasks.do",
+  "rendered_view": "/jsp/taskList.jsp",
+  "view_evidence": "logged in as operator1; title: Task List"
+}

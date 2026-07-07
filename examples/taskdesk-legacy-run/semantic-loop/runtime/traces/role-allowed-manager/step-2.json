@@ -1,0 +1,12 @@
+{
+  "step": 2,
+  "action": "goto",
+  "url": "/taskdesk-legacy/taskAssign.do?taskId=1",
+  "route": "/taskAssign",
+  "request_method": "GET",
+  "form_fields": [],
+  "response_status": 200,
+  "redirect_location": null,
+  "rendered_view": "/jsp/taskAssign.jsp",
+  "view_evidence": "title: Assign Task"
+}

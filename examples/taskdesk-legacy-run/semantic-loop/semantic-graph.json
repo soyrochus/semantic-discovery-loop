@@ -1,5 +1,5 @@
 {
-  "repo_fingerprint": "f944873f50f565b872c246e3a5c942dbf107bed6",
+  "repo_fingerprint": "aaa948fffcdc369e6f10956cb4c336e8cd876c78",
   "nodes": [
     {
       "id": "sem:application:taskdesk-legacy",
@@ -307,6 +307,12 @@
           "evidence_type": "journey-corroboration",
           "kind": "observed",
           "journey_ref": "journey:login-task-review"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation"
         }
       ],
       "unknowns": [],
@@ -322,7 +328,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/login.jsp",
-      "confidence": 0.98,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -339,6 +345,12 @@
           "evidence_type": "journey-corroboration",
           "kind": "observed",
           "journey_ref": "journey:login-task-review"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation"
         }
       ],
       "unknowns": [],
@@ -642,7 +654,7 @@
       "layer": "semantic",
       "type": "Action",
       "name": "TaskAssignAction (/taskAssign.do)",
-      "confidence": 0.97,
+      "confidence": 0.99,
       "status": "accepted",
       "grounded_in": [
         {
@@ -662,13 +674,20 @@
             "end_line": 50
           },
           "evidence_type": "action-class"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager"
         }
       ],
       "unknowns": [],
       "properties": {
         "route": "/taskAssign.do",
         "form": "taskAssignForm",
-        "action_class": "com.example.taskdesk.action.TaskAssignAction"
+        "action_class": "com.example.taskdesk.action.TaskAssignAction",
+        "runtime_corroborated": true
       }
     },
     {
@@ -676,7 +695,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/taskAssign.jsp",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -687,11 +706,18 @@
             "end_line": 51
           },
           "evidence_type": "jsp-template"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager"
         }
       ],
       "unknowns": [],
       "properties": {
-        "view_path": "/jsp/taskAssign.jsp"
+        "view_path": "/jsp/taskAssign.jsp",
+        "runtime_corroborated": true
       }
     },
     {
@@ -858,7 +884,7 @@
       "layer": "semantic",
       "type": "View",
       "name": "/jsp/accessDenied.jsp",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -878,11 +904,18 @@
             "end_line": 16
           },
           "evidence_type": "struts-global-forward"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator"
         }
       ],
       "unknowns": [],
       "properties": {
-        "view_path": "/jsp/accessDenied.jsp"
+        "view_path": "/jsp/accessDenied.jsp",
+        "runtime_corroborated": true
       }
     },
     {
@@ -1625,7 +1658,7 @@
       "layer": "semantic",
       "type": "SecurityElement",
       "name": "Session login state",
-      "confidence": 0.93,
+      "confidence": 0.97,
       "status": "accepted",
       "grounded_in": [
         {
@@ -1645,17 +1678,31 @@
             "end_line": 22
           },
           "evidence_type": "session-attribute-write"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager"
         }
       ],
       "unknowns": [],
-      "properties": {}
+      "properties": {
+        "runtime_corroborated": true
+      }
     },
     {
       "id": "sem:rule:manager-role-checks",
       "layer": "semantic",
       "type": "Rule",
       "name": "Manager-only role checks",
-      "confidence": 0.9,
+      "confidence": 0.94,
       "status": "accepted",
       "grounded_in": [
         {
@@ -1675,17 +1722,32 @@
             "end_line": 1
           },
           "evidence_type": "role-check"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager"
         }
       ],
       "unknowns": [],
-      "properties": {}
+      "properties": {
+        "runtime_corroborated": true,
+        "runtime_behavior": "Behaviourally confirmed on /taskAssign.do: operator1 was denied (accessDenied) and manager1 was allowed (the action's own view). The role check fires at runtime, not merely in source."
+      }
     },
     {
       "id": "sem:rule:validator-required-fields",
       "layer": "semantic",
       "type": "Rule",
       "name": "Struts required field validation",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "status": "accepted",
       "grounded_in": [
         {
@@ -1705,10 +1767,19 @@
             "end_line": 110
           },
           "evidence_type": "validator-plugin"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-corroboration",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation"
         }
       ],
       "unknowns": [],
-      "properties": {}
+      "properties": {
+        "runtime_corroborated": true,
+        "runtime_behavior": "Behaviourally confirmed: an empty login submission was rejected and returned to the login view with an error banner (journey:login-validation)."
+      }
     },
     {
       "id": "sem:rule:database-check-constraints",
@@ -1866,13 +1937,147 @@
       "unknowns": [],
       "properties": {
         "actor": "operator1",
-        "flow_hypothesis": "claim:taskdesk-readme:login-entry (documented login URL and demo users) plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
+        "flow_hypothesis": "claim:taskdesk-readme:login-entry plus the static route chain /login -> /tasks -> /taskDetail from struts-config forwards",
         "walked_routes": [
           "/login",
           "/login",
           "/taskDetail"
         ],
         "replayable_script": "runtime/scripts/walk-journeys.mjs"
+      }
+    },
+    {
+      "id": "sem:flow:role-denied-operator",
+      "layer": "semantic",
+      "type": "Flow",
+      "name": "Operator is denied a manager-only action",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1:/login",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-1.json"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2:/taskAssign",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-2.json"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "actor": "operator1",
+        "flow_hypothesis": "static role check in TaskAssignAction (SecurityUtils.isManager -> findForward(\"denied\")); tests sem:rule:manager-role-checks behaviourally",
+        "walked_routes": [
+          "/login",
+          "/taskAssign"
+        ],
+        "replayable_script": "runtime/scripts/walk-journeys.mjs"
+      }
+    },
+    {
+      "id": "sem:flow:role-allowed-manager",
+      "layer": "semantic",
+      "type": "Flow",
+      "name": "Manager is allowed the same manager-only action",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1:/login",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-1.json"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2:/taskAssign",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-2.json"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "actor": "manager1",
+        "flow_hypothesis": "same route as journey:role-denied-operator, walked as a manager; the diff proves the role rule is enforced, not merely declared",
+        "walked_routes": [
+          "/login",
+          "/taskAssign"
+        ],
+        "replayable_script": "runtime/scripts/walk-journeys.mjs"
+      }
+    },
+    {
+      "id": "sem:flow:login-validation",
+      "layer": "semantic",
+      "type": "Flow",
+      "name": "Empty login is rejected by required-field validation",
+      "confidence": 0.9,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1:/login",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation",
+          "trace_ref": "runtime/traces/login-validation/step-1.json"
+        },
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2:/login",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation",
+          "trace_ref": "runtime/traces/login-validation/step-2.json"
+        }
+      ],
+      "unknowns": [],
+      "properties": {
+        "actor": "anonymous",
+        "flow_hypothesis": "Struts validator required fields on loginForm (validation.xml username/password); tests sem:rule:validator-required-fields behaviourally",
+        "walked_routes": [
+          "/login",
+          "/login"
+        ],
+        "replayable_script": "runtime/scripts/walk-journeys.mjs"
+      }
+    },
+    {
+      "id": "sem:unknown:runtime-write-side-effects",
+      "layer": "semantic",
+      "type": "UnknownSemanticConstruct",
+      "name": "Runtime write side-effects (not observed)",
+      "confidence": 0.6,
+      "status": "accepted",
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "reached-write-entrypoint-without-observing-persistence",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-2.json"
+        }
+      ],
+      "unknowns": [
+        "The runtime phase walked read and access-control journeys. It confirmed write actions are reachable and authorization-gated, but did NOT observe that a save actually persists: no before/after database diff was taken. Whether these actions commit the rows they claim to is unverified by runtime evidence \u2014 only by static SQL reading. This gap is deliberate (corroboration slice first) and reported rather than hidden."
+      ],
+      "properties": {
+        "deferred_slice": "DB-diff side-effect proof (spec \u00a75.1 item 3)",
+        "reached_write_entrypoints": [
+          "/taskAssign (GET form, manager)"
+        ],
+        "not_verified": [
+          "/taskSave",
+          "/taskAssign POST",
+          "/taskComplete",
+          "/taskReopen"
+        ]
       }
     }
   ],
@@ -6029,6 +6234,212 @@
           "trace_ref": "runtime/traces/login-task-review/step-3.json"
         }
       ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:173:sem:flow:role-denied-operator:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:flow:role-denied-operator",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.95,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:174:sem:flow:role-denied-operator:traverses:sem:action:login",
+      "source_id": "sem:flow:role-denied-operator",
+      "target_id": "sem:action:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:175:sem:flow:role-denied-operator:traverses:sem:view:taskList",
+      "source_id": "sem:flow:role-denied-operator",
+      "target_id": "sem:view:taskList",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:176:sem:flow:role-denied-operator:traverses:sem:action:taskAssign",
+      "source_id": "sem:flow:role-denied-operator",
+      "target_id": "sem:action:taskAssign",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-2.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:177:sem:flow:role-denied-operator:traverses:sem:view:accessDenied",
+      "source_id": "sem:flow:role-denied-operator",
+      "target_id": "sem:view:accessDenied",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2",
+          "kind": "observed",
+          "journey_ref": "journey:role-denied-operator",
+          "trace_ref": "runtime/traces/role-denied-operator/step-2.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:178:sem:flow:role-allowed-manager:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:flow:role-allowed-manager",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.95,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:179:sem:flow:role-allowed-manager:traverses:sem:action:login",
+      "source_id": "sem:flow:role-allowed-manager",
+      "target_id": "sem:action:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:180:sem:flow:role-allowed-manager:traverses:sem:view:taskList",
+      "source_id": "sem:flow:role-allowed-manager",
+      "target_id": "sem:view:taskList",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:181:sem:flow:role-allowed-manager:traverses:sem:action:taskAssign",
+      "source_id": "sem:flow:role-allowed-manager",
+      "target_id": "sem:action:taskAssign",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-2.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:182:sem:flow:role-allowed-manager:traverses:sem:view:taskAssign",
+      "source_id": "sem:flow:role-allowed-manager",
+      "target_id": "sem:view:taskAssign",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-2",
+          "kind": "observed",
+          "journey_ref": "journey:role-allowed-manager",
+          "trace_ref": "runtime/traces/role-allowed-manager/step-2.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:183:sem:flow:login-validation:part-of:sem:application:taskdesk-legacy",
+      "source_id": "sem:flow:login-validation",
+      "target_id": "sem:application:taskdesk-legacy",
+      "type": "part-of",
+      "confidence": 0.95,
+      "grounded_in": [],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:184:sem:flow:login-validation:traverses:sem:action:login",
+      "source_id": "sem:flow:login-validation",
+      "target_id": "sem:action:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation",
+          "trace_ref": "runtime/traces/login-validation/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:185:sem:flow:login-validation:traverses:sem:view:login",
+      "source_id": "sem:flow:login-validation",
+      "target_id": "sem:view:login",
+      "type": "traverses",
+      "confidence": 0.9,
+      "grounded_in": [
+        {
+          "source_node": null,
+          "evidence_type": "journey-step-1",
+          "kind": "observed",
+          "journey_ref": "journey:login-validation",
+          "trace_ref": "runtime/traces/login-validation/step-1.json"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "id": "sem-edge:186:sem:unknown:runtime-write-side-effects:part-of:sem:datastore:sqlite",
+      "source_id": "sem:unknown:runtime-write-side-effects",
+      "target_id": "sem:datastore:sqlite",
+      "type": "part-of",
+      "confidence": 0.6,
+      "grounded_in": [],
       "properties": {}
     }
   ]

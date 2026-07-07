@@ -1,0 +1,15 @@
+{
+  "step": 2,
+  "action": "submit-form",
+  "url": "/taskdesk-legacy/login.do",
+  "route": "/login",
+  "request_method": "POST",
+  "form_fields": [
+    "username",
+    "password"
+  ],
+  "response_status": 200,
+  "redirect_location": null,
+  "rendered_view": "/jsp/login.jsp",
+  "view_evidence": "error banner present: true; returned to login: true"
+}
