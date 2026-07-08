@@ -236,4 +236,4 @@ journey phase defined by `skills/09-journey-walker.md` and
 against a disposable database copy, hypothesis-driven journeys, and the split
 reproducibility standard. Free crawling, scheduled runs, and journeys against
 unapproved targets stay out of scope. Background and spec:
-`docs/implement-extended-semantic-layer.md`, Extension B.
+`specs/implement-extended-semantic-layer.md`, Extension B.

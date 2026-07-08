@@ -3,17 +3,78 @@
 > **The AI proposes, the repository proves.** See a complete example run in
 > [`examples/taskdesk-legacy-run/`](examples/taskdesk-legacy-run/).
 
-A bounded, evidence-backed AI agent loop that inspects a source repository **without
-modifying it** and produces two artefacts:
+`semantic-discovery-loop` is a small, file-based method for making an AI assistant study
+a codebase without hand-waving. It asks the assistant to inspect a repository, build
+durable artefacts, cite local evidence, verify its own claims, and iterate when the
+evidence is weak.
 
-- a deterministic **Source Construct Graph** — what literally exists in the code, built
-  by parsers, and
-- an interpretive, provenance-backed **Semantic Construct Graph** — what the code means
-  (routes, forms, flows, persistence, authorization, …), where every claim points back to
-  local source evidence.
+It is not a service, database, SaaS product, or background daemon. It is a portable loop:
+prompts, phase instructions, JSON contracts, prepared parsers, and a verifier. The same
+method can be driven by Codex, Claude Code, GitHub Copilot, or another capable coding
+assistant.
+
+## Why this exists
+
+LLMs are good at reading code, but a useful software-understanding tool needs more than
+a plausible summary. It needs evidence, repeatable artefacts, and a way to say "I do
+not know" when the repository does not prove a claim.
+
+This repository demonstrates that pattern. A run produces:
+
+- a deterministic **Source Construct Graph**: what literally exists in the code, built
+  by parsers;
+- an interpretive **Semantic Construct Graph**: what the code means at application
+  level, such as routes, forms, flows, persistence, authorization, and integrations;
+- a **Semantic Type Registry**: the vocabulary used by the semantic graph;
+- optional **documentation claims** and **runtime journeys** as additional evidence
+  layers; and
+- an independent **verification report** that scores the result before the loop can
+  call itself complete.
 
 The loop verifies its own output against a scored gate and is only complete when every
 score in `.work/semantic-loop/verification.json` is 8 or higher.
+
+## Start here
+
+You do not need to run anything to understand the project:
+
+1. Read the finished example report:
+   [`examples/taskdesk-legacy-run/semantic-loop/reports/application-structure.md`](examples/taskdesk-legacy-run/semantic-loop/reports/application-structure.md)
+2. Inspect the generated semantic graph:
+   [`examples/taskdesk-legacy-run/semantic-loop/semantic-graph.json`](examples/taskdesk-legacy-run/semantic-loop/semantic-graph.json)
+3. Compare it with the source graph:
+   [`examples/taskdesk-legacy-run/semantic-loop/source-graph.json`](examples/taskdesk-legacy-run/semantic-loop/source-graph.json)
+4. Look at the verifier output:
+   [`examples/taskdesk-legacy-run/semantic-loop/verification.json`](examples/taskdesk-legacy-run/semantic-loop/verification.json)
+
+The bundled target is `taskdesk-legacy/`, a deliberately small but realistic Struts 1 /
+JSP application backed by SQLite. It gives the loop enough real structure to discover
+actions, views, validation, services, DAOs, tables, rules, and flows.
+
+## What a run produces
+
+All generated files live under `.work/semantic-loop/` during a local run. A completed
+run normally includes:
+
+| Artefact | What it answers |
+| --- | --- |
+| `inventory.json` | What files and artifact types are in scope? |
+| `parser-registry.json` | Which parsers were used, where did they come from, and how were they validated? |
+| `source-graph.json` | What concrete source constructs exist? |
+| `semantic-types.json` | Which semantic vocabulary is registered for this run? |
+| `semantic-graph.json` | What application concepts were discovered, and what proves them? |
+| `doc-claims.json` | Which in-repository documentation claims were extracted and grounded? |
+| `runtime/journeys.json` | What behaviour was observed by approved runtime journeys? |
+| `verification.json` | Did the artefacts pass the independent quality gate? |
+| `reports/application-structure.md` | Human-readable summary of the discovered application. |
+
+## The guides
+
+- [Semantic Discovery Loop Implementation Guide](docs/semantic-discovery-loop-implementation-guide.md) —
+  structure, concepts, state machine, phases, artefacts, and extension points.
+- [Semantic Layers Overview](docs/semantic-layers-overview.md) — the source and
+  semantic layers, evidence classes, registered semantic types, and current local graph
+  snapshot.
 
 ## The articles
 
@@ -38,7 +99,8 @@ This repository is the working example for a two-part article series,
 | `.agent-loop/tools/` | Curated gallery of prepared parsers/extractors and the verifier. The loop copies these into `.cache/scripts/` and adapts the copies — never the originals. |
 | `taskdesk-legacy/` + `db/` | Bundled example target (see below). |
 | `examples/` | Committed output of a past loop run against the example, kept as a reference. |
-| `docs/` | The loop's spec (`semantic-source-discovery-loop-prompt.md`) and evaluation (`loop-implementation-report.md`). |
+| `specs/` | Original loop specifications, extension notes, and implementation/evaluation records. |
+| `docs/` | Human-oriented implementation guides for the loop and its semantic layers. |
 
 ## How to run the loop
 
@@ -115,6 +177,24 @@ The example app is runnable (Java 8+, Maven, Tomcat 9); see `taskdesk-legacy/REA
 Running it is not required for the static and documentation layers — those only read the
 source tree and the SQLite file — but it *is* what the optional runtime journey phase
 drives (see "Running the optional runtime journey phase" above).
+
+## The loop-engineering pattern
+
+This project is an implementation of the loop-engineering pattern described [in this article](https://addyosmani.com/blog/loop-engineering/): it replaces one-off prompting with a bounded, stateful, evidence-backed loop that writes durable artefacts, verifies its own output, and iterates until a defined quality gate passes.
+
+It intentionally stays file-based and manually invoked, so it demonstrates the core loop mechanics without adding scheduled automations, worktree orchestration, connectors, or persistent background agents.
+
+In regards to the features as descrobed in the article and currenlty not implementes, the project would gain the most from:
+
+
+- Worktree-aware runs
+
+  This would let multiple loop runs analyze different targets or revisions without trampling .work/semantic-loop and .cache/scripts. It fits the article well and would make experimentation safer.
+
+- Run state summaries / triage memory
+
+  The loop already has state.json, but a human-facing runs/index.md or reports/run-history.md could make repeated runs easier to compare: what changed, what failed, what improved, what remains unknown.
+
 
 ---
 

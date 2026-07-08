@@ -3,7 +3,7 @@
 **Audience:** an AI assistant (or human) picking up this work on a fresh machine with
 no memory of the previous session.
 
-**Governing spec:** `docs/implement-extended-semantic-layer.md`. Read it first — it
+**Governing spec:** `specs/implement-extended-semantic-layer.md`. Read it first — it
 defines the requirements this work implements, with numbered requirement IDs
 (EV-1…EV-6, DOC-1…DOC-8, RT-1…RT-8) that this document refers to. The original
 analysis it was distilled from is `extend-semantic-layer.md` at the repository root
@@ -15,7 +15,7 @@ analysis it was distilled from is `extend-semantic-layer.md` at the repository r
 > dimensions at 10, 8/8 mutation self-test, `sem:flow:login-task-review` instantiated
 > from replayable traces, source tree byte-identical before/after, repeat-run
 > reproducibility confirmed. See the 2026-07-07 addenda in
-> `docs/loop-implementation-report.md`. The text below is the original handoff and is
+> `specs/loop-implementation-report.md`. The text below is the original handoff and is
 > kept as the record of what was planned; sections 3a/3b are now history, not TODO.
 
 **State of the work (original handoff):** Milestones 1 and 2 of the spec (section 7)
@@ -165,7 +165,7 @@ All changes are in the working tree, **uncommitted**, on branch `main`. Run
   note for doc-claims), `.agent-loop/tools/verifier/tool.json` (nine dimensions,
   claim re-resolution, authority rule), `.agent-loop/prompts/verify-discovery-loop.md`
   (nine dimensions, doc-claims in the reads list).
-- **`docs/implement-extended-semantic-layer.md`** — fixture references updated
+- **`specs/implement-extended-semantic-layer.md`** — fixture references updated
   (decision 1).
 
 ### Validation already performed (all passing)
@@ -211,7 +211,7 @@ spec acceptance criteria 1, 2, 5 (nine-dimension part), and 6:
    the new run's artefacts (same layout: `semantic-loop/` + `cache-scripts/`), so
    the committed example matches the current repo state and nine-dimension
    contract. Check `examples/README.md` (and the root `README.md`, plus
-   `docs/loop-implementation-report.md` if it enumerates dimensions) for stale
+   `specs/loop-implementation-report.md` if it enumerates dimensions) for stale
    "eight dimensions" / catalog references while at it.
 6. Commit — the user has not committed any of this; ask or follow their lead on
    commit granularity (suggest: M1+M2 code as one commit, refreshed example as a
