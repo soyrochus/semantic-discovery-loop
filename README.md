@@ -84,6 +84,7 @@ statically-derived routes, and behaviourally testing access-control and validati
 rules). It needs a one-time environment, none of which is committed to the repo:
 
 1. Build and deploy the example app to Tomcat 9 — see `taskdesk-legacy/README.md`.
+   On Linux, the tested setup is system OpenJDK plus Maven and Tomcat 9 under `~/opt`.
 2. Install the browser driver: `npm install playwright && npx playwright install chromium`.
 3. Start Tomcat against a **disposable copy** of the database (never the committed file),
    e.g. `TASKDESK_DB_URL=jdbc:sqlite:/abs/path/.work/semantic-loop/runtime/db/taskdesk-demo.sqlite`.

@@ -6,7 +6,7 @@ These instructions cover macOS (Homebrew) and Linux (tested on Ubuntu 26.04).
 
 ## Requirements
 
-- JDK 8 or newer (the build targets Java 8; JDK 17 works fine)
+- JDK 8 or newer (the build targets Java 8; JDK 17 and current OpenJDK packages work fine)
 - Maven
 - **Tomcat 9, not Tomcat 10.** Struts 1.x and this application use the older `javax.servlet` APIs; Tomcat 10 moved to `jakarta.servlet` and will not run this WAR.
 
@@ -18,25 +18,61 @@ brew install maven tomcat@9
 
 ### Linux install
 
-Recent Ubuntu releases ship only `tomcat10` in apt, which does not work with this app, so install Tomcat 9 from Apache. If you have root, the JDK and Maven can come from apt (`sudo apt install openjdk-17-jdk maven`); the fully user-space alternative below needs no root and is what `paths.sh` expects by default:
+Recent Ubuntu releases ship only `tomcat10` in apt, which does not work with this app, so install Tomcat 9 from Apache. The recommended Linux setup is a system OpenJDK plus Maven and Tomcat under `~/opt`, which is exactly what `paths.sh` expects.
+
+Install the system JDK:
+
+```bash
+sudo apt install openjdk-25-jdk
+```
+
+Install Maven and Tomcat 9 under `~/opt`:
 
 ```bash
 mkdir -p ~/opt && cd ~/opt
 
-# Temurin JDK 17
-curl -sSLo jdk17.tar.gz "https://api.adoptium.net/v3/binary/latest/17/ga/linux/x64/jdk/hotspot/normal/eclipse"
 # Maven (check https://maven.apache.org/download.cgi for the current version)
 curl -sSLo maven.tar.gz "https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz"
 # Tomcat 9 (check https://tomcat.apache.org/download-90.cgi for the current version)
 curl -sSLo tomcat9.tar.gz "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.120/bin/apache-tomcat-9.0.120.tar.gz"
 
-tar xzf jdk17.tar.gz && tar xzf maven.tar.gz && tar xzf tomcat9.tar.gz && rm -f *.tar.gz
-ln -sfn jdk-17* jdk17
+tar xzf maven.tar.gz && tar xzf tomcat9.tar.gz
 ln -sfn apache-maven-* maven
 ln -sfn apache-tomcat-9* tomcat9
 ```
 
+The downloaded archives remain in `~/opt`; remove them manually only if you no longer want to keep them.
+
+If you cannot or do not want to install a system JDK, add a user-space JDK under `~/opt/jdk17` too:
+
+```bash
+cd ~/opt
+curl -sSLo jdk17.tar.gz "https://api.adoptium.net/v3/binary/latest/17/ga/linux/x64/jdk/hotspot/normal/eclipse"
+tar xzf jdk17.tar.gz
+ln -sfn jdk-17* jdk17
+```
+
+`paths.sh` honors an already-exported or system JDK. If `~/opt/jdk17` exists, it uses that JDK instead.
+
 To uninstall, delete `~/opt`.
+
+### Linux quick start
+
+After installing the Linux prerequisites above, run from the repository root:
+
+```bash
+cd taskdesk-legacy
+. ./paths.sh
+mvn clean package
+./redeploy.sh
+"$TOMCAT_HOME/bin/catalina.sh" run
+```
+
+Open:
+
+```text
+http://localhost:8080/taskdesk-legacy/login.do
+```
 
 ## Environment: paths.sh
 
@@ -51,7 +87,7 @@ It sets (without overriding values you have already exported):
 | Variable          | macOS                              | Linux                          |
 |-------------------|------------------------------------|--------------------------------|
 | `TOMCAT_HOME`     | `$(brew --prefix tomcat@9)/libexec` | `~/opt/tomcat9`               |
-| `JAVA_HOME`/`PATH`| untouched (system JDK)             | `~/opt/jdk17`, `~/opt/maven` (if present) |
+| `JAVA_HOME`/`PATH`| untouched (system JDK)             | honors an exported/system JDK; otherwise uses `~/opt/jdk17` and `~/opt/maven` when present |
 | `TASKDESK_DB_URL` | derived from the repo location on both platforms | |
 
 Source it in every shell where you build, deploy, or run Tomcat — humans and AI agents alike. This is the single place to fix if an install location changes.
