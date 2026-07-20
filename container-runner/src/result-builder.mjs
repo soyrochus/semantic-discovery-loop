@@ -48,6 +48,25 @@ export async function buildResult({ request, repository, copilot, mode }) {
   };
 }
 
+export function buildFailureResult({ request, mode, repository, copilot, error }) {
+  return {
+    runId: request.runId,
+    mode,
+    status: "failed",
+    repository: repository
+      ? {
+          requestedRef: repository.requestedRef,
+          resolvedCommit: repository.resolvedCommit
+        }
+      : null,
+    copilot: copilot
+      ? { exitCode: copilot.exitCode, skipped: copilot.skipped === true }
+      : null,
+    loop: null,
+    error: error instanceof Error ? error.message : String(error)
+  };
+}
+
 async function readJsonIfPresent(filePath) {
   try {
     return JSON.parse(await readFile(filePath, "utf8"));

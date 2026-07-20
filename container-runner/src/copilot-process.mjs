@@ -1,8 +1,10 @@
 // container-runner/src/copilot-process.mjs
 
 import { spawn } from "node:child_process";
+import { createWriteStream } from "node:fs";
+import path from "node:path";
 
-export function executeCopilot({ cwd, prompt, timeoutSeconds }) {
+export function executeCopilot({ cwd, prompt, timeoutSeconds, logsDirectory }) {
   return new Promise((resolve, reject) => {
     const args = [
       "--prompt",
@@ -30,20 +32,28 @@ export function executeCopilot({ cwd, prompt, timeoutSeconds }) {
       stdio: ["ignore", "pipe", "pipe"]
     });
 
-    let stdout = "";
-    let stderr = "";
+    // Written as chunks arrive, not buffered until close, so a long run is
+    // observable on the host by tailing these files (specs/strenghten-container-run.md).
+    const stdoutLog = createWriteStream(
+      path.join(logsDirectory, "copilot.jsonl"),
+      { flags: "a" }
+    );
+    const stderrLog = createWriteStream(
+      path.join(logsDirectory, "copilot.stderr.log"),
+      { flags: "a" }
+    );
 
     child.stdout.setEncoding("utf8");
     child.stderr.setEncoding("utf8");
 
     child.stdout.on("data", chunk => {
-      stdout += chunk;
       process.stdout.write(chunk);
+      stdoutLog.write(chunk);
     });
 
     child.stderr.on("data", chunk => {
-      stderr += chunk;
       process.stderr.write(chunk);
+      stderrLog.write(chunk);
     });
 
     const timeout = setTimeout(() => {
@@ -52,17 +62,17 @@ export function executeCopilot({ cwd, prompt, timeoutSeconds }) {
 
     child.on("error", error => {
       clearTimeout(timeout);
+      stdoutLog.end();
+      stderrLog.end();
       reject(error);
     });
 
     child.on("close", exitCode => {
       clearTimeout(timeout);
+      stdoutLog.end();
+      stderrLog.end();
 
-      resolve({
-        exitCode,
-        stdout,
-        stderr
-      });
+      resolve({ exitCode });
     });
   });
 }

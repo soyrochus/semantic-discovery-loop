@@ -25,11 +25,12 @@ prompt, and exporting the resulting artefacts.
 | `.dockerignore` | Keeps unrelated repo content (git history, build output, examples, docs) out of the build context. |
 | `container-runner/package.json` | Worker package manifest. No runtime dependencies — Node 22 built-ins only. |
 | `container-runner/src/main.mjs` | Entry point. Reads env vars, calls `executeRun`, sets the process exit code. |
-| `container-runner/src/worker.mjs` | Orchestration: read request → checkout → install adapter → run Copilot (per mode) → build result → export. |
+| `container-runner/src/worker.mjs` | Orchestration: read request → checkout → install adapter → run Copilot (per mode) → build result → export, updating `status.json` at each step (see [Runtime state and logs](#runtime-state-and-logs)). |
+| `container-runner/src/run-state.mjs` | Owns `status.json`: creates it before checkout starts, updates it at every phase boundary and on failure, and emits the matching structured log line to stdout. |
 | `container-runner/src/repository-checkout.mjs` | Clones the requested repository and resolves `ref` to a commit SHA. |
 | `container-runner/src/prompt-compiler.mjs` | Selects and fills in the prompt template for the requested run mode. |
-| `container-runner/src/copilot-process.mjs` | Spawns `copilot` non-interactively and captures stdout/stderr/exit code. |
-| `container-runner/src/result-builder.mjs` | Reads `state.json`/`verification.json` from the checkout and builds `result.json`. |
+| `container-runner/src/copilot-process.mjs` | Spawns `copilot` non-interactively; streams stdout/stderr to `logs/` on the mounted output volume as they arrive and returns the exit code. |
+| `container-runner/src/result-builder.mjs` | Builds `result.json` — `buildResult` from `state.json`/`verification.json` on success, `buildFailureResult` from whatever's known when a run throws. |
 | `container-runner/prompts/execute-semantic-loop.prompt.txt` | The real loop prompt (`full` mode), adapted from `.agent-loop/prompts/run-discovery-loop.md`. |
 | `container-runner/prompts/smoke-test.prompt.txt` | Trivial prompt used by `smoke` mode. |
 | `local/request.example.json` | Example request; copy to `local/request.json` for a real run. |
@@ -41,16 +42,23 @@ For every mode, `worker.mjs` performs the same shape of run:
 
 ```text
 1. Read and validate /input/request.json (runId, repository.url/ref, analysisScope).
-2. Create a disposable temporary workspace.
-3. Clone the requested repository and resolve ref to a commit SHA.
+2. Create /output/<run-id>/ and write status.json (phase "initializing") and
+   request.json — before anything that can fail.
+3. Clone the requested repository and resolve ref to a commit SHA
+   (phase "checking-out" → "checked-out").
 4. Copy the image-owned .agent-loop into the checkout; create .work/semantic-loop
-   and .cache/scripts.
-5. Run Copilot CLI (mock: skipped; smoke/full: with the mode's prompt).
+   and .cache/scripts (phase "adapter-installed").
+5. Run Copilot CLI (mock: skipped; smoke/full: with the mode's prompt), streaming
+   its stdout/stderr straight to logs/ as it runs (phase "running-copilot", with a
+   status.json heartbeat every 60s, then "copilot-finished").
 6. Read .work/semantic-loop/state.json and verification.json (if present) and
-   build result.json.
-7. Export request.json, result.json, logs/, repository/metadata.json, and
-   .work/semantic-loop/ (if present) to /output/<run-id>/.
-8. Exit 0 if result.status is "complete", otherwise 2 (or 1 on a hard failure).
+   build result.json (phase "building-result").
+7. Export result.json, repository/metadata.json, and .work/semantic-loop/
+   (if present) to /output/<run-id>/; status.json's final phase matches
+   result.status.
+8. Exit 0 if result.status is "complete", 2 if "incomplete", 1 on a hard failure —
+   in which case status.json/result.json are still written with a "failed" phase/
+   status and the error, from whatever step it failed on.
 ```
 
 The host source tree is never mounted into the container. Only the request file and
@@ -77,6 +85,58 @@ Copilot was skipped (`result.copilot.skipped`). In `mock` and `smoke` modes,
 Run each tier in order when validating a new environment or Copilot CLI version:
 `mock` first (no external calls at all), then `smoke` (proves Copilot + auth work),
 then `full`.
+
+## Runtime state and logs
+
+Full requirements and rationale: [specs/strenghten-container-run.md](../specs/strenghten-container-run.md).
+
+Everything a run's state consists of lives on the mounted `/output/<run-id>/`
+directory, from the moment the container starts — no Podman/container access is
+needed to check on a run:
+
+- **`status.json`** exists before checkout even begins and is updated at every phase
+  boundary (`initializing → checking-out → checked-out → adapter-installed →
+  running-copilot → copilot-finished → building-result → complete | incomplete |
+  failed`; `mock` skips straight from `adapter-installed` to `building-result`, since
+  Copilot is never spawned). While Copilot is running, `updatedAt` is also refreshed
+  every 60 seconds even without a phase change, so a long `full` run doesn't look
+  stalled. Shape:
+
+  ```json
+  {
+    "runId": "...",
+    "mode": "mock | smoke | full",
+    "phase": "...",
+    "startedAt": "ISO 8601",
+    "updatedAt": "ISO 8601",
+    "resolvedCommit": "string | null",
+    "error": "string | null"
+  }
+  ```
+
+  - **still running** → `status.json` exists, `phase` is non-terminal, `updatedAt` is
+    recent.
+  - **terminated cleanly** → `phase` is `complete` or `incomplete`; cross-check
+    against `result.json`.
+  - **crashed** → `phase` is `failed`, `error` holds the cause, and `result.json` has
+    `status: "failed"` with the same message — this happens even if the crash was
+    before Copilot ever ran (e.g. the clone failed), where previously nothing at all
+    was exported.
+
+- **`logs/copilot.jsonl`/`logs/copilot.stderr.log`** are appended to as Copilot
+  produces output, not written once at the end — `tail -f
+  local/output/<run-id>/logs/copilot.jsonl` shows a `full` run's progress live.
+
+- Every phase transition is also logged as one JSON line on the container's own
+  stdout (`{"level":"info","event":"phase.changed","runId":"...","phase":"...",
+  "timestamp":"..."}`), visible via `podman logs`. This is the same convention
+  `main.mjs` already uses for its top-level crash line
+  (`{"level":"error","event":"run.failed",...}`) and is written specifically so it
+  lands cleanly in Cloud Logging once this runs as a Cloud Run Job.
+
+One residual gap: a request that fails validation before a `runId` is known
+(unparsable JSON, missing `runId`) still can't be attributed to any output
+directory — `main.mjs`'s stderr line remains the only signal for that specific case.
 
 ## Request format
 
@@ -198,10 +258,11 @@ non-skipped tier fails its check.
 
 ```text
 local/output/<run-id>/
+  status.json               # written first; updated at every phase (see above)
   request.json
   result.json
   logs/
-    copilot.jsonl
+    copilot.jsonl            # streamed live, not written once at the end
     copilot.stderr.log
   repository/
     metadata.json
@@ -212,6 +273,10 @@ local/output/<run-id>/
       application-structure.md
     ...
 ```
+
+On a crashed run (e.g. the clone fails), only `status.json`, `request.json`, and
+`result.json` exist — everything under `logs/`, `repository/`, and `semantic-loop/`
+depends on having gotten far enough to produce it.
 
 Example `result.json` from a `full` run:
 
@@ -238,6 +303,10 @@ Example `result.json` from a `full` run:
 
 `status` is `"complete"` only when Copilot exited `0` **and** `verification.json`'s
 `passed` field is `true` — a clean Copilot exit code alone is not sufficient.
+`status` can also be `"failed"` (the run threw before it could build a normal
+result — see [Runtime state and logs](#runtime-state-and-logs)), in which case
+`repository`/`copilot`/`loop` are `null` where not yet known and an `error` field
+holds the message.
 
 ## Environment variables
 
@@ -253,5 +322,9 @@ Example `result.json` from a `full` run:
 ## What is not built yet
 
 Per the design doc's phased plan, only Phase 1 (this direct `podman run` worker)
-exists. There is no local HTTP dispatcher (`POST /runs` / `GET /runs/{runId}`, Phase 2)
-and no Cloud Run/Firestore/Cloud Storage deployment (Phase 3).
+exists. [specs/strenghten-container-run.md](../specs/strenghten-container-run.md)
+made a single run's own state, logs, and failures legible from `/output` alone
+(`status.json`, streamed logs, crash safety) — but that's still per-container. There
+is still no local HTTP dispatcher (`POST /runs` / `GET /runs/{runId}`, Phase 2), no
+run registry that survives outside one container's own mount, no `runId` collision
+protection, and no Cloud Run/Firestore/Cloud Storage deployment (Phase 3).

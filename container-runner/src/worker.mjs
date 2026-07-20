@@ -7,9 +7,11 @@ import path from "node:path";
 import { checkoutRepository } from "./repository-checkout.mjs";
 import { compilePrompt } from "./prompt-compiler.mjs";
 import { executeCopilot } from "./copilot-process.mjs";
-import { buildResult } from "./result-builder.mjs";
+import { buildResult, buildFailureResult } from "./result-builder.mjs";
+import { createRunState } from "./run-state.mjs";
 
 const REQUIRED_REQUEST_FIELDS = ["runId", "repository", "analysisScope"];
+const HEARTBEAT_INTERVAL_MS = 60_000;
 
 // mock  — exercise checkout/adapter-install/export only; Copilot CLI is never spawned.
 // smoke — spawn Copilot CLI with a trivial fixed prompt to prove non-interactive
@@ -25,43 +27,76 @@ export async function executeRun({ requestPath, outputRoot, mode = "full" }) {
   }
 
   const request = await readRequest(requestPath);
-  const workspace = await createTemporaryWorkspace(request.runId);
+  const outputDirectory = path.join(outputRoot, request.runId);
 
-  const repository = await checkoutRepository({
-    workspace,
-    repository: request.repository
-  });
-
-  await installLoopAdapter(repository.directory);
-
-  const copilot = await runCopilotForMode({ mode, repository, request });
-
-  const result = await buildResult({
-    request,
-    repository,
-    copilot,
+  // status.json/logs/ and request.json exist before checkout even starts, so a
+  // consumer watching /output can tell a run has begun from the outside.
+  const runState = await createRunState({
+    outputDirectory,
+    runId: request.runId,
     mode
   });
 
-  await exportRun({
-    repositoryDirectory: repository.directory,
-    outputDirectory: `${outputRoot}/${request.runId}`,
-    request,
-    result,
-    copilot
-  });
+  await writeFile(
+    path.join(outputDirectory, "request.json"),
+    JSON.stringify(request, null, 2)
+  );
 
-  return result;
+  let repository;
+  let copilot;
+
+  try {
+    await runState.phase("checking-out");
+
+    const workspace = await createTemporaryWorkspace(request.runId);
+    repository = await checkoutRepository({
+      workspace,
+      repository: request.repository
+    });
+
+    await runState.phase("checked-out", { resolvedCommit: repository.resolvedCommit });
+
+    await installLoopAdapter(repository.directory);
+    await runState.phase("adapter-installed");
+
+    copilot = await runCopilotForMode({
+      mode,
+      repository,
+      request,
+      outputDirectory,
+      runState
+    });
+
+    await runState.phase("building-result");
+    const result = await buildResult({ request, repository, copilot, mode });
+    await runState.phase(result.status);
+
+    await exportRun({
+      repositoryDirectory: repository.directory,
+      outputDirectory,
+      result
+    });
+
+    return result;
+  } catch (error) {
+    await runState.fail(error);
+
+    await writeFile(
+      path.join(outputDirectory, "result.json"),
+      JSON.stringify(
+        buildFailureResult({ request, mode, repository, copilot, error }),
+        null,
+        2
+      )
+    );
+
+    throw error;
+  }
 }
 
-async function runCopilotForMode({ mode, repository, request }) {
+async function runCopilotForMode({ mode, repository, request, outputDirectory, runState }) {
   if (mode === "mock") {
-    return {
-      exitCode: 0,
-      stdout: "",
-      stderr: "",
-      skipped: true
-    };
+    return { exitCode: 0, skipped: true };
   }
 
   const prompt = await compilePrompt({
@@ -71,11 +106,27 @@ async function runCopilotForMode({ mode, repository, request }) {
     maxIterations: request.execution?.maxIterations ?? 6
   });
 
-  const copilotResult = await executeCopilot({
-    cwd: repository.directory,
-    prompt,
-    timeoutSeconds: request.execution?.timeoutSeconds ?? 7200
-  });
+  await runState.phase("running-copilot");
+
+  // touch(), not phase(): a long Copilot call must not look stalled, but it also
+  // hasn't changed phase — only updatedAt needs to move.
+  const heartbeat = setInterval(() => {
+    runState.touch().catch(() => {});
+  }, HEARTBEAT_INTERVAL_MS);
+
+  let copilotResult;
+  try {
+    copilotResult = await executeCopilot({
+      cwd: repository.directory,
+      prompt,
+      timeoutSeconds: request.execution?.timeoutSeconds ?? 7200,
+      logsDirectory: path.join(outputDirectory, "logs")
+    });
+  } finally {
+    clearInterval(heartbeat);
+  }
+
+  await runState.phase("copilot-finished");
 
   return { ...copilotResult, skipped: false };
 }
@@ -116,33 +167,13 @@ async function installLoopAdapter(repositoryDirectory) {
   });
 }
 
-async function exportRun({
-  repositoryDirectory,
-  outputDirectory,
-  request,
-  result,
-  copilot
-}) {
-  const logsDirectory = path.join(outputDirectory, "logs");
+async function exportRun({ repositoryDirectory, outputDirectory, result }) {
   const repositoryMetaDirectory = path.join(outputDirectory, "repository");
-
-  await mkdir(logsDirectory, { recursive: true });
   await mkdir(repositoryMetaDirectory, { recursive: true });
-
-  await writeFile(
-    path.join(outputDirectory, "request.json"),
-    JSON.stringify(request, null, 2)
-  );
 
   await writeFile(
     path.join(outputDirectory, "result.json"),
     JSON.stringify(result, null, 2)
-  );
-
-  await writeFile(path.join(logsDirectory, "copilot.jsonl"), copilot.stdout);
-  await writeFile(
-    path.join(logsDirectory, "copilot.stderr.log"),
-    copilot.stderr
   );
 
   await writeFile(

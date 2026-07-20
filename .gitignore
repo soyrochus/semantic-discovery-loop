@@ -59,6 +59,10 @@ Thumbs.db
 .cache/
 dist/
 
+# container-runner exported run artefacts (regenerated each podman run / mode.js check)
+local/output/*
+!local/output/.gitkeep
+
 # local environment files
 .env
 
