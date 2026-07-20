@@ -58,3 +58,6 @@ Thumbs.db
 .work/
 .cache/
 dist/
+
+# local environment files
+.env
