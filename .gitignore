@@ -57,3 +57,4 @@ Thumbs.db
 # Semantic-discovery-loop run output (regenerated each run; see examples/ for a kept run)
 .work/
 .cache/
+dist/
