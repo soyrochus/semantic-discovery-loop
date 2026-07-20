@@ -75,6 +75,10 @@ run normally includes:
 - [Semantic Layers Overview](docs/semantic-layers-overview.md) — the source and
   semantic layers, evidence classes, registered semantic types, and current local graph
   snapshot.
+- [Container Runner](docs/container-runner.md) — the non-interactive, containerized
+  worker (`container-runner/`) that drives one loop run via GitHub Copilot CLI: build
+  and run instructions, the `mock`/`smoke`/`full` validation tiers, request/output
+  contracts, and environment variables.
 
 ## The articles
 
@@ -101,6 +105,8 @@ This repository is the working example for a two-part article series,
 | `examples/` | Committed output of a past loop run against the example, kept as a reference. |
 | `specs/` | Original loop specifications, extension notes, and implementation/evaluation records. |
 | `docs/` | Human-oriented implementation guides for the loop and its semantic layers. |
+| `container-runner/` + `Dockerfile` | Non-interactive, containerized worker that runs one loop pass via GitHub Copilot CLI; see [Container Runner](docs/container-runner.md). |
+| `local/` | Example request and default output mount point for local container runs. |
 
 ## How to run the loop
 

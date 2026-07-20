@@ -1,0 +1,15 @@
+{
+  "runId": "local-taskdesk-001",
+  "repository": {
+    "url": "https://github.com/soyrochus/semantic-discovery-loop.git",
+    "ref": "main"
+  },
+  "analysisScope": "Analyze the bundled taskdesk-legacy application. Focus on application structure, flows, persistence and integrations.",
+  "runtime": {
+    "approved": false
+  },
+  "execution": {
+    "maxIterations": 6,
+    "timeoutSeconds": 7200
+  }
+}

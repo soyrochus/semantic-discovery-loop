@@ -1,0 +1,13 @@
+Do not run the Semantic Discovery Loop for this request. This is a smoke test of
+GitHub Copilot CLI's non-interactive execution inside this container, invoked through
+the same code path used for a full loop run.
+
+Perform exactly these steps and nothing else:
+
+1. Create the directory `.work/semantic-loop` if it does not already exist.
+2. Write a file at `.work/semantic-loop/smoke.json` containing exactly this JSON
+   object, with no additional fields:
+   {"smoke":"ok"}
+3. Do not read, parse, modify, or delete any other file in this repository.
+4. Do not create, edit, or delete any file outside `.work/semantic-loop/`.
+5. Print the single line SMOKE_OK and stop.
