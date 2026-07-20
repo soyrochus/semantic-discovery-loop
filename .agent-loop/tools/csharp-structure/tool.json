@@ -1,0 +1,30 @@
+{
+  "tool_id": "csharp-structure-v1",
+  "artifact_type": "csharp-source",
+  "input_patterns": ["**/*.cs"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Comment/string-aware masking pass (state-machine lexer, extended from java-structure with C# verbatim @\"...\" and interpolated $\"...\" string handling), then structural matching with brace-matched spans and brace-depth checks. Not a full grammar parser, but immune to the classic regex failures: declarations inside comments or string literals (including verbatim strings containing '{' or unescaped-looking quotes), spans cut short by nested braces, anonymous/local-function bodies attributed to the enclosing type.",
+  "extracts": [
+    "namespace declaration (block- or file-scoped, first one in the file)",
+    "using directives incl. 'using static' and alias imports ('using X = Y;')",
+    "class/interface/struct/enum/record declarations incl. nested types, unresolved base-list (extends+implements combined, since C# uses one colon-separated list for both), attributes",
+    "methods and constructors with line spans, signatures, modifiers, attributes, overloads, and body_form (body / expression-bodied '=>' / abstract-or-interface)",
+    "simple auto-properties ('Type Name { get; set; }') with type, modifiers, accessors, attributes"
+  ],
+  "known_limitations": [
+    "Not a full C# grammar: no expression-level analysis, no symbol resolution (base-list names, attribute names, return/property types are unresolved strings).",
+    "Triple-quoted raw string literals (C# 11+) are not handled by the lexer, matching java-structure's equivalent gap for Java text blocks.",
+    "Full/expanded properties with get/set bodies (e.g. 'get { return x; }') are intentionally NOT extracted as Property nodes — only simple auto-properties whose accessor list has no nested braces. This matches the common ASP.NET DTO/ViewModel pattern; computed properties with logic are out of scope for this lexical tool.",
+    "Only the first namespace declaration in a file is used to qualify names; a file with multiple sibling namespace blocks (rare) will misattribute types declared in the second block.",
+    "Attributes are only recognised when each '[...]' occupies its own line directly above the declaration (stacked or single) — an attribute on the same line as the declaration (e.g. '[HttpGet] public ActionResult Foo()') is not captured.",
+    "Destructors ('~Foo()') and operator overloads ('public static Foo operator +(...)') are not extracted as methods.",
+    "Expression-bodied members ('=> expr;') locate their end by the first ';' after '=>', which would end the span early for an expression containing a ';' inside a nested lambda body — rare in practice.",
+    "Generic type constraint clauses ('where T : class') are stripped, not parsed; constraints themselves are not recorded.",
+    "Type-declaration matching rejects a small set of reserved-keyword names (in, is, as, out, ref, when, and the modifier keywords) to avoid false positives like 'foreach (Foo record in list)' being misread as a record type named 'in' — validated against this repository, where 'record' is a common variable/parameter name."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

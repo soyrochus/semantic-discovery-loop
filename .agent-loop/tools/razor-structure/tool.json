@@ -1,0 +1,28 @@
+{
+  "tool_id": "razor-structure-v1",
+  "artifact_type": "razor-view",
+  "input_patterns": ["**/*.cshtml", "**/*.vbhtml"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Lexical extractor (Razor interleaves C# with HTML and is not well-formed markup, so no real parser is possible with stdlib). Razor comments (@* *@) and HTML comments are masked before matching, so commented-out includes/forms/links are never extracted. This tool is honest about being lexical — it targets a fixed set of MVC conventions rather than pretending to parse the page or the embedded C#.",
+  "extracts": [
+    "@model / @using / @inherits directives, and Layout = \"...\" assignment (as an 'extends' edge to the layout path)",
+    "partial-view and child-action includes: Html.Partial/RenderPartial(Async), Html.Action/RenderAction(Async) (includes edges)",
+    "route references with unresolved action/controller names: Html.ActionLink, Url.Action, Html.BeginForm (references edges — the loop's graph builder must resolve these against actual controller/action constructs, e.g. from csharp-structure output)",
+    "@section declarations (declares edges) and @RenderSection/@RenderBody slots (includes edges)",
+    "plain HTML <form> elements with action/method, and <a href> links",
+    "code_block_count (@{ }) and expression_count (@( )) on the file node"
+  ],
+  "known_limitations": [
+    "Lexical: no HTML DOM, no C# expression parsing. Embedded C# (e.g. fluent DevExpress/DevExtreme builder calls) is not interpreted beyond the fixed regexes above.",
+    "Route references (ActionLink/Url.Action/BeginForm) are recorded with raw action/controller strings only; resolving them to actual Controller/Action constructs is the semantic-graph builder's job, not this parser's.",
+    "Only string-literal arguments are recognised for partial/action/route helpers; targets built from variables or interpolated strings are missed.",
+    "@using directive detection excludes '@using (...)' code blocks (those are C# using-statements, not namespace imports) via a negative lookahead on '('; a using-block written across multiple lines before the '(' would still be excluded correctly since the lookahead is immediately after the whitespace.",
+    "Tag helpers (ASP.NET Core Razor) are not extracted — this tool targets classic ASP.NET MVC 5 Razor conventions (Html.* / Url.* helpers), matching this repository's stack.",
+    "Attributes using unquoted values or runtime expressions as attribute values may be missed, same as the jsp-structure gallery tool this was modeled on."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

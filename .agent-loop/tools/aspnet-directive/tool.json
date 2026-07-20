@@ -1,0 +1,25 @@
+{
+  "tool_id": "aspnet-directive-v1",
+  "artifact_type": "aspnet-directive-file",
+  "input_patterns": ["**/*.asax", "**/*.svc", "**/*.asmx", "**/*.ashx", "**/*.aspx", "**/*.ascx", "**/*.master"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Lexical extractor (these files open with a `<%@ ... %>` directive, which is not well-formed XML, so no real parser is possible with stdlib). Extracts every directive and its attributes via regex; classifies CodeBehind/CodeFile as file references and Inherits/Class/Service as type references so the semantic-graph builder can attempt to resolve them against actual C# constructs.",
+  "extracts": [
+    "the file's entry directive kind (Application, ServiceHost, WebHandler, WebService, Page, Control, Master, ...) and its Language attribute, recorded on the file node",
+    "one Directive node per `<%@ ... %>` occurrence with all attributes captured as attr_* properties",
+    "FileReference node + references edge for CodeBehind/CodeFile attribute values (unresolved relative paths)",
+    "TypeReference node + references edge for Inherits/Class/Service attribute values (unresolved qualified type names)",
+    "inline `<script runat=\"server\">` blocks by presence, span, and language attribute — contents are not parsed"
+  ],
+  "known_limitations": [
+    "Lexical only: attribute values that span multiple lines with nested `%>`-like sequences inside quoted strings could confuse the non-greedy directive match, though this does not occur in practice for these files.",
+    "FileReference and TypeReference targets are recorded as raw strings; resolving them to actual File/Class nodes (e.g. produced by csharp-structure) is the semantic-graph builder's job, not this parser's.",
+    "Inline server-script C# code is detected but not parsed — pair with csharp-structure conceptually if that code matters, though in practice ASP.NET MVC entry points (Global.asax, .svc) in this codebase use CodeBehind exclusively.",
+    "Secondary directives (Assembly, Import, Register, OutputCache) are captured generically like any other directive kind but their specific semantics are not interpreted."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}

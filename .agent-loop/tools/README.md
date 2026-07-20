@@ -49,6 +49,10 @@ mid-loop tends to reach for line regexes; a prepared tool can afford to do it pr
 | Tool | Artifact type | Approach |
 | --- | --- | --- |
 | `java-structure/` | Java sources | Tokenizer + brace matching (comment/string aware), packages, imports, types, methods with spans |
+| `csharp-structure/` | C# sources | Tokenizer + brace matching (comment/string/verbatim-string aware), namespace, using, types, methods, auto-properties with spans |
+| `razor-structure/` | Razor views (`.cshtml`) | Lexical extractor: @model/@using/Layout directives, partial/child-action includes, ActionLink/Url.Action/BeginForm route references, sections |
+| `aspnet-directive/` | ASP.NET directive files (`.asax`, `.svc`, `.asmx`, `.ashx`, `.aspx`/`.ascx`/`.master`) | Lexical extractor: `<%@ ... %>` directives, CodeBehind/Inherits/Class/Service as unresolved file/type references |
+| `nuget-packages/` | .NET package manifests (`packages.config`, `.csproj`) | Real XML parse: Dependency nodes per package/PackageReference, BuildModule + ProjectReference for `.csproj` |
 | `xml-structure/` | XML files | Real XML parse (`xml.sax`) with line numbers, element paths, attributes |
 | `struts-config/` | Struts 1.x config (`struts-config.xml`, `validation.xml`) | Real XML parse: Route nodes per action mapping (forwards, form beans, input), global-forwards, plug-ins, validator fields |
 | `maven-pom/` | Maven `pom.xml` | Real XML parse: BuildModule + Dependency nodes with exact `<dependency>` block spans; skips dependencyManagement/plugins |

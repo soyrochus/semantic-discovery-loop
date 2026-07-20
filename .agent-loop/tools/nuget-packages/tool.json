@@ -1,0 +1,24 @@
+{
+  "tool_id": "nuget-packages-v1",
+  "artifact_type": "nuget-manifest",
+  "input_patterns": ["**/packages.config", "**/*.csproj"],
+  "language": "python3-stdlib",
+  "invocation": "python3 parser.py <files...>",
+  "smoke_test": "python3 parser.py --smoke",
+  "output_schema": "source-graph-fragment-v1",
+  "parsing_approach": "Real XML parse via xml.sax with a locator (external entity/DTD resolution disabled), modeled on the maven-pom gallery tool. A cheap root-element sniff dispatches each file to the right handler: <packages> is packages.config (classic non-SDK-style projects, one Dependency node per <package>); <Project> is a .csproj, which yields a BuildModule node (name from the file stem, target framework(s) from <TargetFramework>/<TargetFrameworkVersion>/<TargetFrameworks>) plus a Dependency node per <PackageReference> and a ProjectReference node+edge per <ProjectReference>. Files with neither root element yield an empty fragment rather than guessing.",
+  "extracts": [
+    "Dependency node per <package id version targetFramework> in packages.config, carrying the exact declaration line",
+    "Dependency node per <PackageReference Include Version> in SDK-style .csproj (both attribute-style; see known_limitations for the child-element form)",
+    "BuildModule node per .csproj with target_frameworks from the property group",
+    "ProjectReference node + references edge per <ProjectReference Include> (inter-module dependency, e.g. Curriculums.csproj -> Domain.Models.csproj)"
+  ],
+  "known_limitations": [
+    "Classic non-SDK-style .csproj (xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\", the common case in this repository) declares assembly references via <Reference Include=\"...\"> with an optional <HintPath>, not <PackageReference> — those are NOT extracted as Dependency nodes by this tool. Only packages.config in the same project captures the NuGet-sourced subset of those references. A legacy .csproj with zero <PackageReference> elements will correctly yield a BuildModule with no dependencies, which is expected, not a parsing failure.",
+    "PackageReference version supplied as a nested <Version> child element (rather than a Version= attribute) is not extracted — only the attribute form, which is what modern SDK-style csproj files normally use.",
+    "No resolution against the NuGet lock file or a package's actual dependency tree (transitive dependencies) — only what each file directly declares.",
+    "ProjectReference target paths are recorded as raw (often Windows-style, backslash-separated) strings; resolving them to an actual BuildModule/File node in this repository is the semantic-graph builder's job."
+  ],
+  "writes_source_tree": false,
+  "network_required": false
+}
